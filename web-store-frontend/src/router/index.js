@@ -10,9 +10,25 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
+    name: "home",
     path: '/',
     component: () => import('@/pages/HomePage.vue'),
   },
+  {
+    name: "auth",
+    path: '/auth',
+    component: () => import('@/pages/AuthPage.vue'),
+  },
+  {
+    name: "profile",
+    path: '/profile',
+    component: () => import('@/pages/UserProfilePage.vue'),
+  },
+  {
+    name: 'cart',
+    path: '/cart',
+    component: () => import('@/pages/CartPage.vue'),
+  }
 ]
 
 const router = createRouter({
