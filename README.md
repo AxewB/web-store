@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Spring Boot, Spring Security, PostgreSQL: JWT Authentication & Authorization example
 
 ## User Registration, User Login and Authorization process.
@@ -133,9 +132,3 @@ Run both Back-end & Front-end in one place:
 > [Integrate React.js with Spring Boot Rest API](https://bezkoder.com/integrate-reactjs-spring-boot/)
 
 > [Integrate Vue.js with Spring Boot Rest API](https://bezkoder.com/integrate-vue-spring-boot/)
-=======
-
-## Prototype of online store. 
-
-# WIP
->>>>>>> f1655c8c7d28bb48da37d719a5ea75b63df908d4
