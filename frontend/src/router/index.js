@@ -7,7 +7,7 @@
 
 // Composables
 import { createWebHistory, createRouter } from "vue-router";
-import Home from "@/components/temp/Home.vue";
+import Home from "@/components/temp/HomePage.vue";
 import Login from "@/components/user/UserLogin.vue";
 import Register from "@/components/user/UserRegister.vue";
 // lazy-loaded
