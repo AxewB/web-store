@@ -1,7 +1,9 @@
 package ru.aksenov.onlineshop.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -11,9 +13,14 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotBlank
     private String name;
+    @NotBlank
     private String description;
+    private List<String> images;
+    @NotBlank
     private Integer quantity;
+    @NotBlank
     private Float cost;
 
     @JoinTable(
@@ -26,16 +33,18 @@ public class Product {
                     referencedColumnName = "id"
             )
     )
+    @NotBlank
     @ManyToMany
     private Set<Category> category;
 
     public Product() {}
 
-    public Product (String name, String description, Integer quantity, Float cost) {
+    public Product (String name, String description, Integer quantity, Float cost, List<String> images) {
         this.name = name;
         this.description = description;
         this.quantity = quantity;
         this.cost = cost;
+        this.images = images;
     }
 
     public String getName() {
@@ -70,9 +79,16 @@ public class Product {
         this.cost = cost;
     }
 
+    public List<String> getImages() {
+        return this.images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
     @Override
     public String toString() {
         return this.id + " | " + this.name + " | " + this.description+ " | " + this.quantity + " | " + this.cost;
     }
-
 }
