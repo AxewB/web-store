@@ -1,0 +1,1 @@
+- add getMapping for sub categories
