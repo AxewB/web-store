@@ -1,101 +1,100 @@
 <template>
-  <div class="col-md-12">
-    <div class="">
-      <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
-      />
-      <Form @submit="handleRegister" :validation-schema="schema">
-        <div v-if="!successful">
-          <div class="form-group">
-            <label for="username">Username</label>
-            <Field name="username" type="text" class="form-control" />
-            <ErrorMessage name="username" class="error-feedback" />
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <Field name="email" type="email" class="form-control" />
-            <ErrorMessage name="email" class="error-feedback" />
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <Field name="password" type="password" class="form-control" />
-            <ErrorMessage name="password" class="error-feedback" />
-          </div>
+    <v-sheet 
+    height="100vh" 
+    class="d-flex 
+          justify-center 
+          align-center 
+          flex-column
+          bg-transparent"
+    >
+      <v-sheet
+      class="pa-4 rounded d-flex flex-column"
+      width="400px">
+      <span class="text-h4 mb-4 text-center">
+        Register
+      </span>
+      <form @submit.prevent="submit">
+        <v-text-field
+          v-model="username.value.value"
+          :error-messages="username.errorMessage.value"
+          label="Username"
+        ></v-text-field>
+        <v-text-field
+          v-model="email.value.value"
+          :error-messages="email.errorMessage.value"
+          type="email"
+          label="Email"
+        ></v-text-field>
+        <v-text-field
+          v-model="password.value.value"
+          :error-messages="password.errorMessage.value"
+          type="password"
+          label="Password"
+        ></v-text-field>
+        <v-btn type="submit" variant="tonal" size="large" width="100%">Register</v-btn>
+      </form>
 
-          <div class="form-group">
-            <button class="btn btn-primary btn-block" :disabled="loading">
-              <span
-                v-show="loading"
-                class="spinner-border spinner-border-sm"
-              ></span>
-              Sign Up
-            </button>
-          </div>
-        </div>
-      </Form>
+      </v-sheet>
+      <v-sheet class="pa-4 bg-transparent rounded d-flex flex-row" width="400px">  
+        <v-divider class="mt-3 mr-3" />
+        OR
+        <v-divider class="mt-3 ml-3" />
 
-      <div
-        v-if="message"
-        class="alert"
-        :class="successful ? 'alert-success' : 'alert-danger'"
-      >
-        {{ message }}
-      </div>
-    </div>
-  </div>
+      </v-sheet>
+      <v-sheet 
+      class="px-4 bg-transparent rounded d-flex flex-column"
+      width="400px">
+      <v-btn 
+        variant="tonal" 
+        size="large" 
+        :to="{ path: '/user/login'}">
+        Login
+      </v-btn>
+    </v-sheet>
+    </v-sheet>
+
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from "vue-router";
-import { Form, Field, ErrorMessage } from "vee-validate";
-import * as yup from "yup";
-import { useUserStore } from "@/stores/userStore";
+import { useField, useForm } from 'vee-validate'
+import { ref, computed, onMounted } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+import { useRouter } from 'vue-router';
 
 const userStore = useUserStore();
-const router = useRouter()
+const router = useRouter();
 
-const successful = ref(false)
-const loading = ref(false)
-const message = ref("")
+const { handleSubmit } = useForm({
+  validationSchema: {
+    username (value) {
+      if (value?.length >= 2) return true
 
+      return 'Username needs to be at least 2 characters.'
+    },
+    password (value) {
+      if (value?.length > 0) return true
 
-const schema = yup.object().shape({
-      username: yup
-        .string()
-        .required("Username is required!")
-        .min(3, "Must be at least 3 characters!")
-        .max(20, "Must be maximum 20 characters!"),
-      email: yup
-        .string()
-        .required("Email is required!")
-        .email("Email is invalid!")
-        .max(50, "Must be maximum 50 characters!"),
-      password: yup
-        .string()
-        .required("Password is required!")
-        .min(6, "Must be at least 6 characters!")
-        .max(40, "Must be maximum 40 characters!"),
-    });
+      return 'Password is required.'
+    },
+    email (value) {
+      const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      if (value.match(re)) return true
 
-
-const loggedIn = computed(() => {
-    return userStore.user.status.loggedIn;
+      return 'Please enter a valid email address.'
+    }
   },
-)
-
-const handleRegister = (user) => {
+})
+const username = useField('username')
+const password = useField('password')
+const email = useField('email')
+const message = ref("")
+const submit = handleSubmit(user => {
   message.value = "";
-  successful.value = false;
-  loading.value = true;
 
   userStore.register(user).then(
     (data) => {
+      console.log(data)
       message.value = data.message;
-      successful.value = true;
-      loading.value = false;
     },
     (error) => {
       message.value =
@@ -104,25 +103,18 @@ const handleRegister = (user) => {
           error.response.data.message) ||
         error.message ||
         error.toString();
-      successful.value = false;
-      loading.value = false;
     }
   );
-}
+})
 
+
+const loggedIn = computed(() => {
+    return userStore.user.status.loggedIn;
+  },
+)
 onMounted(() => {
   if (loggedIn.value) {
-    router.push("/profile");
+    router.push('/user/profile');
   }
 })
 </script>
-
-<style scoped>
-label {
-  display: block;
-  margin-top: 10px;
-}
-.error-feedback {
-  color: red;
-}
-</style>

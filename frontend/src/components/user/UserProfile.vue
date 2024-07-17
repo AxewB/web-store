@@ -1,5 +1,7 @@
 <template>
-  <div class="container">
+  <v-sheet v-if="currentUser" class="container">
+    asdfds
+    {{ loggedIn }}
     <header class="jumbotron">
       <h3>
         <strong>{{currentUser.username}}</strong> Profile
@@ -21,7 +23,8 @@
     <ul>
       <li v-for="role in currentUser.roles" :key="role">{{role}}</li>
     </ul>
-  </div>
+    <v-btn @click="logout">LOGOUT</v-btn>
+  </v-sheet>
 </template>
 
 <script setup>
@@ -32,22 +35,20 @@ const router = useRouter();
 const userStore = useUserStore();
 
 const currentUser = computed(() => {return userStore.user.user});
+
+const logout = () => {
+  userStore.logout();
+}
+
+const loggedIn = computed(() => {
+    return userStore.user.status.loggedIn;
+  },
+)
 onMounted(() => {
-  if (!currentUser.value) {
-    router.push('/login');
+  if (!loggedIn.value) {
+    router.push('/user/login');
   }
 })
-// export default {
-//   name: 'Profile',
-//   computed: {
-//     currentUser() {
-//       return this.$store.state.auth.user;
-//     }
-//   },
-//   mounted() {
-//     if (!this.currentUser) {
-//       this.$router.push('/login');
-//     }
-//   }
-// };
+
+
 </script>

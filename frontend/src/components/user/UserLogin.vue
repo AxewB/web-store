@@ -1,136 +1,101 @@
 <template>
-  <div class="col-md-12">
-    {{ loggedIn }}
-    <div class="">
-      <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
-      />
-      <Form @submit="handleLogin" :validation-schema="schema">
-        <div class="form-group">
-          <label for="username">Username</label>
-          <Field name="username" type="text" class="form-control" />
-          <ErrorMessage name="username" class="error-feedback" />
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <Field name="password" type="password" class="form-control" />
-          <ErrorMessage name="password" class="error-feedback" />
-        </div>
+    <v-sheet 
+    height="100vh" 
+    class="d-flex 
+          justify-center 
+          align-center 
+          flex-column
+          bg-transparent"
+    >
+      <v-sheet
+      class="pa-4 rounded d-flex flex-column"
+      width="400px">
+      <span class="text-h4 mb-4 text-center">
+        Login
+      </span>
+      <form @submit.prevent="submit">
+        <v-text-field
+          v-model="username.value.value"
+          :error-messages="username.errorMessage.value"
+          label="Username"
+        ></v-text-field>
+        <v-text-field
+          v-model="password.value.value"
+          :error-messages="password.errorMessage.value"
+          type="password"
+          label="Password"
+        ></v-text-field>
+        <v-btn type="submit" variant="tonal" size="large" width="100%">Login</v-btn>
+      </form>
+      </v-sheet>
+      <v-sheet class="pa-4 bg-transparent rounded d-flex flex-row" width="400px">  
+        <v-divider class="mt-3 mr-3" />
+        OR
+        <v-divider class="mt-3 ml-3" />
 
-        <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled="loading">
-            <span
-              v-show="loading"
-              class="spinner-border spinner-border-sm"
-            ></span>
-            <span>Login</span>
-          </button>
-        </div>
-
-        <div class="form-group">
-          <div v-if="message" class="alert alert-danger" role="alert">
-            {{ message }}
-          </div>
-        </div>
-      </Form>
-    </div>
-  </div>
+      </v-sheet>
+      <v-sheet 
+      class="px-4 bg-transparent rounded d-flex flex-column"
+      width="400px">
+      <v-btn 
+        variant="tonal" 
+        size="large" 
+        :to="{ path: '/user/register'}">
+        Register
+      </v-btn>
+    </v-sheet>
+    </v-sheet>
 </template>
 
-<script>
-import { Form, Field, ErrorMessage } from "vee-validate";
-import * as yup from "yup";
-import { useUserStore } from "@/stores/userStore";
-export default {
-  name: "Login",
-  components: {
-    Form,
-    Field,
-    ErrorMessage,
-  },
-  data() {
-    const schema = yup.object().shape({
-      username: yup.string().required("Username is required!"),
-      password: yup.string().required("Password is required!"),
-    });
+<script setup>
+import { useField, useForm } from 'vee-validate'
+import { ref, computed, onMounted } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+import { useRouter } from 'vue-router';
 
-    return {
-      loading: false,
-      message: "",
-      schema,
-      userStore: useUserStore(),
-    };
-  },
-  computed: {
-    loggedIn() {
-      return this.userStore.user.status.loggedIn;
+const userStore = useUserStore();
+const router = useRouter();
+
+const { handleSubmit } = useForm({
+  validationSchema: {
+    username (value) {
+      if (value?.length >= 2) return true
+
+      return 'Username needs to be at least 2 characters.'
+    },
+    password (value) {
+      if (value?.length > 0) return true
+
+      return 'Password is required.'
     },
   },
-  created() {
-    if (this.loggedIn) {
-      this.$router.push("/profile");
+})
+const username = useField('username')
+const password = useField('password')
+const message = ref("")
+const submit = handleSubmit(user => {
+  console.log('user', user)
+  userStore.login(user).then(
+    () => {
+      router.push("user/profile");
+    },
+    (error) => {
+      message.value =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
     }
+  );
+})
+const loggedIn = computed(() => {
+    return userStore.user.status.loggedIn;
   },
-  methods: {
-    handleLogin(user) {
-      this.loading = true;
-
-      this.userStore.login(user).then(
-        () => {
-          this.$router.push("/profile");
-        },
-        (error) => {
-          this.loading = false;
-          this.message =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-        }
-      );
-    },
-  },
-};
+)
+onMounted(() => {
+  if (loggedIn.value) {
+    router.push('/user/profile');
+  }
+})
 </script>
-
-<style scoped>
-label {
-  display: block;
-  margin-top: 10px;
-}
-
-.card-container.card {
-  max-width: 350px !important;
-  padding: 40px 40px;
-}
-
-.card {
-  background-color: #f7f7f7;
-  padding: 20px 25px 30px;
-  margin: 0 auto 25px;
-  margin-top: 50px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  border-radius: 2px;
-  -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-  -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-}
-
-.profile-img-card {
-  width: 96px;
-  height: 96px;
-  margin: 0 auto 10px;
-  display: block;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
-}
-
-.error-feedback {
-  color: red;
-}
-</style>
