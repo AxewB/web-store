@@ -2,7 +2,7 @@
   <v-app >
     <v-main class="d-flex flex-row justify-center"
     >
-    <v-sheet width="1200px" class="bg-transparent">
+    <v-sheet width="1500px" class="bg-transparent">
       <router-view/>
     </v-sheet>
     </v-main>
