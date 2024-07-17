@@ -7,7 +7,7 @@
 
 // Composables
 import { createWebHistory, createRouter } from "vue-router";
-import Home from "@/components/temp/HomePage.vue";
+import Home from "@/pages/HomePage.vue";
 import Login from "@/components/user/UserLogin.vue";
 import Register from "@/components/user/UserRegister.vue";
 // lazy-loaded
@@ -22,42 +22,67 @@ const routes = [
     name: "home",
     component: Home,
   },
+  // {
+  //   path: "/home",
+  //   component: Home,
+  // },
+  // {
+  //   path: "/login",
+  //   component: Login,
+  // },
+  // {
+  //   path: "/register",
+  //   component: Register,
+  // },
   {
-    path: "/home",
-    component: Home,
+    path: "/user/",
+    children: [
+      {
+        path: "login",
+        component: () => import("@/components/user/UserLogin.vue"),
+      },
+      {
+        path: "register",
+        component: () => import("@/components/user/UserRegister.vue"),
+      },
+      {
+        path: "profile",
+        component: () => import("@/components/user/UserProfile.vue"),
+      },
+      {
+        path: "payment",
+        component: () => import("@/components/user/UserPayment.vue"),
+      },
+      {
+        path: "orders",
+        component: () => import("@/components/user/UserOrders.vue"),
+      }
+    ]
   },
-  {
-    path: "/login",
-    component: Login,
-  },
-  {
-    path: "/register",
-    component: Register,
-  },
-  {
-    path: "/profile",
-    name: "profile",
-    // lazy-loaded
-    component: Profile,
-  },
-  {
-    path: "/admin",
-    name: "admin",
-    // lazy-loaded
-    component: BoardAdmin,
-  },
-  {
-    path: "/mod",
-    name: "moderator",
-    // lazy-loaded
-    component: BoardModerator,
-  },
-  {
-    path: "/user",
-    name: "user",
-    // lazy-loaded
-    component: BoardUser,
-  },
+  // {
+  //   path: "/profile",
+  //   name: "profile",
+  //   // lazy-loaded
+  //   component: Profile,
+  // },
+  // {
+  //   path: "/admin",
+  //   name: "admin",
+  //   // lazy-loaded
+  //   component: BoardAdmin,
+  // },
+  // {
+  //   path: "/mod",
+  //   name: "moderator",
+  //   // lazy-loaded
+  //   component: BoardModerator,
+  // },
+  // {
+  //   path: "/user",
+  //   name: "user",
+  //   // lazy-loaded
+  //   component: BoardUser,
+  // },
 ];
 
 const router = createRouter({
