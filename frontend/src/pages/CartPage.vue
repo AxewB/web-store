@@ -6,6 +6,6 @@
 </template>
 
 <script setup>
-import PageHeader from '@/components/PageHeader.vue'
+import PageHeader from '@/components/AppHeader.vue'
 
 </script>
