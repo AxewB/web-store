@@ -60,7 +60,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import PageHeader from '@/components/PageHeader.vue'
+import PageHeader from '@/components/AppHeader.vue'
 
 import UserPageOrderHistory from '@/components/user/UserPageOrderHistory.vue'
 import UserPagePayment from '@/components/user/UserPagePayment.vue'
