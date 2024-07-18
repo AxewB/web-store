@@ -1,5 +1,5 @@
 <template>
-  <v-sheet class="pa-2">
+  <v-sheet>
     <PageHeader />
     <ProductList/>
   </v-sheet>
