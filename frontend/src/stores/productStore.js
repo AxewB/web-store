@@ -1,40 +1,32 @@
 import {defineStore} from 'pinia';
 import axios from 'axios';
 
-const API_URL = "localhost:8080/api/products";
+// const API_URL = "http://localhost:8080/api/products";
+const API_URL = 'https://dummyjson.com/products';
 
-export const useProductStore = defineStore('product', {
+export const useProductStore = defineStore('products', {
   state: () => ({
-    products: []
+    products: [],
+    product: {}
   }),
   actions: {
-    getProducts() {
+    async getProducts() {
+      if (this.products.length > 0) return
       try {
-        const res = axios.get(API_URL);
+        const res = await axios.get(API_URL).then((response) => response.data);
+        this.products = res;
       } catch (error) {
         console.log("error in fetching products");
       }
+    },
+    async getProduct(id) {
+      try {
+        const res = await axios.get(`${API_URL}/${id}`).then((response) => response.data);
+        this.product = res
+        return res;
+      } catch (error) {
+        console.log("error in fetching product");
+      }
     }
-    // async setProducts() {
-    //   try {
-    //     const res = await fetch(API_URL, {
-    //       method: "get",
-    //       headers: {
-    //         "Content-Type": "application/json"
-    //       },
-    //     })
-
-    //     const data = await res.json();
-
-    //     if (data.status === 200) {
-    //       console.log("success in fetching products");
-    //     }
-    //     else {
-    //       console.log("error in fetching products");
-    //     }
-    //   } catch (error) {
-        
-    //   }
-    // }
   }
 })
