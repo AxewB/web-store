@@ -22,18 +22,6 @@ const routes = [
     name: "home",
     component: Home,
   },
-  // {
-  //   path: "/home",
-  //   component: Home,
-  // },
-  // {
-  //   path: "/login",
-  //   component: Login,
-  // },
-  // {
-  //   path: "/register",
-  //   component: Register,
-  // },
   {
     path: "/user/",
     children: [
@@ -59,30 +47,16 @@ const routes = [
       }
     ]
   },
-  // {
-  //   path: "/profile",
-  //   name: "profile",
-  //   // lazy-loaded
-  //   component: Profile,
-  // },
-  // {
-  //   path: "/admin",
-  //   name: "admin",
-  //   // lazy-loaded
-  //   component: BoardAdmin,
-  // },
-  // {
-  //   path: "/mod",
-  //   name: "moderator",
-  //   // lazy-loaded
-  //   component: BoardModerator,
-  // },
-  // {
-  //   path: "/user",
-  //   name: "user",
-  //   // lazy-loaded
-  //   component: BoardUser,
-  // },
+  {
+    path: "/product/",
+    children: [
+      {
+        path: ":id",
+        component: () => import("@/components/product/ProductPage.vue")
+      }
+    ]
+  }
+ 
 ];
 
 const router = createRouter({
@@ -105,35 +79,3 @@ const router = createRouter({
 // });
 
 export default router;
-
-// import { createRouter, createWebHistory } from 'vue-router'
-
-// const routes = [
-//   {
-//     name: "home",
-//     path: '/',
-//     component: () => import('@/pages/HomePage.vue'),
-//   },
-//   {
-//     name: "auth",
-//     path: '/auth',
-//     component: () => import('@/pages/AuthPage.vue'),
-//   },
-//   {
-//     name: "profile",
-//     path: '/profile',
-//     component: () => import('@/pages/UserProfilePage.vue'),
-//   },
-//   {
-//     name: 'cart',
-//     path: '/cart',
-//     component: () => import('@/pages/CartPage.vue'),
-//   }
-// ]
-
-// const router = createRouter({
-//   history: createWebHistory(import.meta.env.BASE_URL),
-//   routes
-// })
-
-// export default router
