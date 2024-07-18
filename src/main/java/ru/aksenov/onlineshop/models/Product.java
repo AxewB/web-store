@@ -18,6 +18,7 @@ public class Product {
     @NotBlank
     private String description;
     private List<String> images;
+    private String thumbnail;
     @NotBlank
     private Integer quantity;
     @NotBlank
@@ -39,12 +40,13 @@ public class Product {
 
     public Product() {}
 
-    public Product (String name, String description, Integer quantity, Float cost, List<String> images) {
+    public Product (String name, String description, Integer quantity, Float cost, List<String> images, String thumbnail) {
         this.name = name;
         this.description = description;
         this.quantity = quantity;
         this.cost = cost;
         this.images = images;
+        this.thumbnail = thumbnail;
     }
 
     public String getName() {
@@ -77,6 +79,14 @@ public class Product {
 
     public void setCost(Float cost) {
         this.cost = cost;
+    }
+
+    public String getThumbnail() {
+        return this.thumbnail;
+    }
+
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     public List<String> getImages() {
