@@ -1,6 +1,6 @@
 <template>
-  <v-sheet width="100%" class="bg-re">
-    <v-toolbar density="default" floating class="d-flex align-center pa-2 rounded" width="100%">
+  <v-sheet width="100%" class="bg-transparent">
+    <v-toolbar density="default" class="d-flex align-center pa-2 rounded" width="100%">
       <ShopLogo />
 
       <v-btn 
@@ -32,7 +32,7 @@
         size="small" 
         prepend-icon="mdi-account" 
         stacked
-        :to="{ path: 'user/profile' }"
+        :to="{ path: '/user/profile' }"
       >
         Профиль
       </v-btn>
@@ -41,18 +41,17 @@
         size="small" 
         prepend-icon="mdi-package-variant" 
         stacked
-        :to="{ path: 'user/orders' }"
       >
         Заказы
       </v-btn>
       <v-btn 
         class="mx-2 text-caption" 
         size="small" 
-        prepend-icon="mdi-cog" 
+        prepend-icon="mdi-cart" 
         stacked
-        :to="{ path: 'user/settings' }"
+        :to="{ path: '/cart' }"
       >
-        Настройки
+        Корзина
       </v-btn>
 
     </v-toolbar>
