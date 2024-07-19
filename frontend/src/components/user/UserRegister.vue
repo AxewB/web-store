@@ -76,7 +76,7 @@ const { handleSubmit } = useForm({
 
       return 'Password is required.'
     },
-    email (value) {
+    email (value = "") {
       const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       if (value.match(re)) return true
 
@@ -97,6 +97,7 @@ const submit = handleSubmit(user => {
       message.value = data.message;
     },
     (error) => {
+      console.log(error )
       message.value =
         (error.response &&
           error.response.data &&
@@ -109,7 +110,7 @@ const submit = handleSubmit(user => {
 
 
 const loggedIn = computed(() => {
-    return userStore.user.status.loggedIn;
+    return userStore.status.loggedIn;
   },
 )
 onMounted(() => {

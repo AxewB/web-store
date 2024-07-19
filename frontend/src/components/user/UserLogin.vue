@@ -42,7 +42,9 @@
         size="large" 
         :to="{ path: '/user/register'}">
         Register
+        {{ message }}
       </v-btn>
+      
     </v-sheet>
     </v-sheet>
 </template>
@@ -90,7 +92,7 @@ const submit = handleSubmit(user => {
   );
 })
 const loggedIn = computed(() => {
-    return userStore.user.status.loggedIn;
+    return userStore.status.loggedIn;
   },
 )
 onMounted(() => {
