@@ -1,9 +1,13 @@
 <template>
   <v-sheet>
-    user payment
+user info
   </v-sheet>
 </template>
 
 <script setup>
 
 </script>
+
+<style lang="scss" scoped>
+
+</style>
