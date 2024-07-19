@@ -8,9 +8,7 @@ const initialState = user
   : { status: { loggedIn: false }, user: null };
 
 export const useUserStore = defineStore("user", {
-  state: () => ({
-    user: initialState
-  }),
+  state: () => initialState,
   actions: {
     login(user) {
       return AuthService.login(user).then(
@@ -42,23 +40,23 @@ export const useUserStore = defineStore("user", {
       );
     },
     
-    loginSuccess(state, user) {
-      state.status.loggedIn = true;
-      state.user = user;
+    loginSuccess(user) {
+      this.status.loggedIn = true;
+      this.user = user;
     },
-    loginFailure(state) {
-      state.status.loggedIn = false;
-      state.user = null;
+    loginFailure() {
+      this.status.loggedIn = false;
+      this.user = null;
     },
-    logoutSuccess(state) {
-      state.status.loggedIn = false;
-      state.user = null;
+    logoutSuccess() {
+      this.status.loggedIn = false;
+      this.user = null;
     },
-    registerSuccess(state) {
-      state.status.loggedIn = false;
+    registerSuccess() {
+      this.status.loggedIn = false;
     },
-    registerFailure(state) {
-      state.status.loggedIn = false;
+    registerFailure() {
+      this.status.loggedIn = false;
     }
   }
 })
