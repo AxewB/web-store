@@ -8,13 +8,13 @@
 // Composables
 import { createWebHistory, createRouter } from "vue-router";
 import Home from "@/pages/HomePage.vue";
-import Login from "@/components/user/UserLogin.vue";
-import Register from "@/components/user/UserRegister.vue";
 // lazy-loaded
 const Profile = () => import("@/components/user/UserProfile.vue")
 const BoardAdmin = () => import("@/components/temp/BoardAdmin.vue")
 const BoardModerator = () => import("@/components/temp/BoardModerator.vue")
 const BoardUser = () => import("@/components/temp/BoardUser.vue")
+
+import UserProfile from "@/components/user/UserProfile.vue";
 
 const routes = [
   {
@@ -23,28 +23,28 @@ const routes = [
     component: Home,
   },
   {
+    path: "/cart",
+    name: "cart",
+    component: () => import("@/components/CartPage.vue"),
+  },
+  {
     path: "/user/",
     children: [
       {
+        name: "userLogin",
         path: "login",
         component: () => import("@/components/user/UserLogin.vue"),
       },
       {
+        name: "userRegister",
         path: "register",
         component: () => import("@/components/user/UserRegister.vue"),
       },
       {
+        name: "userProfile",
         path: "profile",
         component: () => import("@/components/user/UserProfile.vue"),
       },
-      {
-        path: "payment",
-        component: () => import("@/components/user/UserPayment.vue"),
-      },
-      {
-        path: "orders",
-        component: () => import("@/components/user/UserOrders.vue"),
-      }
     ]
   },
   {
