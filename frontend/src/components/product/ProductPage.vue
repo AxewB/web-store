@@ -1,28 +1,30 @@
 <template>
-  <v-sheet class="d-flex flex-column">
-    <AppHeader/>
-    <v-container width="100%" class="bg-red">
-    <v-row no-gutters>
-      <v-col sm="4">
-        <v-sheet class="ma-2 pa-2">
-          One of three columns
-        </v-sheet>
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-col  sm="4">
-        <v-sheet class="ma-2 pa-2">
-          One of three columns
-        </v-sheet>
-      </v-col>
-      <v-spacer></v-spacer>
-      <v-col width="100%" class="bg-red" sm="4">
-        <v-sheet class="ma-2 pa-2">
-          One of three columns
-        </v-sheet>
-      </v-col>
-    </v-row>
-  </v-container>
-    {{ product }}
+  <v-sheet class="d-flex flex-column bg-transparent">
+    <AppHeader class="mb-1"/>
+    <v-sheet class="my-1 pa-2 bg-transparent text-overline">
+      {{ product.category }} /
+      {{ product.category }} /
+      {{ product.category }}
+      <!-- TODO: Add categories (parent and child categories) -->
+    </v-sheet>
+    <v-sheet class="d-flex justify-center pa-4 my-1" rounded width="100%" >
+      <v-sheet elevation="2" rounded class="pa-2 bg-transparent" border min-width="350px">
+        <ProductImageCarousel :images="product.images"/>
+      </v-sheet>
+
+      <v-sheet class="flex-grow-1 pa-2 mx-4 bg-transparent">
+        <ProductShortInfo :product="product" @on-open-description=""/>
+      </v-sheet>
+
+      <v-sheet min-width="300px" class="pa-2  bg-transparent" >
+        <ProductActions :product="product" @on-add-to-cart="addProductToCart"/>
+      </v-sheet>
+    </v-sheet>
+    <v-sheet class="pa-4 d-flex flex-column" rounded >
+      <span class="text-h5 font-weight-medium ">Описание</span>
+      <span class="text-body-1"> {{ product.description }} </span>
+    </v-sheet>
+   
   </v-sheet>
 </template>
 
@@ -31,6 +33,9 @@ import { onMounted, ref } from 'vue'
 import {useProductStore} from '@/stores/productStore'
 import { useRoute } from 'vue-router';
 import AppHeader from "@/components/AppHeader.vue";
+import ProductImageCarousel from './page/ProductImageCarousel.vue';
+import ProductShortInfo from './page/ProductShortInfo.vue';
+import ProductActions from './page/ProductActions.vue';
 
 const route = useRoute()
 const product = ref({})
@@ -39,4 +44,8 @@ onMounted(async () => {
   const id = route.params.id
   product.value = await productStore.getProduct(id)
 })
+
+function addProductToCart() {
+  alert("add product to cart") // TODO: add product to cart
+}
 </script>

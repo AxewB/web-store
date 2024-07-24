@@ -15,6 +15,7 @@ const BoardModerator = () => import("@/components/temp/BoardModerator.vue")
 const BoardUser = () => import("@/components/temp/BoardUser.vue")
 
 import UserProfile from "@/components/user/UserProfile.vue";
+import { components } from "vuetify/dist/vuetify-labs.js";
 
 const routes = [
   {
@@ -29,7 +30,13 @@ const routes = [
   },
   {
     path: "/user/",
+    redirect: { name: "userProfile" },
     children: [
+      {
+        name: "userProfile",
+        path: "profile",
+        component: () => import("@/components/user/UserProfile.vue"),
+      },
       {
         name: "userLogin",
         path: "login",
@@ -40,17 +47,14 @@ const routes = [
         path: "register",
         component: () => import("@/components/user/UserRegister.vue"),
       },
-      {
-        name: "userProfile",
-        path: "profile",
-        component: () => import("@/components/user/UserProfile.vue"),
-      },
+
     ]
   },
   {
     path: "/product/",
     children: [
       {
+        name: "productPage",
         path: ":id",
         component: () => import("@/components/product/ProductPage.vue")
       }

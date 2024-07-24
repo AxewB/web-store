@@ -1,6 +1,9 @@
 <template>
-  <v-sheet class="d-flex justify-center bg-transparent align-center rounded text-h4 pa-2"
-    width="175px">
+  <v-sheet 
+    class="d-flex justify-center bg-transparent align-center rounded text-h4 pa-2 cursor-pointer"
+    width="175px"
+    @click="router.push({name: 'home'})"
+  >
     <span class="logo-font text-light-blue-accent-4">
       S H O P
     </span>
@@ -8,7 +11,9 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 </script>
 
 <style lang="scss" scoped>

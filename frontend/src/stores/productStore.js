@@ -7,14 +7,22 @@ const API_URL = 'https://dummyjson.com/products';
 export const useProductStore = defineStore('products', {
   state: () => ({
     products: [],
-    product: {}
+    total: 0,
+    skip: 0,
+    limit: 10,
+    page: 1,
   }),
+  getters: {
+    totalPages: (state) => Math.ceil(state.total / state.limit),
+  },
   actions: {
     async getProducts() {
-      if (this.products.length > 0) return
       try {
-        const res = await axios.get(API_URL).then((response) => response.data);
-        this.products = res;
+        const res = await axios.get(API_URL + `?skip=${this.skip}&limit=${this.limit}`).then((response) => response.data);
+        this.products = res.products
+        this.total = res.total
+        this.skip = res.skip
+        this.limit = res.limit
       } catch (error) {
         console.log("error in fetching products");
       }
@@ -22,11 +30,26 @@ export const useProductStore = defineStore('products', {
     async getProduct(id) {
       try {
         const res = await axios.get(`${API_URL}/${id}`).then((response) => response.data);
-        this.product = res
-        return res;
+        return res
       } catch (error) {
         console.log("error in fetching product");
       }
+    },
+    async turnPage(page) {
+      this.page = page
+      this.skip = (this.page - 1) * this.limit
+      console.log(this.skip)
+      await this.getProducts()
+    },
+    resetStore() { 
+      this.products = []
+      this.total = 0
+      this.skip = 0
+      this.limit = 10
+      this.page = 1
+    },
+    editProduct(oldProduct, newProduct) {
+      alert("Not implemented yet!")
     }
   }
 })
