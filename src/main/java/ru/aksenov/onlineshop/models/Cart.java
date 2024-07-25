@@ -2,6 +2,7 @@ package ru.aksenov.onlineshop.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,33 +12,45 @@ public class Cart{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToMany
     @JoinTable(
-            name="cart_user",
-            joinColumns = @JoinColumn(
-                    name="user_id",
-                    referencedColumnName = "id"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name="cart_id",
-                    referencedColumnName = "id"
-            )
+            name = "cart_product",
+            joinColumns = @JoinColumn(name = "cart_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-    @OneToOne(targetEntity = User.class)
-    private List<User> users;
+    private List<Product> products = new ArrayList<>();
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 
-    @JoinTable(
-            name="cart_product",
-            joinColumns = @JoinColumn(
-                    name="product_id",
-                    referencedColumnName = "id"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name="cart_id",
-                    referencedColumnName = "id"
-            )
-    )
-    @ManyToMany(targetEntity = Product.class)
-    private List<Product> products;
+    public User getUser() {
+        return this.user;
+    }
 
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public List<Product> getProducts() {
+        return this.products;
+    }
+
+    // Вспомогательные методы
+
+    public void addProduct(Product product) {
+        this.products.add(product);
+    }
+
+    public void removeProduct(Product product) {
+        this.products.remove(product);
+    }
+
+    public void clearProducts() {
+        this.products.clear();
+    }
 }

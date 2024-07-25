@@ -1,16 +1,14 @@
 package ru.aksenov.onlineshop.controllers;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.aksenov.onlineshop.helperClasses.ResponseWrapper;
 import ru.aksenov.onlineshop.models.Product;
 import ru.aksenov.onlineshop.repository.ProductRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.aksenov.onlineshop.service.ProductService;
 
 import java.util.List;
 
@@ -20,64 +18,51 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    ProductRepository productRepository;
-
-    public ProductController(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
+    ProductService productService;
 
     @GetMapping
-    public ResponseWrapper<Product> list(
-            @RequestParam(defaultValue = "10") int limit,
-            @RequestParam(defaultValue = "0") int skip) {
-        List<Product> data = productRepository.findAll();
-        int size = data.size();
-        return new ResponseWrapper<>(
-                data.subList(skip, Math.min(skip + limit, size)),
-                size,
-                limit,
-                skip
-        );
+    public List<Product> getAllProducts() {
+        return productService.getAllProducts();
     }
 
     @GetMapping("{id}")
-    public Product getById(@PathVariable("id") Product product) {
-        return product;
+    public ResponseEntity<Product> getById(@PathVariable("id") Long id) {
+        try {
+            Product product = productService.getProductById(id);
+            return ResponseEntity.ok(product);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @GetMapping("/search/{searchText}")
-    public ResponseWrapper<Product> searchProducts(
-            @PathVariable String searchText,
-            @RequestParam(defaultValue = "10") int limit,
-            @RequestParam(defaultValue = "0") int skip) {
-
-        List<Product> data = productRepository.findByName(searchText);
-        int size = data.size();
-        return new ResponseWrapper<>(
-                data.subList(skip, Math.min(skip + limit, size)),
-                size,
-                limit,
-                skip
-        );
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public Product create(@RequestBody Product product) {
-        return productRepository.save(product);
+    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+        Product newProduct = productService.addProduct(product);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("{id}")
-    public Product update(@PathVariable("id") Product productFromDb,
-                          @RequestBody Product product) {
-        BeanUtils.copyProperties(product, productFromDb, "id");
-        return productRepository.save(productFromDb);
+    public ResponseEntity<Product> updateProduct(
+            @PathVariable Long id,
+            @RequestBody Product productDetails
+    ) {
+        try {
+            Product updatedProduct = productService.updateProduct(id, productDetails);
+            return ResponseEntity.ok(updatedProduct);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{id}")
-    public void delete(@PathVariable("id") Product product) {
-        productRepository.delete(product);
+    public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long id) {
+
+        try {
+            productService.deleteProduct(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

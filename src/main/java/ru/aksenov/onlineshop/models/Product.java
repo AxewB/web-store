@@ -3,6 +3,7 @@ package ru.aksenov.onlineshop.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -13,40 +14,32 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @NotBlank
+
     private String name;
-    @NotBlank
     private String description;
     private List<String> images;
     private String thumbnail;
-    @NotBlank
-    private Integer quantity;
-    @NotBlank
-    private Float cost;
+    private int quantity;
+    private double cost;
 
-    @JoinTable(
-            joinColumns = @JoinColumn(
-                    name="product_id",
-                    referencedColumnName = "id"
-            ),
-            inverseJoinColumns = @JoinColumn(
-                    name="category_id",
-                    referencedColumnName = "id"
-            )
-    )
-    @NotBlank
+
     @ManyToMany
-    private Set<Category> category;
+    @JoinTable(
+            name="product_category",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private Set<Category> categories = new HashSet<>();
 
     public Product() {}
 
-    public Product (String name, String description, Integer quantity, Float cost, List<String> images, String thumbnail) {
-        this.name = name;
-        this.description = description;
-        this.quantity = quantity;
+    public Product(double cost, int quantity, List<String> images, String thumbnail, String description, String name) {
         this.cost = cost;
-        this.images = images;
+        this.quantity = quantity;
         this.thumbnail = thumbnail;
+        this.images = images;
+        this.description = description;
+        this.name = name;
     }
 
     public String getName() {
@@ -65,22 +58,6 @@ public class Product {
         this.description = description;
     }
 
-    public Integer getQuantity() {
-        return this.quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Float getCost() {
-        return this.cost;
-    }
-
-    public void setCost(Float cost) {
-        this.cost = cost;
-    }
-
     public String getThumbnail() {
         return this.thumbnail;
     }
@@ -95,6 +72,50 @@ public class Product {
 
     public void setImages(List<String> images) {
         this.images = images;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
+    }
+
+    // Проверка наличия товара
+    public boolean isAvailable(int requestedQuantity) {
+        return this.quantity >= requestedQuantity;
+    }
+
+    // Уменьшение количества товара
+    public void decreaseQuantity(int amount) {
+        if (this.quantity >= amount) {
+            this.quantity -= amount;
+        }
     }
 
     @Override

@@ -36,6 +36,8 @@ public class User {
   @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles = new HashSet<>();
 
+  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+  private Cart cart;
 
   public User() {
   }
@@ -84,5 +86,13 @@ public class User {
 
   public void setRoles(Set<Role> roles) {
     this.roles = roles;
+  }
+
+  public Cart getCart() {
+    return this.cart;
+  }
+
+  public void setCart(Cart cart) {
+    this.cart = cart;
   }
 }
