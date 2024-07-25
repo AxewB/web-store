@@ -1,8 +1,8 @@
 import {defineStore} from 'pinia';
 import axios from 'axios';
 
-// const API_URL = "http://localhost:8080/api/products";
-const API_URL = 'https://dummyjson.com/products';
+const API_URL = "http://localhost:8080/api/products";
+// const API_URL = 'https://dummyjson.com/products';
 
 export const useProductStore = defineStore('products', {
   state: () => ({

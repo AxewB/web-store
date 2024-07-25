@@ -3,6 +3,7 @@ package ru.aksenov.onlineshop.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import ru.aksenov.onlineshop.helperClasses.ResponseWrapper;
 import ru.aksenov.onlineshop.models.Product;
 import ru.aksenov.onlineshop.repository.ProductRepository;
 import org.springframework.beans.BeanUtils;
@@ -22,6 +23,7 @@ public class ProductController {
 
     @GetMapping
     public List<Product> getAllProducts() {
+        
         return productService.getAllProducts();
     }
 
