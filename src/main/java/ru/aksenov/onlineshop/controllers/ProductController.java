@@ -23,7 +23,7 @@ public class ProductController {
 
     @GetMapping
     public List<Product> getAllProducts() {
-        
+//        TODO: add limit and skip parameters
         return productService.getAllProducts();
     }
 
@@ -66,5 +66,23 @@ public class ProductController {
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<Product>> getProductsByCategoryAndDescendants(@PathVariable Long categoryId) {
+        List<Product> products = productService.getProductsByCategoryAndSubcategories(categoryId);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/search/{name}")
+    public ResponseEntity<List<Product>> getProductsByName(@PathVariable String name) {
+        List<Product> products = productService.getProductsByName(name);
+        return ResponseEntity.ok(products);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> searchProductsByName(@RequestParam String name) {
+        List<Product> products = productService.getProductsByNameIgnoreCaseAndSpace(name);
+        return ResponseEntity.ok(products);
     }
 }

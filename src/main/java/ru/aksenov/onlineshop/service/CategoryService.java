@@ -6,7 +6,9 @@ import ru.aksenov.onlineshop.models.Category;
 import ru.aksenov.onlineshop.repository.CategoryRepository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class CategoryService {
@@ -43,5 +45,19 @@ public class CategoryService {
             category = category.getParent();
         }
         return path;
+    }
+
+    public Set<Long> getAllChildCategoryIds(Long parentId) {
+        Set<Long> categoryIds = new HashSet<>();
+        collectChildCategoryIds(parentId, categoryIds);
+        return categoryIds;
+    }
+
+    private void collectChildCategoryIds(Long parentId, Set<Long> categoryIds) {
+        List<Category> childCategories = categoryRepository.findByParentId(parentId);
+        for (Category child : childCategories) {
+            categoryIds.add(child.getId());
+            collectChildCategoryIds(child.getId(), categoryIds);
+        }
     }
 }

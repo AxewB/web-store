@@ -22,6 +22,9 @@ public class ProductService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private CategoryService categoryService;
+
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
@@ -60,7 +63,21 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(()->new RuntimeException("Product not found"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
         productRepository.delete(product);
+    }
+
+    public List<Product> getProductsByCategoryAndSubcategories(Long categoryId) {
+        Set<Long> categoryIds = categoryService.getAllChildCategoryIds(categoryId);
+        categoryIds.add(categoryId); // Добавляем родительскую категорию
+        return productRepository.findByCategoriesIdIn(categoryIds);
+    }
+
+    public List<Product> getProductsByName(String name) {
+        return productRepository.findByName(name);
+    }
+
+    public List<Product> getProductsByNameIgnoreCaseAndSpace(String name) {
+        return productRepository.findByNameIgnoreCaseAndSpaces(name);
     }
 }
