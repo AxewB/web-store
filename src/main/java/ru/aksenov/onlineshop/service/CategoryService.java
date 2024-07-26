@@ -40,11 +40,19 @@ public class CategoryService {
     public List<Category> getPathFromRoot(Long categoryId) {
         List<Category> path = new ArrayList<>();
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found"));
-        while (category.getParent() != null) {
+        do {
             path.add(0, category);
+            System.out.println(category.getName());
             category = category.getParent();
-        }
+        } while (category != null);
         return path;
+//        List<Category> path = new ArrayList<>();
+//        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found"));
+//        while (category.getParent() != null) {
+//            path.add(0, category);
+//            category = category.getParent();
+//        }
+//        return path;
     }
 
     public Set<Long> getAllChildCategoryIds(Long parentId) {

@@ -1,8 +1,8 @@
 <template>
-  <v-sheet class="d-flex flex-column" rounded>
+  <v-sheet v-if="props.images" class="d-flex flex-column" rounded>
     <v-sheet class="pa-2" rounded 
     color="grey-lighten-1">
-      <v-carousel v-model="currentImage" height="350" hide-delimiters show-arrows="hover">
+      <v-carousel v-model="currentImage" height="350" hide-delimiters :show-arrows="props.images.length > 1 ? 'hover' : false">
         <v-carousel-item
           v-for="image in props.images"
           :key="image + 'carousel'"

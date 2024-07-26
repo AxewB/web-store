@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.aksenov.onlineshop.service.ProductService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -22,9 +23,19 @@ public class ProductController {
     ProductService productService;
 
     @GetMapping
-    public List<Product> getAllProducts() {
-//        TODO: add limit and skip parameters
-        return productService.getAllProducts();
+    public ResponseEntity<ResponseWrapper<Product>> getAllProducts(
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(defaultValue = "0") int skip
+    ) {
+        List<Product> products = productService.getAllProducts();
+        ResponseWrapper<Product> response = new ResponseWrapper<>(
+                limit == 0
+                        ? products.stream().skip(skip).collect(Collectors.toList())
+                        : products.stream().skip(skip).limit(limit).collect(Collectors.toList()),
+                limit,
+                skip
+        );
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("{id}")

@@ -1,15 +1,12 @@
 <template>
   <v-sheet class="bg-transparent">
     <v-sheet class="text-h4 bg-transparent"> 
-      {{ product.title }} 
+      {{ product.name }} 
     </v-sheet>
     <VDivider class="my-2"/>
     <v-sheet class="d-flex flex-column bg-transparent">
       <v-sheet class="text-h5 font-weight-bold align-center d-flex mb-2 bg-transparent">
         О товаре
-        <v-btn size="small" class="ml-4" variant="tonal" append-icon="mdi-arrow-right" @click="emit('on-open-description')">
-          Перейти к описанию
-        </v-btn>
       </v-sheet>
       <v-sheet 
         v-for="key in Object.keys(displayData)" 
@@ -39,12 +36,19 @@ const props = defineProps({
 const emit = defineEmits(['on-open-description'])
 
 const displayData = computed(() => {
-  const dims = props.product.dimensions
+  // const dims = props.product.dimensions
+  // return {
+  //   "Ширина": dims.width,
+  //   "Высота": dims.height,
+  //   "Глубина": dims.depth,
+  //   "Вес": props.product.weight
+  // }
+
   return {
-    "Ширина": dims.width,
-    "Высота": dims.height,
-    "Глубина": dims.depth,
-    "Вес": props.product.weight
+    "Ширина": "Ширина",
+    "Высота": "Высота",
+    "Глубина": "Глубина",
+    "Вес": "Вес"
   }
 })
 </script>

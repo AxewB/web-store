@@ -4,10 +4,10 @@
 
     <VDivider />
     <span class="text-h6 my-1">
-      {{ props.product.price }}$
+      {{ props.product.cost }}$
     </span>
     <span class="my-1">
-      {{ props.product.title }}
+      {{ props.product.name }}
     </span>
     <v-rating class="my-1" readonly density="compact" size="small" color="orange" v-model="props.product.rating"></v-rating>
   </v-card>

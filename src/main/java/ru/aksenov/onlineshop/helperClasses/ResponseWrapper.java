@@ -8,13 +8,12 @@ public class ResponseWrapper<T> {
     private int limit;
     private int skip;
 
-    public ResponseWrapper(List<T> data, int size, int limit, int skip) {
+    public ResponseWrapper(List<T> data, int limit, int skip) {
         this.data = data;
-        this.size = size;
+        this.size = data.size();
         this.limit = limit;
         this.skip = skip;
     }
-
     // Геттеры и сеттеры
 
     public List<T> getData() {

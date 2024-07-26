@@ -19,7 +19,7 @@ export const useProductStore = defineStore('products', {
     async getProducts() {
       try {
         const res = await axios.get(API_URL + `?skip=${this.skip}&limit=${this.limit}`).then((response) => response.data);
-        this.products = res.products
+        this.products = res.data
         this.total = res.total
         this.skip = res.skip
         this.limit = res.limit
