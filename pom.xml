@@ -13,7 +13,7 @@
 	<artifactId>spring-boot-security-postgresql</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>spring-boot-security-postgresql</name>
-	<description>Spring Boot, Spring Security, PostgreSQL: JWT Authentication &amp; Authorization example</description>
+	<description>Web-store backend</description>
 
 	<properties>
 		<java.version>17</java.version>
