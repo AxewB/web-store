@@ -50,8 +50,7 @@ public class ProductService {
     public Product updateProduct(Long id, Product productDetails) {
         Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
 
-        BeanUtils.copyProperties(product, productDetails, "id", "category");
-
+        BeanUtils.copyProperties(productDetails, product,  "id", "category");
         Set<Category> categories = new HashSet<>();
         for (Category category : productDetails.getCategories()) {
             Category singleCategory = categoryRepository.findById(category.getId()).orElseThrow(() -> new RuntimeException("Category not found"));

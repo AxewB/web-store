@@ -1,8 +1,7 @@
 <template>
   <v-card width="100%" rounded class="my-2 pa-2 d-flex" border @click="onClick">
-    <v-sheet width="100px"> 
-      <v-img :src="props.product.thumbnail">
-      </v-img>
+    <v-sheet width="100px">
+      <v-img :src="thumbnail"/>
     </v-sheet>
     <VDivider vertical class="mx-2"/>
 
@@ -18,14 +17,15 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 const props = defineProps({
-  'product':{
+  product: {
     type: Object,
     required: true
   }
 });
 const emit = defineEmits(['on-click']);
-
+const thumbnail = computed(() => props.product.thumbnail)
 function onClick() {
   emit('on-click', props.product.id)
 }

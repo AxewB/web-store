@@ -4,13 +4,13 @@ import java.util.List;
 
 public class ResponseWrapper<T> {
     private List<T> data;
-    private int size;
+    private int total;
     private int limit;
     private int skip;
 
-    public ResponseWrapper(List<T> data, int limit, int skip) {
+    public ResponseWrapper(List<T> data, int total, int limit, int skip) {
         this.data = data;
-        this.size = data.size();
+        this.total = total;
         this.limit = limit;
         this.skip = skip;
     }
@@ -24,12 +24,12 @@ public class ResponseWrapper<T> {
         this.data = data;
     }
 
-    public int getSize() {
-        return size;
+    public int getTotal() {
+        return total;
     }
 
-    public void setSize(int size) {
-        this.size = size;
+    public void setTotal(int total) {
+        this.total = total;
     }
 
     public int getLimit() {

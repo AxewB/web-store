@@ -32,7 +32,8 @@
         size="small"
         prepend-icon="mdi-account"
         stacked
-        :to="{ path: '/user/profile' }"
+        :to="{ name: 'userProfile', query: { tab: 'account' }  }"
+        :active="false"
       >
         Профиль
       </v-btn>
@@ -41,6 +42,8 @@
         size="small"
         prepend-icon="mdi-package-variant"
         stacked
+        :to="{ path: '/user/profile', query: { tab: 'orders' } }"
+        :active="false"
       >
         Заказы
       </v-btn>
@@ -50,6 +53,7 @@
         prepend-icon="mdi-cart"
         stacked
         :to="{ path: '/cart' }"
+        :active="false"
       >
         Корзина
       </v-btn>

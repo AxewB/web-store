@@ -76,7 +76,6 @@ const username = useField('username')
 const password = useField('password')
 const message = ref("")
 const submit = handleSubmit(user => {
-  console.log('user', user)
   userStore.login(user).then(
     () => {
       router.push("user/profile");

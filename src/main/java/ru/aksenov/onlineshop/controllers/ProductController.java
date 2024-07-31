@@ -32,6 +32,7 @@ public class ProductController {
                 limit == 0
                         ? products.stream().skip(skip).collect(Collectors.toList())
                         : products.stream().skip(skip).limit(limit).collect(Collectors.toList()),
+                products.size(),
                 limit,
                 skip
         );
@@ -54,7 +55,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Product> updateProduct(
             @PathVariable Long id,
             @RequestBody Product productDetails
@@ -68,7 +69,7 @@ public class ProductController {
 
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long id) {
 
         try {

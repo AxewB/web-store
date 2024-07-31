@@ -1,5 +1,5 @@
 <template>
-  <v-sheet>
+  <v-sheet class="pa-2" rounded>
     user payment
   </v-sheet>
 </template>

@@ -51,6 +51,7 @@
         Login
       </v-btn>
     </v-sheet>
+
     </v-sheet>
 
 </template>
@@ -93,11 +94,11 @@ const submit = handleSubmit(user => {
 
   userStore.register(user).then(
     (data) => {
-      console.log(data)
+      
       message.value = data.message;
     },
     (error) => {
-      console.log(error )
+      
       message.value =
         (error.response &&
           error.response.data &&

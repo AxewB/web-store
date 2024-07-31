@@ -1,5 +1,6 @@
 package ru.aksenov.onlineshop.service;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.aksenov.onlineshop.models.Category;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -25,9 +27,14 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
+    public Category addCategory(Category category) {
+        return categoryRepository.save(category);
+    }
+
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
+
 
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
@@ -37,22 +44,22 @@ public class CategoryService {
         return categoryRepository.findByParentId(parentId);
     }
 
+    public List<Category> getRootLayer() {
+        return categoryRepository.findByParentIdIsNull();
+    }
+
+    public List<Category> getBottomLayer() {
+        return categoryRepository.findAll().stream().filter(cat -> cat.getChildren().isEmpty()).toList();
+    }
+
     public List<Category> getPathFromRoot(Long categoryId) {
         List<Category> path = new ArrayList<>();
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found"));
         do {
             path.add(0, category);
-            System.out.println(category.getName());
             category = category.getParent();
         } while (category != null);
         return path;
-//        List<Category> path = new ArrayList<>();
-//        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new RuntimeException("Category not found"));
-//        while (category.getParent() != null) {
-//            path.add(0, category);
-//            category = category.getParent();
-//        }
-//        return path;
     }
 
     public Set<Long> getAllChildCategoryIds(Long parentId) {
@@ -67,5 +74,16 @@ public class CategoryService {
             categoryIds.add(child.getId());
             collectChildCategoryIds(child.getId(), categoryIds);
         }
+    }
+
+    public Category updateCategory(Long id, Category categoryDetails) {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
+        BeanUtils.copyProperties(categoryDetails, category, "id");
+        return categoryRepository.save(category);
+    }
+
+    public void deleteCategory(Long id) {
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
+        categoryRepository.delete(category);
     }
 }

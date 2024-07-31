@@ -24,6 +24,7 @@ public class CategoryController {
         return categoryService.getAllCategories();
     }
 
+
     @GetMapping("/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
         try {
@@ -32,6 +33,16 @@ public class CategoryController {
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/root")
+    public List<Category> getRootLayer() {
+        return categoryService.getRootLayer();
+    }
+
+    @GetMapping("/bottom")
+    public List<Category> getBottomLayer() {
+        return categoryService.getBottomLayer();
     }
 
     @GetMapping("/{id}/children")
@@ -45,11 +56,29 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Category> addCategory(
-            @RequestParam String name,
-            @RequestParam(required = false) Long parentId
-    ) {
-        Category category = categoryService.addCategory(name, parentId);
+    public ResponseEntity<Category> addCategory(@RequestBody Category category) {
+        System.out.println(category);
+        categoryService.addCategory(category);
         return ResponseEntity.status(HttpStatus.CREATED).body(category);
+    }
+
+    @PutMapping
+    public ResponseEntity<Category> updateCategory(@RequestParam Long id, @RequestBody Category category) {
+        try {
+            Category updatedCategory = categoryService.updateCategory(id, category);
+            return ResponseEntity.ok(updatedCategory);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Category> deleteCategory(@RequestParam Long id) {
+        try {
+            categoryService.deleteCategory(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

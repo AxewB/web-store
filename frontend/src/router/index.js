@@ -10,12 +10,10 @@ import { createWebHistory, createRouter } from "vue-router";
 import Home from "@/pages/HomePage.vue";
 // lazy-loaded
 const Profile = () => import("@/components/user/UserProfile.vue")
-const BoardAdmin = () => import("@/components/temp/BoardAdmin.vue")
+const BoardAdmin = () => import("@/components/user/admin/BoardAdmin.vue")
 const BoardModerator = () => import("@/components/temp/BoardModerator.vue")
 const BoardUser = () => import("@/components/temp/BoardUser.vue")
 
-import UserProfile from "@/components/user/UserProfile.vue";
-import { components } from "vuetify/dist/vuetify-labs.js";
 
 const routes = [
   {
@@ -59,8 +57,12 @@ const routes = [
         component: () => import("@/components/product/ProductPage.vue")
       }
     ]
+  },
+  {
+    path: "/admin",
+    name: "admin",
+    component: BoardAdmin,
   }
- 
 ];
 
 const router = createRouter({

@@ -83,6 +83,7 @@ INSERT INTO categories (id, name, parentId) VALUES
 (28, 'Men''s Shirts', 14), -- Подкатегория к 'Men\'s Wear'
 (29, 'Men''s Shoes', 14); -- Подкатегория к 'Men\'s Wear'
 
+INSERT INTO product (id, name, description, images, thumbnail, quantity, cost) VALUES
 (16, 'Essence Mascara Lash Princess', 'The Essence Mascara Lash Princess is a popular mascara known for its volumizing and lengthening effects. Achieve dramatic lashes with this long-lasting and cruelty-free formula.', '{"https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/1.png"}', 'https://cdn.dummyjson.com/products/images/beauty/Essence%20Mascara%20Lash%20Princess/thumbnail.png', 5, 9.99),
 (17, 'Eyeshadow Palette with Mirror', 'The Eyeshadow Palette with Mirror offers a versatile range of eyeshadow shades for creating stunning eye looks. With a built-in mirror, it''s convenient for on-the-go makeup application.', '{"https://cdn.dummyjson.com/products/images/beauty/Eyeshadow%20Palette%20with%20Mirror/1.png"}', 'https://cdn.dummyjson.com/products/images/beauty/Eyeshadow%20Palette%20with%20Mirror/thumbnail.png', 44, 19.99),
 (18, 'Powder Canister', 'The Powder Canister is a finely milled setting powder designed to set makeup and control shine. With a lightweight and translucent formula, it provides a smooth and matte finish.', '{"https://cdn.dummyjson.com/products/images/beauty/Powder%20Canister/1.png"}', 'https://cdn.dummyjson.com/products/images/beauty/Powder%20Canister/thumbnail.png', 59, 14.99),
