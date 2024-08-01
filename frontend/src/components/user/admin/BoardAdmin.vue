@@ -64,8 +64,8 @@ function switchTab(tab) {
 }
 
 
-onMounted(() => {
-  UserService.getAdminBoard().then(
+onMounted(async () => {
+  await UserService.getAdminBoard().then(
     (response) => {
       content.value = response.data;
     },

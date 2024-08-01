@@ -1,9 +1,13 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
-const API_URL = "http://localhost:8080/api/category";
+import contentHeader from '@/services/content-header';
+import authHeader from '@/services/auth-header';
 let user = JSON.parse(localStorage.getItem('user'));
+console.log(user.accessToken)
+const API_URL = "http://localhost:8080/api/category";
 
-export const useCategoryStore = defineStore('categories', {
+
+export const useCategoryStore = defineStore('category', {
   state: () => ({
     categories: [],
     category: {},
@@ -39,58 +43,56 @@ export const useCategoryStore = defineStore('categories', {
     },
 
     async addCategory(category) {
-      const parent = category.parent ? this.categories.filter((cat) => cat.id === category.parent) : null
-
-      await axios.post(API_URL, {
-        "name": category.name,
-        "parent": parent
-      },
-      {
+      
+      const cat = {
+        name: "New Category",
+        parentId: null 
+      };
+      
+      const token = user.accessToken; // ваш JWT токен
+      
+      axios.post("http://localhost:8080/api/category/add", cat, {
         headers: {
           'Content-Type': 'application/json',
-          "Authorization": 'Basic ' + user.accessToken
-        },
+          'Authorization': `Bearer ${token}`
+        }
       })
-      .then(response => {
-        console.log('response', response)
+      .then(function (response) {
+        console.log(response);
       })
-      .catch(error => {
-        console.log('error', error)
-      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
-      await this.getCategories();
+      // const parent = category.parent ? this.categories.filter((cat) => cat.id === category.parent) : null
+      // const data = {
+      //   "name": category.name,
+      //   "parent": parent
+      // }
+      // axios.post(API_URL + '/add', data, { headers: contentHeader() })
+      // .then(response => console.log(response))
+      // .catch(error => console.log(error));
     },
 
     async updateCategory(id, category) {
       await this.getCategories();
       const parent = category.parent ? this.categories.filter((cat) => cat.id === category.parent) : null
-
-      axios.put(API_URL + `/${id}`, {
+      const data = {
         name: category.name,
         parent: parent
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': Authorization
-        },
-      })
-      .then(response => {
-        console.log(response)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+      }
+
+      axios.put(API_URL + `/${id}`, data, { headers: contentHeader() })
+      .then(response => console.log('response', response))
+      .catch(error => console.log('error', error));
     },
 
     async deleteCategory(id) {
-      axios.delete(API_URL + `/${id}`)
-      .then(response => {
-        console.log(response)
-      })
-      .catch(error => {
-        console.log(error)
-      })
+      console.log('deleting')
+
+      axios.delete(API_URL + `/${id}`, { headers: authHeader() })
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
     },
 
     initCategories() {

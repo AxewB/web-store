@@ -3,6 +3,7 @@ package ru.aksenov.onlineshop.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import ru.aksenov.onlineshop.helperClasses.ResponseWrapper;
 import ru.aksenov.onlineshop.models.Product;
 import ru.aksenov.onlineshop.repository.ProductRepository;
@@ -49,13 +50,15 @@ public class ProductController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Product> addProduct(@RequestBody Product product) {
         Product newProduct = productService.addProduct(product);
         return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Product> updateProduct(
             @PathVariable Long id,
             @RequestBody Product productDetails
@@ -70,6 +73,8 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long id) {
 
         try {

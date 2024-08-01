@@ -1,8 +1,11 @@
 import {defineStore} from 'pinia';
 import axios from 'axios';
-import { useCategoryStore } from './categoryStore';
+import { useCategoryStore } from '@/stores/categoryStore';
+import authHeader from "@/services/auth-header";
+import contentHeader from '@/services/content-header';
+
 const API_URL = "http://localhost:8080/api/products";
-// const API_URL = 'https://dummyjson.com/products';
+
 export const useProductStore = defineStore('products', {
   state: () => ({
     products: [],
@@ -37,10 +40,9 @@ export const useProductStore = defineStore('products', {
 
     async addProduct(product) {
       const categoryStore = useCategoryStore();
-      categoryStore.getCategories();
+      // await categoryStore.getCategories();
       const categories = categoryStore.categories.filter((cat) => product.categories.includes(cat.id));
-
-      axios.post(API_URL, {
+      const data  = {
         "name": product.name,
         "description": product.description,
         "images": product.images,
@@ -48,27 +50,19 @@ export const useProductStore = defineStore('products', {
         "quantity": product.quantity,
         "cost": product.cost,
         "categories": categories
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      }
+      
+      axios.post(API_URL + '/add', data, { headers: contentHeader() })
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
+
       this.getProducts();
     },
 
     async updateProduct(id, product) {
       const categoryStore = useCategoryStore();
-      categoryStore.getCategories();
       const categories = categoryStore.categories.filter((cat) => product.categories.includes(cat.id));
-
-      axios.put(API_URL + `/${id}`, {
+      const data = {
         "name": product.name,
         "description": product.description,
         "images": product.images,
@@ -76,29 +70,19 @@ export const useProductStore = defineStore('products', {
         "quantity": product.quantity,
         "cost": product.cost,
         "categories": categories
-    },
-    {
-      headers: {
-        'Content-Type': 'application/json',
       }
-    })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+
+      axios.put(API_URL + `/${id}`, data, { headers: contentHeader() })
+        .then(response => {console.log(response)})
+        .catch(error => console.log(error));
+
       this.getProducts();
     },
     async deleteProduct(id) {
-      axios.delete(API_URL + `/${id}`)
-      .then(function (response) {
-        console.log(response);
+      axios.delete(API_URL + `/${id}`, { headers: authHeader() })
+        .then(response => console.log(response))
+        .catch(error => console.log(error));
 
-      })
-      .catch(function (error) {
-        console.log(error);
-        });
       this.getProducts();
     },
 

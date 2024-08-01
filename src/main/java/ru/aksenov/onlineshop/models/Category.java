@@ -80,4 +80,15 @@ public class Category {
         child.setParent(this);
         this.children.add(child);
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", parent=" + parent +
+                ", children=" + children +
+                ", products=" + products +
+                '}';
+    }
 }

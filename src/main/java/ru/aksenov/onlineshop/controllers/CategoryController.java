@@ -3,6 +3,7 @@ package ru.aksenov.onlineshop.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import ru.aksenov.onlineshop.models.Category;
 import ru.aksenov.onlineshop.repository.CategoryRepository;
 import org.springframework.beans.BeanUtils;
@@ -55,15 +56,25 @@ public class CategoryController {
         return categoryService.getPathFromRoot(id);
     }
 
-    @PostMapping
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Category> addCategory(@RequestBody Category category) {
         System.out.println(category);
         categoryService.addCategory(category);
         return ResponseEntity.status(HttpStatus.CREATED).body(category);
     }
 
-    @PutMapping
-    public ResponseEntity<Category> updateCategory(@RequestParam Long id, @RequestBody Category category) {
+//    @PostMapping("/add")
+//    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+//    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
+//            Category createdCategory = categoryService.addCategory(category);
+//            return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
+//    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
+        System.out.println(category);
         try {
             Category updatedCategory = categoryService.updateCategory(id, category);
             return ResponseEntity.ok(updatedCategory);
@@ -72,8 +83,9 @@ public class CategoryController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity<Category> deleteCategory(@RequestParam Long id) {
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public ResponseEntity<Category> deleteCategory(@PathVariable Long id) {
         try {
             categoryService.deleteCategory(id);
             return ResponseEntity.noContent().build();

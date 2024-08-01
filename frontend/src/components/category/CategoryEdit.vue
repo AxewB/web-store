@@ -1,6 +1,7 @@
 <template>
   <v-sheet>
     <v-sheet>
+    {{ category }}
       <v-text-field
         v-model="category.name"
         label="Name"
@@ -31,12 +32,12 @@
 </template>
 
 <script setup>
-import { computed, defineProps, onMounted, ref, watch } from 'vue'
+import { computed, defineProps, onMounted, ref, watch, reactive } from 'vue'
 import { useCategoryStore } from '@/stores/categoryStore';
 const categoryStore = useCategoryStore();
 const props = defineProps(['id'])
 const emit = defineEmits(['on-close', 'on-confirm'])
-const category = ref({
+const category = reactive({
   "name": '',
   "parent": null,
 })
@@ -47,6 +48,10 @@ const categories = computed(() => {
 })
 
 const confirmEditing = () => {
+  console.log({
+    name: category.name,
+    parent: isRoot ? null : category.parent,
+  })
   emit('on-confirm', {
     name: category.name,
     parent: isRoot ? null : category.parent,
@@ -55,8 +60,10 @@ const confirmEditing = () => {
 
 onMounted(async () => {
   if (props.id) {
-    category.value = await categoryStore.getCategory(props.id)
-    isRoot.value = category.value.parent === null
+    const res = await categoryStore.getCategory(props.id)
+    category.name = res.name
+    category.parent = res.parent
+    isRoot.value = category.parent === null
   }
 })
 </script>
