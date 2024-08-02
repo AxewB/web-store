@@ -44,34 +44,34 @@ export const useCategoryStore = defineStore('category', {
 
     async addCategory(category) {
       
-      const cat = {
-        name: "New Category",
-        parentId: null 
-      };
+      // const cat = {
+      //   name: "New Category",
+      //   parentId: null 
+      // };
       
-      const token = user.accessToken; // ваш JWT токен
+      // const token = user.accessToken; // ваш JWT токен
       
-      axios.post("http://localhost:8080/api/category/add", cat, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      // axios.post("http://localhost:8080/api/category/add", cat, {
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': `Bearer ${token}`
+      //   }
+      // })
+      // .then(function (response) {
+      //   console.log(response);
+      // })
+      // .catch(function (error) {
+      //   console.log(error);
+      // });
 
-      // const parent = category.parent ? this.categories.filter((cat) => cat.id === category.parent) : null
-      // const data = {
-      //   "name": category.name,
-      //   "parent": parent
-      // }
-      // axios.post(API_URL + '/add', data, { headers: contentHeader() })
-      // .then(response => console.log(response))
-      // .catch(error => console.log(error));
+      const parent = category.parent ? this.categories.filter((cat) => cat.id === category.parent) : null
+      const data = {
+        "name": category.name,
+        "parent": parent
+      }
+      axios.post(API_URL, data, { headers: contentHeader() })
+      .then(response => console.log(response))
+      .catch(error => console.log(error));
     },
 
     async updateCategory(id, category) {

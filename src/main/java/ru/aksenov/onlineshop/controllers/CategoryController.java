@@ -58,18 +58,10 @@ public class CategoryController {
 
     @PostMapping("/add")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Category> addCategory(@RequestBody Category category) {
-        System.out.println(category);
-        categoryService.addCategory(category);
-        return ResponseEntity.status(HttpStatus.CREATED).body(category);
+    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
+        Category createdCategory = categoryService.addCategory(category);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
     }
-
-//    @PostMapping("/add")
-//    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-//    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-//            Category createdCategory = categoryService.addCategory(category);
-//            return ResponseEntity.status(HttpStatus.CREATED).body(createdCategory);
-//    }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
