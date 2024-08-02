@@ -35,6 +35,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useProductStore } from '@/stores/productStore'
 import { useCategoryStore } from '@/stores/categoryStore'
+import {useCartStore } from '@/stores/cartStore'
 
 import { useRoute } from 'vue-router';
 import AppHeader from "@/components/AppHeader.vue";
@@ -46,11 +47,11 @@ const route = useRoute()
 const product = ref({})
 const productStore = useProductStore();
 const categoryStore = useCategoryStore();
-
+const cartStore = useCartStore();
 const productCategoryPath = computed(() => categoryStore.categoryPath)
 
 function addProductToCart() {
-  alert("add product to cart") // TODO: add product to cart
+  cartStore.addToCart(product.value)
 }
 
 // watch(product, () => {

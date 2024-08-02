@@ -6,4 +6,5 @@ import ru.aksenov.onlineshop.models.Cart;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
+    Cart getCartById(Long id);
 }

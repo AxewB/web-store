@@ -26,6 +26,14 @@ public class Cart{
     )
     private List<Product> products = new ArrayList<>();
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setUser(User user) {
         this.user = user;
     }
@@ -54,5 +62,9 @@ public class Cart{
 
     public void clearProducts() {
         this.products.clear();
+    }
+
+    public double totalCost() {
+        return products.stream().reduce(0d, (partialCost, product) -> partialCost + product.getCost(), Double::sum);
     }
 }

@@ -2,8 +2,6 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import contentHeader from '@/services/content-header';
 import authHeader from '@/services/auth-header';
-let user = JSON.parse(localStorage.getItem('user'));
-console.log(user.accessToken)
 const API_URL = "http://localhost:8080/api/category";
 
 
@@ -43,27 +41,7 @@ export const useCategoryStore = defineStore('category', {
     },
 
     async addCategory(category) {
-      
-      // const cat = {
-      //   name: "New Category",
-      //   parentId: null 
-      // };
-      
-      // const token = user.accessToken; // ваш JWT токен
-      
-      // axios.post("http://localhost:8080/api/category/add", cat, {
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     'Authorization': `Bearer ${token}`
-      //   }
-      // })
-      // .then(function (response) {
-      //   console.log(response);
-      // })
-      // .catch(function (error) {
-      //   console.log(error);
-      // });
-
+      await this.getCategories();
       const parent = category.parent ? this.categories.filter((cat) => cat.id === category.parent) : null
       const data = {
         "name": category.name,

@@ -8,7 +8,6 @@
 <script setup>
 import PageHeader from '@/components/AppHeader.vue'
 import ProductList from '@/components/product/ProductList.vue';
-import { useProductStore } from '@/stores/productStore';
 import { useRouter } from 'vue-router';
 const router = useRouter();
 

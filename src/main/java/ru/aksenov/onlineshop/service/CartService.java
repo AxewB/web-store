@@ -96,4 +96,9 @@ public class CartService {
 
         return order;
     }
+
+    public double getTotalCostByCartId(Long id) {
+        Cart cart = cartRepository.getCartById(id);
+        return cart.totalCost();
+    }
 }

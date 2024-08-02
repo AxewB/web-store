@@ -1,7 +1,6 @@
 <template>
   <v-sheet>
     <v-sheet>
-    {{ category }}
       <v-text-field
         v-model="category.name"
         label="Name"

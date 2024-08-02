@@ -7,8 +7,12 @@ import ru.aksenov.onlineshop.models.Cart;
 import ru.aksenov.onlineshop.models.Order;
 import ru.aksenov.onlineshop.service.CartService;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("api/cart/")
+@CrossOrigin(origins = "*", maxAge = 3600)
 public class CartController {
 
     @Autowired
@@ -17,10 +21,13 @@ public class CartController {
 
     // Просмотр содержимого корзины
     @GetMapping("/{userId}")
-    public ResponseEntity<Cart> getCart(@PathVariable Long userId) {
+    public ResponseEntity<Map<String, Object>> getCart(@PathVariable Long userId) {
         try {
+            Map<String, Object> result = new HashMap<>();
             Cart cart = cartService.getCartByUserId(userId);
-            return ResponseEntity.ok(cart);
+            result.put("cart", cart);
+            result.put("totalCost", cartService.getTotalCostByCartId(cart.getId()));
+            return ResponseEntity.ok(result);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(null);
         }
@@ -60,4 +67,10 @@ public class CartController {
         }
     }
 
+    @DeleteMapping("/{userId}/clear")
+    public ResponseEntity<Cart> clearCart(@PathVariable Long userId) {
+        Cart cart = cartService.getCartByUserId(userId);
+        cart.clearProducts();
+        return ResponseEntity.noContent().build();
+    }
 }
