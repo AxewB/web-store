@@ -13,6 +13,11 @@ export const useProductStore = defineStore('products', {
     skip: 0,
     limit: 10,
     page: 1,
+
+    searchSettings: {
+      name: '',
+      category: {},
+    }
   }),
   getters: {
     totalPages: (state) => Math.ceil(state.total / state.limit),
@@ -29,6 +34,25 @@ export const useProductStore = defineStore('products', {
         console.log("error in fetching products");
       }
     },
+    async getProductsWithParams(skip, limit) {
+      try {
+        const res = await axios.get(API_URL + `?skip=${skip}&limit=${limit}`).then((response) => response.data);
+        return res
+      } catch (error) {
+        console.log("error in fetching products");
+      }
+    },
+    async getProductsByName(name) {
+      try {
+        const res = await axios.get(API_URL + `/search/${name}`).then((response) => response.data);
+        this.products = res.data
+        this.total = res.total
+        this.skip = res.skip
+        this.limit = res.limit
+      } catch (error) {
+        console.log("error in fetching products");
+      }
+    }
     async getProduct(id) {
       try {
         const res = await axios.get(`${API_URL}/${id}`).then((response) => response.data);
@@ -86,6 +110,13 @@ export const useProductStore = defineStore('products', {
       this.getProducts();
     },
 
+    setSkip(skip) {
+      this.skip = skip
+    },
+
+    setLimit(limit) {
+      this.limit = limit
+    },
 
     async turnPage(page) {
       this.page = page

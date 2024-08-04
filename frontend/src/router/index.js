@@ -1,18 +1,13 @@
 
-/**
- * router/index.ts
- *
- * Automatic routes for `./src/pages/*.vue`
- */
-
-// Composables
 import { createWebHistory, createRouter } from "vue-router";
 import Home from "@/pages/HomePage.vue";
-// lazy-loaded
-const Profile = () => import("@/components/user/UserProfile.vue")
-const BoardAdmin = () => import("@/components/user/admin/BoardAdmin.vue")
-const BoardModerator = () => import("@/components/temp/BoardModerator.vue")
-const BoardUser = () => import("@/components/temp/BoardUser.vue")
+import CartPage from "@/components/CartPage.vue";
+import UserProfile from "@/components/user/UserProfile.vue";
+import UserLogin from "@/components/user/UserLogin.vue";
+import UserRegister from "@/components/user/UserRegister.vue";
+import ProductPage from "@/components/product/ProductPage.vue";
+
+import BoardAdmin from "@/components/user/admin/BoardAdmin.vue";
 
 
 const routes = [
@@ -24,7 +19,7 @@ const routes = [
   {
     path: "/cart",
     name: "cart",
-    component: () => import("@/components/CartPage.vue"),
+    component: CartPage
   },
   {
     path: "/user/",
@@ -33,17 +28,17 @@ const routes = [
       {
         name: "userProfile",
         path: "profile",
-        component: () => import("@/components/user/UserProfile.vue"),
+        component: UserProfile
       },
       {
         name: "userLogin",
         path: "login",
-        component: () => import("@/components/user/UserLogin.vue"),
+        component: UserLogin
       },
       {
         name: "userRegister",
         path: "register",
-        component: () => import("@/components/user/UserRegister.vue"),
+        component: UserRegister
       },
 
     ]
@@ -54,7 +49,7 @@ const routes = [
       {
         name: "productPage",
         path: ":id",
-        component: () => import("@/components/product/ProductPage.vue")
+        component: ProductPage
       }
     ]
   },
@@ -62,7 +57,7 @@ const routes = [
     path: "/admin",
     name: "admin",
     component: BoardAdmin,
-  }
+  },
 ];
 
 const router = createRouter({

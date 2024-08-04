@@ -67,4 +67,19 @@ public class Cart{
     public double totalCost() {
         return products.stream().reduce(0d, (partialCost, product) -> partialCost + product.getCost(), Double::sum);
     }
+
+    public double totalCostAvailable() {
+        List<Product> availabeProducts = products.stream()
+                .filter(product -> product.getQuantity() > 0)
+                .toList();
+        return availabeProducts.stream().reduce(0d, (partialCost, product) -> partialCost + product.getCost(), Double::sum);
+    }
+
+    public void removeOutOfStockProducts() {
+        products = products.stream().filter(product -> product.getQuantity() > 0).toList();
+    }
+
+    public void removeAvailableProducts() {
+        products = products.stream().filter(product -> product.getQuantity() == 0).toList();
+    }
 }

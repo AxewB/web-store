@@ -11,6 +11,15 @@ export const useCartStore = defineStore('cart', {
     cart: [],
     totalCost: 0,
   }),
+
+  getters: {
+    isProductInCart: (state) => {
+      return (product) => {
+        return state.cart.products.some((item) => item.id === product.id);
+      }
+    }
+  },
+
   actions: {
     async getCart() {
       const userStore = useUserStore();
@@ -24,19 +33,31 @@ export const useCartStore = defineStore('cart', {
       const userStore = useUserStore();
       const { id } = product;
       axios.post(API_URL + `/${userStore.user.id}/add?productId=${id}`, { headers: contentHeader() })
+      .then(() => this.getCart())
     },
     async removeFromCart(product) {
       const userStore = useUserStore();
       const { id } = product;
       axios.delete(API_URL + `/${userStore.user.id}/remove?productId=${id}`, { headers: userHeader() })
+      .then(() => this.getCart())
+      .catch((error) => console.log(error))
+    },
+    async removeFromCartById(productId) {
+      const userStore = useUserStore();
+      const id = productId;
+      axios.delete(API_URL + `/${userStore.user.id}/remove?productId=${id}`, { headers: userHeader() })
+      .then(() => this.getCart())
+      .catch((error) => console.log(error))
     },
     async clearCart() {
       const userStore = useUserStore();
       axios.delete(API_URL + `/${userStore.user.id}/clear`, { headers: userHeader() })
+      .then(() => this.getCart())
     },
     async checkout() {
       const userStore = useUserStore();
       axios.post(API_URL + `/${userStore.user.id}/checkout`, { headers: userHeader() },)
+      .then(() => this.getCart())
     }
   }
 })

@@ -2,6 +2,7 @@ package ru.aksenov.onlineshop.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.aksenov.onlineshop.models.*;
 import ru.aksenov.onlineshop.repository.CartRepository;
 import ru.aksenov.onlineshop.repository.OrderRepository;
@@ -11,6 +12,8 @@ import ru.aksenov.onlineshop.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class CartService {
@@ -38,6 +41,10 @@ public class CartService {
             user.setCart(cart);
         }
 
+        if (cart.getProducts().stream().anyMatch(item -> Objects.equals(item.getId(), product.getId()))) {
+            throw new RuntimeException("This item is already in the cart");
+        }
+
         cart.getProducts().add(product);
         cartRepository.save(cart);
     }
@@ -60,6 +67,7 @@ public class CartService {
         return user.getCart();
     }
 
+    @Transactional
     public Order checkout(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         Cart cart = user.getCart();
@@ -69,32 +77,43 @@ public class CartService {
 
         Order order = new Order();
         order.setUser(user);
-        order.setOrderDate(LocalDateTime.now());
 
-        List<OrderItem> orderItems = new ArrayList<>();
-        for (Product product : cart.getProducts()) {
-            if (!product.isAvailable(1)) {
-                throw new RuntimeException("Product " + product.getName() + " is out of stock");
-            }
 
-            OrderItem orderItem = new OrderItem();
-            orderItem.setOrder(order);
-            orderItem.setProduct(product);
-            orderItem.setQuantity(1); // Assuming each product is added once for simplicity
 
-            product.decreaseQuantity(1);
-            productRepository.save(product);
-
-            orderItems.add(orderItem);
+        // Вытягиваем доступные продукты
+        List<Product> availableProducts = cart.getProducts().stream()
+                .filter(product -> product.getQuantity() > 0)
+                .collect(Collectors.toList());
+        if (availableProducts.isEmpty()) {
+            throw new RuntimeException("There is no products in stock");
         }
 
+
+
+        // Превращаем их в нужный обхъект для заказа
+        List<OrderItem> orderItems = availableProducts.stream()
+                .map(product -> {
+                    OrderItem orderItem = new OrderItem();
+                    orderItem.setProduct(product);
+                    orderItem.setQuantity(1);
+                    orderItem.setOrder(order);
+
+                    product.decreaseQuantity(1);
+                    productRepository.save(product); // TODO: добавить возможность изменять количество покупаемого продукта
+                    return orderItem;
+                })
+                .toList();
+
         order.setOrderItems(orderItems);
+        order.setOrderDate(LocalDateTime.now());
         orderRepository.save(order);
 
-        cart.clearProducts();
+        // Оставляем в корзине только те продукты, которых нет в наличии
+        cart.setProducts(cart.getProducts().stream().filter(product -> !product.isAvailable(1)).collect(Collectors.toList()));
         cartRepository.save(cart);
 
         return order;
+
     }
 
     public double getTotalCostByCartId(Long id) {

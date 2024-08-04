@@ -30,6 +30,10 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
+    public Order getOrderById(Long orderId) {
+        return orderRepository.getOrderById(orderId);
+    }
+
     public List<Order> getOrderByUserId(Long userId) {
         return orderRepository.getOrderByUserId(userId);
     }

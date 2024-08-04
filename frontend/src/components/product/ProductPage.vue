@@ -2,12 +2,12 @@
   <v-sheet class="d-flex flex-column bg-transparent">
     <AppHeader class="mb-1"/>
     <v-sheet class="my-1 pa-2 bg-transparent text-overline d-flex align-center">
-      <v-div  v-for="category in productCategoryPath" :key="category.id + 'category'">
+      <div v-for="category in productCategoryPath" :key="category.id + 'category'">
         <span>/</span>
         <v-btn size="small" variant="plain" class="mx-2">
           {{category.name}}
         </v-btn>
-      </v-div>
+      </div>
       
     </v-sheet>
     <v-sheet class="d-flex justify-center pa-4 my-1" rounded width="100%" >
@@ -20,7 +20,12 @@
       </v-sheet>
 
       <v-sheet min-width="300px" class="pa-2  bg-transparent" >
-        <ProductActions :product="product" @on-add-to-cart="addProductToCart"/>
+        <ProductActions 
+          :is-product-in-cart="isProductInCart" 
+          :product="product" 
+          @on-add-to-cart="addProductToCart"
+          @on-remove-from-cart="removeProductFromCart"
+          @on-go-to-cart="pushProductToCart"/>
       </v-sheet>
     </v-sheet>
     <v-sheet class="pa-4 d-flex flex-column" rounded >
@@ -37,26 +42,36 @@ import { useProductStore } from '@/stores/productStore'
 import { useCategoryStore } from '@/stores/categoryStore'
 import {useCartStore } from '@/stores/cartStore'
 
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import AppHeader from "@/components/AppHeader.vue";
 import ProductImageCarousel from './page/ProductImageCarousel.vue';
 import ProductShortInfo from './page/ProductShortInfo.vue';
 import ProductActions from './page/ProductActions.vue';
 
 const route = useRoute()
+const router = useRouter()
 const product = ref({})
 const productStore = useProductStore();
 const categoryStore = useCategoryStore();
 const cartStore = useCartStore();
 const productCategoryPath = computed(() => categoryStore.categoryPath)
 
+const isProductInCart = computed(() => {
+  return cartStore.isProductInCart(product.value)
+})
+
 function addProductToCart() {
   cartStore.addToCart(product.value)
 }
 
-// watch(product, () => {
-  
-// })
+function removeProductFromCart() {
+  cartStore.removeFromCart(product.value)
+}
+
+function pushProductToCart() {
+  router.push({name: 'cart'})
+}
+
 
 onMounted(async () => {
   const id = route.params.id

@@ -1,19 +1,25 @@
+
 <template>
-  <v-sheet class="d-flex flex-column">
-    <v-sheet>
+  <v-sheet v-if="props.products.length" class="d-flex flex-column bg-transparent">
+    <v-sheet 
+      v-for="(product, index) in products"
+      :key="product.id">
       <CartItem
-        v-for="(product, key, index) in products"
-        :key="product.id"
         :product="product"
-        :class="index < products.length - 1 ? 'mb-2' : ''"
       ></CartItem>
+      <VDivider v-if="index < products.length - 1" class="my-1"/>
     </v-sheet>
   </v-sheet>
+  <EmptyWarning 
+    v-else
+    title="Ваша корзина пуста"
+    description="Добавьте что-нибудь в корзину"/>
 </template>
 
 <script setup>
 import CartItem from './CartItem.vue';
 import { computed } from 'vue'
+import EmptyWarning from '@/components/EmptyWarning.vue';
 const props = defineProps({
   products: {
     type: Array,

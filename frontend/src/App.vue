@@ -12,10 +12,14 @@
 <script setup>
 import { onMounted } from 'vue';
 import { useProductStore } from '@/stores/productStore';
+import { useCartStore } from './stores/cartStore';
 const productStore = useProductStore();
+const cartStore = useCartStore();
 
 onMounted(() => {
   productStore.limit = 30;
   productStore.getProducts();
+
+  cartStore.getCart();
 })
 </script>
