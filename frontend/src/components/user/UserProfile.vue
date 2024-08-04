@@ -1,7 +1,8 @@
 <template>
   <v-sheet v-if="currentUser" height="100%" class="d-flex flex-column bg-transparent">
       <AppHeader/>
-      <v-sheet class="d-flex mt-4 flex-row bg-transparent">
+      <PageHeading title="Profile"/>
+      <v-sheet class="d-flex flex-row bg-transparent">
         <v-sheet class="mr-2 bg-transparent" min-width="200px">
           <v-list rounded width="100%" v-model="window" elevation="10" class="mb-2">
             <v-list-item
@@ -13,19 +14,19 @@
             <v-list-item
               link
               @click="switchTab('account')"
-              :active="window === UserInfo"
+              :active="tab === 'account'"
               prepend-icon="mdi-account"
               title="Account"/>
               <v-list-item
               link
               @click="switchTab('orders')"
-              :active="window === UserOrders"
+              :active="tab === 'orders'"
               prepend-icon="mdi-package-variant"
               title="Orders"/>
               <v-list-item
               link
               @click="switchTab('settings')"
-              :active="window === UserSettings"
+              :active="tab === 'settings'"
               prepend-icon="mdi-cog"
               title="Settings"/>
             
@@ -66,7 +67,7 @@
         </v-sheet>
         <v-sheet class="flex-grow-1 bg-transparent">
           <v-sheet elevation="3" rounded>
-            <component :is="window"/>
+            <component :is="currentTab"/>
           </v-sheet>
         </v-sheet>
       </v-sheet>
@@ -79,6 +80,7 @@ import { computed, onMounted, ref, shallowRef, watch } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 import { useRouter, useRoute } from 'vue-router';
 import { UserInfo, UserOrders, UserSettings } from '@/components/user/UserProfileTabs.js';
+import PageHeading from '../PageHeading.vue';
 const router = useRouter();
 const route = useRoute();
 const userStore = useUserStore();
@@ -91,7 +93,14 @@ const logout = () => {
 
 const loggedIn = computed(() => userStore.status.loggedIn)
 const tab = computed(() => route.query.tab)
-
+const currentTab = computed(() => {
+  switch (tab.value) {
+    case 'account': return UserInfo
+    case 'orders': return UserOrders
+    case 'settings': return UserSettings
+    default: return UserInfo
+  }
+})
 watch(tab, (value) => {
   window.value = getWindow(value)
 })
