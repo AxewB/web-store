@@ -6,7 +6,7 @@ import UserProfile from "@/components/user/UserProfile.vue";
 import UserLogin from "@/components/user/UserLogin.vue";
 import UserRegister from "@/components/user/UserRegister.vue";
 import ProductPage from "@/components/product/ProductPage.vue";
-
+import SearchPage from "@/components/SearchPage.vue";
 import BoardAdmin from "@/components/user/admin/BoardAdmin.vue";
 
 
@@ -49,7 +49,12 @@ const routes = [
       {
         name: "productPage",
         path: ":id",
-        component: ProductPage
+        component: ProductPage,
+      },
+      {
+        name: "productSearch",
+        path: "search",
+        component: SearchPage
       }
     ]
   },
@@ -58,6 +63,11 @@ const routes = [
     name: "admin",
     component: BoardAdmin,
   },
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: { name: "home" },
+    component: Home
+  }
 ];
 
 const router = createRouter({

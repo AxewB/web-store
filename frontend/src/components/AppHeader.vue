@@ -15,12 +15,15 @@
         label="Search"
         hide-details
         variant="solo"
-        class="mx-2">
+        class="mx-2"
+        v-model="searchValue"
+      >
         <template #append-inner>
           <v-btn
             color="primary"
             append-icon="mdi-magnify"
             variant="tonal"
+            @click="search(searchValue)"
           >
             ИСКАТЬ
           </v-btn>
@@ -62,10 +65,18 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import ShopLogo from './ShopLogo.vue';
 import { useRouter } from 'vue-router';
 
 const onSearchClick = () => {
   router.push({name: "productSearch"})
+}
+
+const router = useRouter();
+const searchValue = ref('');
+
+function search(value) {
+  router.push({name: "productSearch", query: {search: value}})
 }
 </script>
