@@ -52,7 +52,7 @@ export const useProductStore = defineStore('products', {
       } catch (error) {
         console.log("error in fetching products");
       }
-    }
+    },
     async getProduct(id) {
       try {
         const res = await axios.get(`${API_URL}/${id}`).then((response) => response.data);
