@@ -67,13 +67,19 @@ public class ProductService {
     }
 
     public List<Product> getProductsByCategoryAndSubcategories(Long categoryId) {
+        if (categoryId == null) {
+            return this.getAllProducts();
+        }
         Set<Long> categoryIds = categoryService.getAllChildCategoryIds(categoryId);
         categoryIds.add(categoryId); // Добавляем родительскую категорию
         return productRepository.findByCategoriesIdIn(categoryIds);
     }
 
     public List<Product> getProductsByName(String name) {
-        return productRepository.findByName(name);
+        if (name.isEmpty())
+            return productRepository.findAll();
+        else
+            return productRepository.findByName(name);
     }
 
     public List<Product> getProductsByNameIgnoreCaseAndSpace(String name) {

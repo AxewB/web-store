@@ -16,10 +16,9 @@ import { useCartStore } from './stores/cartStore';
 const productStore = useProductStore();
 const cartStore = useCartStore();
 
-onMounted(() => {
+onMounted(async () => {
   productStore.limit = 30;
-  productStore.getProducts();
-
-  cartStore.getCart();
+  const res = await productStore.fetchProducts();
+  // cartStore.getCart();
 })
 </script>

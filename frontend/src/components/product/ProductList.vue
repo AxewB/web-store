@@ -66,6 +66,6 @@ watch(page, () => {
 
 onMounted(async() => {
   productStore.resetStore();
-  productStore.getProducts();
+  productStore.fetchProducts();
 })
 </script>

@@ -45,7 +45,7 @@ onMounted(() => {
     router.push('/');
   }
   productStore.limit = 5;
-  productStore.getProducts();
+  productStore.fetchProducts();
   if (route.query.mode) {
     mode.value = route.query.mode
   }

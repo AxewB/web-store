@@ -5,8 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import ru.aksenov.onlineshop.models.Category;
-import ru.aksenov.onlineshop.repository.CategoryRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 import ru.aksenov.onlineshop.service.CategoryService;
 
@@ -34,6 +32,12 @@ public class CategoryController {
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/all-with-children")
+    public ResponseEntity<List<Category>> getAllCategoriesWithChildren() {
+        List<Category> categories = categoryService.getAllCategories();
+        return ResponseEntity.ok(categories);
     }
 
     @GetMapping("/root")

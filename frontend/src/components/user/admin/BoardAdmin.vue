@@ -84,6 +84,6 @@ onMounted(async () => {
     router.push('/user/login');
   }
 
-  productStore.getProducts()
+  productStore.fetchProducts()
 })
 </script>

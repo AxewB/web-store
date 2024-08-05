@@ -8,6 +8,7 @@ import UserRegister from "@/components/user/UserRegister.vue";
 import ProductPage from "@/components/product/ProductPage.vue";
 import SearchPage from "@/components/SearchPage.vue";
 import BoardAdmin from "@/components/user/admin/BoardAdmin.vue";
+import CataloguePage from "@/components/CataloguePage.vue";
 
 
 const routes = [
@@ -55,6 +56,11 @@ const routes = [
         name: "productSearch",
         path: "search",
         component: SearchPage
+      },
+      {
+        name: "productCatalogue",
+        path: "catalogue",
+        component: CataloguePage
       }
     ]
   },

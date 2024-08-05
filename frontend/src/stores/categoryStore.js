@@ -27,6 +27,10 @@ export const useCategoryStore = defineStore('category', {
       const res = await axios.get(API_URL).then((response) => response.data);
       this.categories = res;
     },
+    async getCategoriesWithChildren() {
+      const res = await axios.get(API_URL + "/all-with-children").then((response) => response.data);
+      this.categories = res;
+    },
     async getCategory(id) {
       try {
         const res = await axios.get(API_URL + `/${id}`).then((response) => response.data)
@@ -38,6 +42,11 @@ export const useCategoryStore = defineStore('category', {
     async getCategoryPath(id) {
       const res = await axios.get(API_URL + `/${id}/path`).then((response) => response.data)
       this.categoryPath = res;
+    },
+
+    async getChildren(parentId) {
+      const res = await axios.get(API_URL + `/${parentId}/children`).then((response) => response.data)
+      return res
     },
 
     async addCategory(category) {

@@ -8,7 +8,9 @@
         size="large"
         variant="flat"
         class="mx-4"
-        color="primary">
+        color="primary"
+        @click="moveToCataloguePage()"
+      >
         Каталог
       </v-btn>
       <v-text-field
@@ -69,6 +71,8 @@ import { ref } from 'vue';
 import ShopLogo from './ShopLogo.vue';
 import { useRouter } from 'vue-router';
 
+const emit = defineEmits(['on-search-click'])
+
 const onSearchClick = () => {
   router.push({name: "productSearch"})
 }
@@ -78,5 +82,10 @@ const searchValue = ref('');
 
 function search(value) {
   router.push({name: "productSearch", query: {search: value}})
+  emit('on-search-click')
+}
+
+function moveToCataloguePage() {
+  router.push({name: "productCatalogue"})
 }
 </script>

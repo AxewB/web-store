@@ -23,6 +23,23 @@ export const useProductStore = defineStore('products', {
     totalPages: (state) => Math.ceil(state.total / state.limit),
   },
   actions: {
+    async fetchProducts() {
+      return await axios.get(API_URL + `?skip=${this.skip}&limit=${this.limit}`)
+      .then(response => {
+        this.setFetchedParams(response.data)
+      })
+      .catch(error => error);
+    },
+    async fetchProductsByName(name) {
+      return await axios.get(API_URL + `/search?name=${name}&skip=${this.skip}&limit=${this.limit}`)
+      .then(response => this.setFetchedParams(response.data))
+      .catch(error => error);
+    },
+    async fetchProductByCategory(categoryId) {
+      return await axios.get(API_URL + `/category/${categoryId}?skip=${this.skip}&limit=${this.limit}`)
+      .then(response => this.setFetchedParams(response.data))
+      .catch(error => error);
+    },
     async getProducts() {
       try {
         const res = await axios.get(API_URL + `?skip=${this.skip}&limit=${this.limit}`).then((response) => response.data);
@@ -75,12 +92,12 @@ export const useProductStore = defineStore('products', {
         "cost": product.cost,
         "categories": categories
       }
-      
+
       axios.post(API_URL + '/add', data, { headers: contentHeader() })
       .then(response => console.log(response))
       .catch(error => console.log(error));
 
-      this.getProducts();
+      await this.fetchProducts();
     },
 
     async updateProduct(id, product) {
@@ -100,14 +117,14 @@ export const useProductStore = defineStore('products', {
         .then(response => {console.log(response)})
         .catch(error => console.log(error));
 
-      this.getProducts();
+      await this.fetchProducts();
     },
     async deleteProduct(id) {
       axios.delete(API_URL + `/${id}`, { headers: authHeader() })
         .then(response => console.log(response))
         .catch(error => console.log(error));
 
-      this.getProducts();
+      await this.fetchProducts();
     },
 
     setSkip(skip) {
@@ -122,7 +139,19 @@ export const useProductStore = defineStore('products', {
       this.page = page
       this.skip = (this.page - 1) * this.limit
       console.log(this.skip)
-      await this.getProducts()
+      await this.fetchProducts()
+    },
+    setFetchedParams(params) {
+      if (params) {
+        this.products = params.data;
+        this.skip = params.skip;
+        this.limit = params.limit;
+        this.total = params.total;
+        this.page = 1
+      }
+      else {
+        this.resetStore();
+      }
     },
     resetStore() { 
       this.products = []

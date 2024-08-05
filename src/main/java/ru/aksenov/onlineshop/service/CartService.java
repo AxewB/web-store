@@ -102,7 +102,7 @@ public class CartService {
                     productRepository.save(product); // TODO: добавить возможность изменять количество покупаемого продукта
                     return orderItem;
                 })
-                .toList();
+                .collect(Collectors.toList());
 
         order.setOrderItems(orderItems);
         order.setOrderDate(LocalDateTime.now());

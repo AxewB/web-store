@@ -86,20 +86,44 @@ public class ProductController {
     }
 
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<List<Product>> getProductsByCategoryAndDescendants(@PathVariable Long categoryId) {
+    public ResponseEntity<ResponseWrapper<Product>> getProductsByCategoryAndDescendants(
+            @PathVariable Long categoryId,
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(defaultValue = "0") int skip
+    ) {
         List<Product> products = productService.getProductsByCategoryAndSubcategories(categoryId);
-        return ResponseEntity.ok(products);
+        ResponseWrapper<Product> response = new ResponseWrapper<>(
+                limit == 0
+                        ? products.stream().skip(skip).collect(Collectors.toList())
+                        : products.stream().skip(skip).limit(limit).collect(Collectors.toList()),
+                products.size(),
+                limit,
+                skip
+        );
+        return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/search/{name}")
-    public ResponseEntity<List<Product>> getProductsByName(@PathVariable String name) {
-        List<Product> products = productService.getProductsByName(name);
-        return ResponseEntity.ok(products);
-    }
+//    @GetMapping("/search")
+//    public ResponseEntity<List<Product>> getProductsByName(@RequestParam String name) {
+//        List<Product> products = productService.getProductsByName(name);
+//        return ResponseEntity.ok(products);
+//    }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Product>> searchProductsByName(@RequestParam String name) {
+    public ResponseEntity<ResponseWrapper<Product>> getProductsByName(
+            @RequestParam String name,
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(defaultValue = "0") int skip
+    ) {
         List<Product> products = productService.getProductsByNameIgnoreCaseAndSpace(name);
-        return ResponseEntity.ok(products);
+        ResponseWrapper<Product> response = new ResponseWrapper<>(
+                limit == 0
+                        ? products.stream().skip(skip).collect(Collectors.toList())
+                        : products.stream().skip(skip).limit(limit).collect(Collectors.toList()),
+                products.size(),
+                limit,
+                skip
+        );
+        return ResponseEntity.ok(response);
     }
 }

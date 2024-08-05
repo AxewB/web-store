@@ -49,7 +49,7 @@ public class CategoryService {
     }
 
     public List<Category> getBottomLayer() {
-        return categoryRepository.findAll().stream().filter(cat -> cat.getChildren().isEmpty()).toList();
+        return categoryRepository.findAll().stream().filter(cat -> cat.getChildren().isEmpty()).collect(Collectors.toList());
     }
 
     public List<Category> getPathFromRoot(Long categoryId) {

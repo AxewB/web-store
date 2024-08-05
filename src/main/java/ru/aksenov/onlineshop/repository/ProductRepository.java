@@ -22,8 +22,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                     SELECT *
                     FROM product
                     WHERE LOWER(REPLACE(name, ' ', ''))
-                    LIKE LOWER(REPLACE(:name, ' ', ''))
-                    """,
+                    LIKE LOWER(CONCAT('%', REPLACE(:name, ' ', ''), '%'))
+                """,
             nativeQuery = true)
     List<Product> findByNameIgnoreCaseAndSpaces(@Param("name") String name);
 }

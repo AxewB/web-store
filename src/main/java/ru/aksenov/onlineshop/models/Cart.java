@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "Cart")
@@ -71,15 +72,15 @@ public class Cart{
     public double totalCostAvailable() {
         List<Product> availabeProducts = products.stream()
                 .filter(product -> product.getQuantity() > 0)
-                .toList();
+                .collect(Collectors.toList());
         return availabeProducts.stream().reduce(0d, (partialCost, product) -> partialCost + product.getCost(), Double::sum);
     }
 
     public void removeOutOfStockProducts() {
-        products = products.stream().filter(product -> product.getQuantity() > 0).toList();
+        products = products.stream().filter(product -> product.getQuantity() > 0).collect(Collectors.toList());
     }
 
     public void removeAvailableProducts() {
-        products = products.stream().filter(product -> product.getQuantity() == 0).toList();
+        products = products.stream().filter(product -> product.getQuantity() == 0).collect(Collectors.toList());
     }
 }
