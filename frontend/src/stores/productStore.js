@@ -13,11 +13,6 @@ export const useProductStore = defineStore('products', {
     skip: 0,
     limit: 10,
     page: 1,
-
-    searchSettings: {
-      name: '',
-      category: {},
-    }
   }),
   getters: {
     totalPages: (state) => Math.ceil(state.total / state.limit),
