@@ -1,11 +1,16 @@
 <template>
   <v-sheet v-if="userData" class="pa-2 d-flex flex-column" rounded>
-    <span class="text-h5 mb-2 font-weight-bold">Account data</span>
-    <v-sheet >
-      <v-text-field 
-        v-for="key in Object.keys(userData)" 
-        :label="key" 
+    <span class="text-h5 mb-2 font-weight-bold">
+      Account data
+    </span>
+    {{ userData }}
+    <v-sheet>
+      <v-text-field
+        v-for="key in Object.keys(userData)"
         :value="userData[key]"
+        :label="key"
+        disabled
+        variant="underlined"
       />
       <VDivider/>
     </v-sheet>

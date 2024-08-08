@@ -64,6 +64,12 @@ public class CartService {
 
     public Cart getCartByUserId(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        if (user.getCart() == null) {
+            Cart cart = new Cart();
+            cart.setUser(user);
+            user.setCart(cart);
+            cartRepository.save(cart);
+        }
         return user.getCart();
     }
 
@@ -90,7 +96,7 @@ public class CartService {
 
 
 
-        // Превращаем их в нужный обхъект для заказа
+        // Превращаем их в нужный объект для заказа
         List<OrderItem> orderItems = availableProducts.stream()
                 .map(product -> {
                     OrderItem orderItem = new OrderItem();

@@ -26,6 +26,7 @@ export const useCartStore = defineStore('cart', {
       axios.get(API_URL + `/${userStore.user.id}`, { headers: userHeader() })
       .then((response) => {
         this.cart = response.data.cart
+        console.log(this.cart)
         this.totalCost = response.data.totalCost
       });
     },

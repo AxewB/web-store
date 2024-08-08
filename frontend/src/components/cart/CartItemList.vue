@@ -1,6 +1,6 @@
 
 <template>
-  <v-sheet v-if="props.products.length" class="d-flex flex-column bg-transparent">
+  <v-sheet v-if="products.length" class="d-flex flex-column bg-transparent">
     <v-sheet 
       v-for="(product, index) in products"
       :key="product.id">

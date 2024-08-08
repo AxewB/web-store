@@ -2,8 +2,8 @@
   <v-sheet class="bg-transparent pa-2">
     <PageHeader/>
     <PageHeading title="Корзина"/>
-
-    <v-sheet class="d-flex flex-row pt-2 bg-transparent" rounded>
+    <v-sheet 
+     class="d-flex flex-row pt-2 bg-transparent" rounded>
 
       <v-sheet class="flex-grow-1 d-flex flex-column mr-2 pa-2" rounded>
         <CartItemList :products="cart.products"/>

@@ -1,3 +1,11 @@
+-- drop whole schema -------------------------
+
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO public;
+
 -- roles ------------------------------
 
 INSERT INTO roles(name) VALUES('ROLE_USER');
@@ -8,7 +16,8 @@ INSERT INTO roles(name) VALUES('ROLE_ADMIN');
 
 
 
-INSERT INTO category (id, name, parent_id) VALUES (1, 'Electronics', NULL);
+INSERT INTO category (id, name, parent_id) VALUES
+(1, 'Electronics', NULL),
 (2, 'Laptops', 1),
 (3, 'Smartphones', 1),
 (4, 'Home Appliances', NULL),
@@ -62,7 +71,7 @@ INSERT INTO product_category (product_id, category_id) VALUES
 (7, 7), (7, 9), (7, 11),
 (8, 7), (8, 8), (8, 12),
 (9, 7), (9, 8),
-(10, 7), (10, 9);
+(10, 7), (10, 9),
 
 (11, 13), (11, 14),
 (12, 13), (12, 15),
@@ -73,7 +82,7 @@ INSERT INTO product_category (product_id, category_id) VALUES
 
 -----
 
-INSERT INTO categories (id, name, parentId) VALUES
+INSERT INTO category (id, name, parent_id) VALUES
 (22, 'Beauty', NULL),
 (23, 'Fragrances', NULL),
 (24, 'Furniture', NULL),
@@ -175,9 +184,9 @@ INSERT INTO product (id, name, description, images, thumbnail, quantity, cost) V
 (104, 'Nike Baseball Cleats', 'Nike Baseball Cleats are designed for maximum traction and performance on the baseball field. They provide stability and support for players during games and practices.', '{"https://cdn.dummyjson.com/products/images/mens-shoes/Nike%20Baseball%20Cleats/1.png","https://cdn.dummyjson.com/products/images/mens-shoes/Nike%20Baseball%20Cleats/2.png","https://cdn.dummyjson.com/products/images/mens-shoes/Nike%20Baseball%20Cleats/3.png","https://cdn.dummyjson.com/products/images/mens-shoes/Nike%20Baseball%20Cleats/4.png"}', 'https://cdn.dummyjson.com/products/images/mens-shoes/Nike%20Baseball%20Cleats/thumbnail.png', 14, 79.99),
 (105, 'Puma Future Rider Trainers', 'The Puma Future Rider Trainers offer a blend of retro style and modern comfort. Perfect for casual wear, these trainers provide a fashionable and comfortable option for everyday use.', '{"https://cdn.dummyjson.com/products/images/mens-shoes/Puma%20Future%20Rider%20Trainers/1.png","https://cdn.dummyjson.com/products/images/mens-shoes/Puma%20Future%20Rider%20Trainers/2.png","https://cdn.dummyjson.com/products/images/mens-shoes/Puma%20Future%20Rider%20Trainers/3.png","https://cdn.dummyjson.com/products/images/mens-shoes/Puma%20Future%20Rider%20Trainers/4.png"}', 'https://cdn.dummyjson.com/products/images/mens-shoes/Puma%20Future%20Rider%20Trainers/thumbnail.png', 10, 89.99),
 (106, 'Sports Sneakers Off White & Red', 'The Sports Sneakers in Off White and Red combine style and functionality, making them a fashionable choice for sports enthusiasts. The red and off-white color combination adds a bold and energetic touch.', '{"https://cdn.dummyjson.com/products/images/mens-shoes/Sports%20Sneakers%20Off%20White%20&%20Red/1.png","https://cdn.dummyjson.com/products/images/mens-shoes/Sports%20Sneakers%20Off%20White%20&%20Red/2.png","https://cdn.dummyjson.com/products/images/mens-shoes/Sports%20Sneakers%20Off%20White%20&%20Red/3.png","https://cdn.dummyjson.com/products/images/mens-shoes/Sports%20Sneakers%20Off%20White%20&%20Red/4.png"}', 'https://cdn.dummyjson.com/products/images/mens-shoes/Sports%20Sneakers%20Off%20White%20&%20Red/thumbnail.png', 73, 119.99),
-(107, 'Sports Sneakers Off White Red', 'Another variant of the Sports Sneakers in Off White Red, featuring a unique design. These sneakers offer style and comfort for casual occasions.', '{"https://cdn.dummyjson.com/products/images/mens-shoes/Sports%20Sneakers%20Off%20White%20Red/1.png","https://cdn.dummyjson.com/products/images/mens-shoes/Sports%20Sneakers%20Off%20White%20Red/2.png","https://cdn.dummyjson.com/products/images/mens-shoes/Sports%20Sneakers%20Off%20White%20Red/3.png","https://cdn.dummyjson.com/products/images/mens-shoes/Sports%20Sneakers%20Off%20White%20Red/4.png"}', 'https://cdn.dummyjson.com/products/images/mens-shoes/Sports%20Sneakers%20Off%20White%20Red/thumbnail.png', 75, 109.99),
+(107, 'Sports Sneakers Off White Red', 'Another variant of the Sports Sneakers in Off White Red, featuring a unique design. These sneakers offer style and comfort for casual occasions.', '{"https://cdn.dummyjson.com/products/images/mens-shoes/Sports%20Sneakers%20Off%20White%20Red/1.png","https://cdn.dummyjson.com/products/images/mens-shoes/Sports%20Sneakers%20Off%20White%20Red/2.png","https://cdn.dummyjson.com/products/images/mens-shoes/Sports%20Sneakers%20Off%20White%20Red/3.png","https://cdn.dummyjson.com/products/images/mens-shoes/Sports%20Sneakers%20Off%20White%20Red/4.png"}', 'https://cdn.dummyjson.com/products/images/mens-shoes/Sports%20Sneakers%20Off%20White%20Red/thumbnail.png', 75, 109.99);
 
-INSERT INTO category_product (product_id, category_id) VALUES
+INSERT INTO product_category (product_id, category_id) VALUES
 (16, 22),
 (17, 22),
 (18, 22),

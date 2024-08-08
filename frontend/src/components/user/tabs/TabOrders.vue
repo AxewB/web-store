@@ -1,7 +1,7 @@
 <template>
   <v-sheet class="pa-2" rounded>
-    <OrderList 
-      :orders="orders" 
+    <OrderList
+      :orders="orders"
       @on-item-click="onItemClick"/>
   </v-sheet >
 </template>

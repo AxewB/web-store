@@ -19,6 +19,6 @@ const cartStore = useCartStore();
 onMounted(async () => {
   productStore.limit = 30;
   const res = await productStore.fetchProducts();
-  // cartStore.getCart();
+  cartStore.getCart();
 })
 </script>

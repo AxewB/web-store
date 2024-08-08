@@ -1,0 +1,147 @@
+[
+  {
+    "id": 1,
+    "name": "Electronics",
+    "parent": null
+  },
+  {
+    "id": 2,
+    "name": "Laptops",
+    "parent": 1
+  },
+  {
+    "id": 3,
+    "name": "Smartphones",
+    "parent": 1
+  },
+  {
+    "id": 4,
+    "name": "Home Appliances",
+    "parent": null
+  },
+  {
+    "id": 5,
+    "name": "Refrigerators",
+    "parent": 4
+  },
+  {
+    "id": 6,
+    "name": "Washing Machines",
+    "parent": 4
+  },
+  {
+    "id": 7,
+    "name": "Books",
+    "parent": null
+  },
+  {
+    "id": 8,
+    "name": "Fiction",
+    "parent": 7
+  },
+  {
+    "id": 9,
+    "name": "Non-Fiction",
+    "parent": 7
+  },
+  {
+    "id": 10,
+    "name": "Science Fiction",
+    "parent": 8
+  },
+  {
+    "id": 11,
+    "name": "Biography",
+    "parent": 9
+  },
+  {
+    "id": 12,
+    "name": "Children's Books",
+    "parent": 7
+  },
+  {
+    "id": 13,
+    "name": "Clothing",
+    "parent": null
+  },
+  {
+    "id": 14,
+    "name": "Men's Wear",
+    "parent": 13
+  },
+  {
+    "id": 15,
+    "name": "Women's Wear",
+    "parent": 13
+  },
+  {
+    "id": 16,
+    "name": "Footwear",
+    "parent": null
+  },
+  {
+    "id": 17,
+    "name": "Formal Shoes",
+    "parent": 16
+  },
+  {
+    "id": 18,
+    "name": "Casual Shoes",
+    "parent": 16
+  },
+  {
+    "id": 19,
+    "name": "Accessories",
+    "parent": null
+  },
+  {
+    "id": 20,
+    "name": "Watches",
+    "parent": 19
+  },
+  {
+    "id": 21,
+    "name": "Jewelry",
+    "parent": 19
+  },
+  {
+    "id": 22,
+    "name": "Beauty",
+    "parent": null
+  },
+  {
+    "id": 23,
+    "name": "Fragrances",
+    "parent": null
+  },
+  {
+    "id": 24,
+    "name": "Furniture",
+    "parent": null
+  },
+  {
+    "id": 25,
+    "name": "Groceries",
+    "parent": null
+  },
+  {
+    "id": 26,
+    "name": "Home Decoration",
+    "parent": null
+  },
+  {
+    "id": 27,
+    "name": "Kitchen Accessories",
+    "parent": null
+  },
+  {
+    "id": 28,
+    "name": "Men's Shirts",
+    "parent": 14
+  },
+  {
+    "id": 29,
+    "name": "Men's Shoes",
+    "parent": 14
+  }
+]
