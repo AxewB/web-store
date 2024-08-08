@@ -50,41 +50,6 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/add")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
-        Product newProduct = productService.addProduct(product);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
-    }
-
-    @PutMapping("/{id}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Product> updateProduct(
-            @PathVariable Long id,
-            @RequestBody Product productDetails
-    ) {
-        try {
-            Product updatedProduct = productService.updateProduct(id, productDetails);
-            return ResponseEntity.ok(updatedProduct);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
-
-    }
-
-    @DeleteMapping("/{id}")
-//    @PreAuthorize("hasRole('ADMIN')")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long id) {
-
-        try {
-            productService.deleteProduct(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<ResponseWrapper<Product>> getProductsByCategoryAndDescendants(
             @PathVariable Long categoryId,
@@ -103,12 +68,6 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-//    @GetMapping("/search")
-//    public ResponseEntity<List<Product>> getProductsByName(@RequestParam String name) {
-//        List<Product> products = productService.getProductsByName(name);
-//        return ResponseEntity.ok(products);
-//    }
-
     @GetMapping("/search")
     public ResponseEntity<ResponseWrapper<Product>> getProductsByName(
             @RequestParam String name,
@@ -125,5 +84,30 @@ public class ProductController {
                 skip
         );
         return ResponseEntity.ok(response);
+    }
+
+
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public ResponseEntity<Product> addProduct(@RequestBody Product product) {
+        Product newProduct = productService.addProduct(product);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    public ResponseEntity<Product> updateProduct(
+            @PathVariable Long id,
+            @RequestBody Product productDetails
+    ) {
+        Product updatedProduct = productService.updateProduct(id, productDetails);
+        return ResponseEntity.ok(updatedProduct);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
     }
 }

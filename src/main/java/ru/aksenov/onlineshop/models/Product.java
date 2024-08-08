@@ -33,6 +33,16 @@ public class Product {
 
     public Product() {}
 
+    public Product(Long id, double cost, int quantity, List<String> images, String thumbnail, String description, String name) {
+        this.id = id;
+        this.cost = cost;
+        this.quantity = quantity;
+        this.thumbnail = thumbnail;
+        this.images = images;
+        this.description = description;
+        this.name = name;
+    }
+
     public Product(double cost, int quantity, List<String> images, String thumbnail, String description, String name) {
         this.cost = cost;
         this.quantity = quantity;
