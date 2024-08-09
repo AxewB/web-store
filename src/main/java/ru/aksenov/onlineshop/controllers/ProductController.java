@@ -23,6 +23,13 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    /**
+     * Получение списка всех продуктов с поддержкой пагинации.
+     *
+     * @param limit Максимальное количество продуктов, возвращаемых за один запрос (по умолчанию 10).
+     * @param skip Количество продуктов, которые нужно пропустить (по умолчанию 0).
+     * @return ResponseEntity с обёрнутым списком продуктов, общим количеством продуктов, лимитом и количеством пропущенных элементов.
+     */
     @GetMapping
     public ResponseEntity<ResponseWrapper<Product>> getAllProducts(
             @RequestParam(defaultValue = "10") int limit,
@@ -40,6 +47,12 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Получение продукта по его идентификатору.
+     *
+     * @param id Идентификатор продукта.
+     * @return ResponseEntity с продуктом, если он найден, или статусом "Not Found" в случае ошибки.
+     */
     @GetMapping("{id}")
     public ResponseEntity<Product> getById(@PathVariable("id") Long id) {
         try {
@@ -50,6 +63,12 @@ public class ProductController {
         }
     }
 
+    /**
+     * Добавление нового продукта.
+     *
+     * @param product Объект продукта, который нужно добавить.
+     * @return ResponseEntity с созданным продуктом и статусом "Created".
+     */
     @PostMapping("/add")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Product> addProduct(@RequestBody Product product) {
@@ -57,6 +76,13 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newProduct);
     }
 
+    /**
+     * Обновление существующего продукта.
+     *
+     * @param id Идентификатор продукта, который нужно обновить.
+     * @param productDetails Обновлённые данные продукта.
+     * @return ResponseEntity с обновлённым продуктом или статусом "Not Found" в случае ошибки.
+     */
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<Product> updateProduct(
@@ -72,9 +98,14 @@ public class ProductController {
 
     }
 
+    /**
+     * Удаление продукта по его идентификатору.
+     *
+     * @param id Идентификатор продукта, который нужно удалить.
+     * @return ResponseEntity с пустым телом и статусом "No Content" или статусом "Not Found" в случае ошибки.
+     */
     @DeleteMapping("/{id}")
-//    @PreAuthorize("hasRole('ADMIN')")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long id) {
 
         try {
@@ -85,6 +116,14 @@ public class ProductController {
         }
     }
 
+    /**
+     * Получение продуктов по идентификатору категории и её подкатегориям с поддержкой пагинации.
+     *
+     * @param categoryId Идентификатор категории.
+     * @param limit Максимальное количество продуктов, возвращаемых за один запрос (по умолчанию 10).
+     * @param skip Количество продуктов, которые нужно пропустить (по умолчанию 0).
+     * @return ResponseEntity с обёрнутым списком продуктов, общим количеством продуктов, лимитом и количеством пропущенных элементов.
+     */
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<ResponseWrapper<Product>> getProductsByCategoryAndDescendants(
             @PathVariable Long categoryId,
@@ -103,12 +142,14 @@ public class ProductController {
         return ResponseEntity.ok(response);
     }
 
-//    @GetMapping("/search")
-//    public ResponseEntity<List<Product>> getProductsByName(@RequestParam String name) {
-//        List<Product> products = productService.getProductsByName(name);
-//        return ResponseEntity.ok(products);
-//    }
-
+    /**
+     * Поиск продуктов по имени с поддержкой пагинации.
+     *
+     * @param name Имя продукта для поиска.
+     * @param limit Максимальное количество продуктов, возвращаемых за один запрос (по умолчанию 10).
+     * @param skip Количество продуктов, которые нужно пропустить (по умолчанию 0).
+     * @return ResponseEntity с обёрнутым списком продуктов, общим количеством продуктов, лимитом и количеством пропущенных элементов.
+     */
     @GetMapping("/search")
     public ResponseEntity<ResponseWrapper<Product>> getProductsByName(
             @RequestParam String name,

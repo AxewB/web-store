@@ -26,18 +26,42 @@ public class OrderService {
     @Autowired
     private ProductRepository productRepository;
 
+    /**
+     * Получение списка всех заказов.
+     *
+     * @return Список всех заказов.
+     */
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
 
+    /**
+     * Получение заказа по его идентификатору.
+     *
+     * @param orderId Идентификатор заказа.
+     * @return Заказ с указанным идентификатором.
+     */
     public Order getOrderById(Long orderId) {
         return orderRepository.getOrderById(orderId);
     }
 
+    /**
+     * Получение списка заказов для указанного пользователя.
+     *
+     * @param userId Идентификатор пользователя.
+     * @return Список заказов, принадлежащих пользователю.
+     */
     public List<Order> getOrderByUserId(Long userId) {
         return orderRepository.getOrderByUserId(userId);
     }
 
+    /**
+     * Создание нового заказа на основе содержимого корзины пользователя.
+     *
+     * @param userId Идентификатор пользователя.
+     * @return Созданный заказ.
+     * @throws RuntimeException Если корзина не найдена или пуста, или если какой-либо продукт не доступен.
+     */
     public Order createOrder(Long userId) {
         Cart cart = cartRepository.findById(userId).orElseThrow(() -> new RuntimeException("Cart not found"));
         if (cart.getProducts().isEmpty()) {

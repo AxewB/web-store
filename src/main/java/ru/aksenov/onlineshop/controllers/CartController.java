@@ -19,7 +19,12 @@ public class CartController {
     private CartService cartService;
 
 
-    // Просмотр содержимого корзины
+    /**
+     * Получение содержимого корзины и общей стоимости для указанного пользователя.
+     *
+     * @param userId Идентификатор пользователя, чью корзину нужно получить.
+     * @return ResponseEntity, содержащий корзину и общую стоимость, или сообщение об ошибке в случае неудачи.
+     */
     @GetMapping("/{userId}")
     public ResponseEntity<Map<String, Object>> getCart(@PathVariable Long userId) {
         try {
@@ -33,7 +38,13 @@ public class CartController {
         }
     }
 
-    // Добавление продукта в заказ
+    /**
+     * Добавление продукта в корзину для указанного пользователя.
+     *
+     * @param userId Идентификатор пользователя, для которого добавляется продукт.
+     * @param productId Идентификатор продукта, который нужно добавить в корзину.
+     * @return ResponseEntity с подтверждением успешного добавления продукта или сообщение об ошибке.
+     */
     @PostMapping("/{userId}/add")
     public ResponseEntity<String> addProductToCart(@PathVariable Long userId, @RequestParam Long productId) {
         try {
@@ -44,8 +55,13 @@ public class CartController {
         }
     }
 
-    // Удаление продукта из корзины
-    @DeleteMapping("/{userId}/remove")
+    /**
+     * Удаление продукта из корзины для указанного пользователя.
+     *
+     * @param userId Идентификатор пользователя, для которого удаляется продукт.
+     * @param productId Идентификатор продукта, который нужно удалить из корзины.
+     * @return ResponseEntity с подтверждением успешного удаления продукта или сообщение об ошибке.
+     */    @DeleteMapping("/{userId}/remove")
     public ResponseEntity<String> removeProductFromCart(@PathVariable Long userId, @RequestParam Long productId) {
         try {
             cartService.removeProductFromCart(userId, productId);
@@ -56,8 +72,12 @@ public class CartController {
     }
 
 
-    // Оформление заказа
-    @PostMapping("/{userId}/checkout")
+    /**
+     * Оформление заказа для указанного пользователя, включая создание заказа и очистку корзины.
+     *
+     * @param userId Идентификатор пользователя, для которого осуществляется оформление заказа.
+     * @return ResponseEntity с деталями созданного заказа или сообщение об ошибке.
+     */    @PostMapping("/{userId}/checkout")
     public ResponseEntity<Order> checkout(@PathVariable Long userId) {
         try {
             Order order = cartService.checkout(userId);
@@ -67,6 +87,12 @@ public class CartController {
         }
     }
 
+    /**
+     * Очистка корзины для указанного пользователя, удаление всех продуктов.
+     *
+     * @param userId Идентификатор пользователя, чью корзину нужно очистить.
+     * @return ResponseEntity без содержимого, подтверждающее успешное выполнение операции.
+     */
     @DeleteMapping("/{userId}/clear")
     public ResponseEntity<Cart> clearCart(@PathVariable Long userId) {
         Cart cart = cartService.getCartByUserId(userId);

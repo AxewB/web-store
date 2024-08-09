@@ -3,6 +3,11 @@ package ru.aksenov.onlineshop.helperClasses;
 import java.util.List;
 
 public class ProductCategoryMapper {
+    /**
+     * Вспомогательный класс, который нужен только
+     * для загрузки категорий и дальнейнего распределения их
+     * в продукты
+     */
     private Long productId;
     private List<Long> categoryIds;
 

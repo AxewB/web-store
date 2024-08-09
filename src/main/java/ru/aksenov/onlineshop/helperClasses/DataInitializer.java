@@ -36,12 +36,15 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        // Проверка и создание ролей, если они отсутствуют
         if (roleRepository.findAll().isEmpty()) {
             Role userRole = new Role(ERole.ROLE_USER);
             Role adminRole = new Role(ERole.ROLE_ADMIN);
             roleRepository.save(userRole);
             roleRepository.save(adminRole);
         }
+
+        // Создание пользователя с ролью администратора, если он не существует
         Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN).orElseThrow(() -> new RuntimeException("There is no such role"));
         if (!userRepository.existsByRoles(adminRole)) {
             Set<Role> roles = new HashSet<>();
@@ -55,6 +58,7 @@ public class DataInitializer implements CommandLineRunner {
             userRepository.save(adminUser);
         }
 
+        // Загрузка и сохранение категорий, если они отсутствуют
         if (categoryRepository.findAll().isEmpty()) {
             List<CategoryJsonInfo> categoriesJson = dataLoader.loadCategories("src/data/categories.json");
 
@@ -75,6 +79,7 @@ public class DataInitializer implements CommandLineRunner {
             }
         }
 
+        // Загрузка и сохранение продуктов и их категорий, если они отсутствуют
         if (productRepository.findAll().isEmpty()) {
             List<Product> products = dataLoader.loadProducts("src/data/products.json");
             productRepository.saveAll(products);

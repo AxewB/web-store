@@ -3,6 +3,14 @@ package ru.aksenov.onlineshop.helperClasses;
 import java.util.List;
 
 public class ResponseWrapper<T> {
+    /**
+     * Вспомогательный класс, которым оборачиваются запросы на продукты
+     * Содержит:
+     * Список продуктов
+     * Размер всего списка
+     * Ограничение по количеству получаемых элементов
+     * Пропуск определенного числа элементов
+     */
     private List<T> data;
     private int total;
     private int limit;

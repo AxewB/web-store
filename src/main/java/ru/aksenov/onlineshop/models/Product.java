@@ -106,12 +106,21 @@ public class Product {
         this.categories = categories;
     }
 
-    // Проверка наличия товара
+    /**
+     * Проверка наличия товара.
+     *
+     * @param requestedQuantity - Запрашиваемое количество товара.
+     * @return true, если значение совпадает, иначе false.
+     */
     public boolean isAvailable(int requestedQuantity) {
         return this.quantity >= requestedQuantity;
     }
 
-    // Уменьшение количества товара
+    /**
+     * Уменьшение количества товара.
+     * Используется при оформлении заказа.
+     * @param amount - Значение, на которое будет уменьшено количество товара.
+     */
     public void decreaseQuantity(int amount) {
         if (this.quantity >= amount) {
             this.quantity -= amount;
