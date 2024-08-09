@@ -1,0 +1,48 @@
+version: '3.8'
+services:
+#  db:
+#    image: postgres:13
+#    ports:
+#      - "5432:5432"
+#    environment:
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: 12345678
+#      POSTGRES_DB: web-shop-db
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+
+#  backend:
+#    build: .
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/web-shop-db
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: 12345678
+#    depends_on:
+#      - db
+
+  backend:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:h2:mem:testdb
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=password
+    volumes:
+      - ./src/data:/app/src/data
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      VITE_API_URL: http://localhost:8080/api
+
+volumes:
+  postgres_data:

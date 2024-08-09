@@ -1,0 +1,8 @@
+# Исключаем все директории и файлы, которые не нужны в контейнере
+node_modules
+dist
+target
+.git
+.DS_Store
+.idea
+*.iml
