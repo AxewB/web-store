@@ -2,7 +2,14 @@ package ru.aksenov.onlineshop.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import ru.aksenov.onlineshop.models.Cart;
 import ru.aksenov.onlineshop.models.Order;
 import ru.aksenov.onlineshop.service.CartService;
@@ -41,7 +48,7 @@ public class CartController {
     /**
      * Добавление продукта в корзину для указанного пользователя.
      *
-     * @param userId Идентификатор пользователя, для которого добавляется продукт.
+     * @param userId    Идентификатор пользователя, для которого добавляется продукт.
      * @param productId Идентификатор продукта, который нужно добавить в корзину.
      * @return ResponseEntity с подтверждением успешного добавления продукта или сообщение об ошибке.
      */
@@ -58,10 +65,11 @@ public class CartController {
     /**
      * Удаление продукта из корзины для указанного пользователя.
      *
-     * @param userId Идентификатор пользователя, для которого удаляется продукт.
+     * @param userId    Идентификатор пользователя, для которого удаляется продукт.
      * @param productId Идентификатор продукта, который нужно удалить из корзины.
      * @return ResponseEntity с подтверждением успешного удаления продукта или сообщение об ошибке.
-     */    @DeleteMapping("/{userId}/remove")
+     */
+    @DeleteMapping("/{userId}/remove")
     public ResponseEntity<String> removeProductFromCart(@PathVariable Long userId, @RequestParam Long productId) {
         try {
             cartService.removeProductFromCart(userId, productId);
@@ -77,7 +85,8 @@ public class CartController {
      *
      * @param userId Идентификатор пользователя, для которого осуществляется оформление заказа.
      * @return ResponseEntity с деталями созданного заказа или сообщение об ошибке.
-     */    @PostMapping("/{userId}/checkout")
+     */
+    @PostMapping("/{userId}/checkout")
     public ResponseEntity<Order> checkout(@PathVariable Long userId) {
         try {
             Order order = cartService.checkout(userId);

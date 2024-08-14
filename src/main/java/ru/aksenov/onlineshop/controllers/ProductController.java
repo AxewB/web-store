@@ -1,15 +1,21 @@
 package ru.aksenov.onlineshop.controllers;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import ru.aksenov.onlineshop.helperClasses.ResponseWrapper;
 import ru.aksenov.onlineshop.models.Product;
-import ru.aksenov.onlineshop.repository.ProductRepository;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import ru.aksenov.onlineshop.service.ProductService;
 
 import java.util.List;
@@ -27,7 +33,7 @@ public class ProductController {
      * Получение списка всех продуктов с поддержкой пагинации.
      *
      * @param limit Максимальное количество продуктов, возвращаемых за один запрос (по умолчанию 10).
-     * @param skip Количество продуктов, которые нужно пропустить (по умолчанию 0).
+     * @param skip  Количество продуктов, которые нужно пропустить (по умолчанию 0).
      * @return ResponseEntity с обёрнутым списком продуктов, общим количеством продуктов, лимитом и количеством пропущенных элементов.
      */
     @GetMapping
@@ -79,7 +85,7 @@ public class ProductController {
     /**
      * Обновление существующего продукта.
      *
-     * @param id Идентификатор продукта, который нужно обновить.
+     * @param id             Идентификатор продукта, который нужно обновить.
      * @param productDetails Обновлённые данные продукта.
      * @return ResponseEntity с обновлённым продуктом или статусом "Not Found" в случае ошибки.
      */
@@ -120,8 +126,8 @@ public class ProductController {
      * Получение продуктов по идентификатору категории и её подкатегориям с поддержкой пагинации.
      *
      * @param categoryId Идентификатор категории.
-     * @param limit Максимальное количество продуктов, возвращаемых за один запрос (по умолчанию 10).
-     * @param skip Количество продуктов, которые нужно пропустить (по умолчанию 0).
+     * @param limit      Максимальное количество продуктов, возвращаемых за один запрос (по умолчанию 10).
+     * @param skip       Количество продуктов, которые нужно пропустить (по умолчанию 0).
      * @return ResponseEntity с обёрнутым списком продуктов, общим количеством продуктов, лимитом и количеством пропущенных элементов.
      */
     @GetMapping("/category/{categoryId}")
@@ -145,9 +151,9 @@ public class ProductController {
     /**
      * Поиск продуктов по имени с поддержкой пагинации.
      *
-     * @param name Имя продукта для поиска.
+     * @param name  Имя продукта для поиска.
      * @param limit Максимальное количество продуктов, возвращаемых за один запрос (по умолчанию 10).
-     * @param skip Количество продуктов, которые нужно пропустить (по умолчанию 0).
+     * @param skip  Количество продуктов, которые нужно пропустить (по умолчанию 0).
      * @return ResponseEntity с обёрнутым списком продуктов, общим количеством продуктов, лимитом и количеством пропущенных элементов.
      */
     @GetMapping("/search")

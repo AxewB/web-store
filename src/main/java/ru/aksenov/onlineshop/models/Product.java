@@ -1,7 +1,13 @@
 package ru.aksenov.onlineshop.models;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.JoinTable;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,13 +35,14 @@ public class Product {
 
     @ManyToMany
     @JoinTable(
-            name="product_category",
+            name = "product_category",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private Set<Category> categories = new HashSet<>();
 
-    public Product() {}
+    public Product() {
+    }
 
     public Product(double cost, int quantity, List<String> images, String thumbnail, String description, String name) {
         this.cost = cost;
@@ -59,6 +66,7 @@ public class Product {
     /**
      * Уменьшение количества товара.
      * Используется при оформлении заказа.
+     *
      * @param amount - Значение, на которое будет уменьшено количество товара.
      */
     public void decreaseQuantity(int amount) {
@@ -69,6 +77,6 @@ public class Product {
 
     @Override
     public String toString() {
-        return this.id + " | " + this.name + " | " + this.description+ " | " + this.quantity + " | " + this.cost;
+        return this.id + " | " + this.name + " | " + this.description + " | " + this.quantity + " | " + this.cost;
     }
 }
