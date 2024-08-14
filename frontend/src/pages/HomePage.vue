@@ -1,8 +1,8 @@
 <template>
-  <v-sheet>
+  <VSheet>
     <PageHeader />
     <ProductList @on-card-click="moveToProductPage"/>
-  </v-sheet>
+  </VSheet>
 </template>
 
 <script setup>

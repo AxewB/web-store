@@ -1,40 +1,45 @@
 <template>
-  <v-sheet class="d-flex flex-row pa-2" rounded>
-    <v-avatar 
+  <VSheet class="d-flex flex-row pa-2" rounded>
+    <VAvatar
     class="cursor-pointer"
-      :image="thumbnail" 
-      size="100" 
-      rounded 
+      :image="thumbnail"
+      size="100"
+      rounded
       color="grey"
-      @click="moveToProductPage()
-    "/>
-    <v-sheet class="flex-grow-1 d-flex flex-column justify-space-between ml-2">
-      <v-sheet 
-        class="d-flex flex-row align-center text-h6 font-weight-medium cursor-pointer " 
+      @click="moveToProductPage()"
+    />
+    <VSheet class="flex-grow-1 d-flex flex-column justify-space-between ml-2">
+      <VSheet
+        class="d-flex flex-row align-center text-h6 font-weight-medium cursor-pointer "
         @click="moveToProductPage()"
       >
         {{ name }}
-        <v-sheet class="text-body-1 font-weight-black px-2 py-1 ml-2 bg-success" rounded >
+        <VSheet
+          class="text-body-1 font-weight-black bg-succes px-2 py-1 ml-2"
+          rounded
+        >
           {{ cost }}$
-        </v-sheet>
-  
-      </v-sheet>
-      <v-btn 
-      icon="mdi-delete" 
+        </VSheet>
+      </VSheet>
+      <VBtn
+      icon="mdi-delete"
       variant="tonal"
       color="error"
       rounded
       size="small"
       @click="removeFromCart()"
     />
-    </v-sheet>
-  </v-sheet>
+    </VSheet>
+  </VSheet>
 </template>
 
 <script setup>
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCartStore } from '@/stores/cartStore';
+
+// variables
+
 const router = useRouter();
 const cartStore = useCartStore();
 const props = defineProps({
@@ -44,12 +49,15 @@ const props = defineProps({
   }
 })
 
+// computed
+
 const thumbnail = computed(() => props.product.thumbnail)
 const name = computed(() => props.product.name)
 const cost = computed(() => props.product.cost)
 const quantity = computed(() => props.product.quantity)
-
 const productId = computed(() => props.product.id)
+
+// methods
 
 function removeFromCart() {
   cartStore.removeFromCartById(productId.value)
@@ -58,5 +66,4 @@ function removeFromCart() {
 function moveToProductPage() {
   router.push({name: 'productPage', params: {id: productId.value}})
 }
-
 </script>

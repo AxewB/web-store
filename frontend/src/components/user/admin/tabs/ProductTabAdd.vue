@@ -1,10 +1,10 @@
 <template>
-  <v-sheet>
-    <TabActionRow title="Add product">
+  <VSheet>
+    <TabActionRow title="Добавить продукт">
       <ProductEdit
         @on-confirm="confirmAdding"/>
     </TabActionRow>
-  </v-sheet>  
+  </VSheet> 
 </template>
 
 <script setup>
@@ -15,7 +15,6 @@ import { useProductStore } from '@/stores/productStore';
 const productStore = useProductStore();
 async function confirmAdding(data) {
   const { product } = data
-  console.log(product)
   await productStore.addProduct(product);
 }
 </script>

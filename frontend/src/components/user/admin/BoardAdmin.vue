@@ -1,30 +1,56 @@
 <template>
-  <v-sheet height="100%" class="d-flex flex-column bg-transparent" rounded>
+  <VSheet height="100%" class="d-flex flex-column bg-transparent" rounded>
     <AppHeader/>
-    <v-sheet class="d-flex mt-4 flex-row bg-transparent" rounded>
-      <v-sheet class="mr-2 bg-transparent" min-width="200px" rounded>
-        <v-list rounded nav density="compact" width="100%" v-model="window" elevation="10" class="mb-2">
-            <v-list-item
+
+    <PageHeading title="Админ панель"/>
+
+    <VSheet
+      class="d-flex mt-4 flex-row bg-transparent"
+      rounded
+    >
+      <VSheet
+        class="mr-2 bg-transparent"
+        min-width="200px"
+        rounded
+      >
+        <VList
+          class="mb-2"
+          v-model="window"
+          rounded
+          nav
+          density="compact"
+          width="100%" 
+          elevation="10"
+        >
+            <VListItem
               link
               @click="switchTab('product')"
               :active="window === ProductTab"
               prepend-icon="mdi-package"
-              title="Product"/>
-              <v-list-item
+              title="Продукты"
+            />
+            <VListItem
               link
               @click="switchTab('category')"
               :active="window === CategoryTab"
               prepend-icon="mdi-shape"
-              title="Category"/>
-        </v-list>
-      </v-sheet>
-      <v-sheet class="flex-grow-1 bg-transparent" rounded>
-        <v-sheet rounded class="bg-transparent">
-          <component :is="window"/>
-        </v-sheet>
-      </v-sheet>
-    </v-sheet>
-  </v-sheet>
+              title="Категории"
+            />
+        </VList>
+      </VSheet>
+      <VSheet
+        class="flex-grow-1 bg-transparent"
+        rounded
+      >
+        <VSheet
+          class="bg-transparent"
+          rounded
+        >
+          <Component :is="window"/>
+        </VSheet>
+      </VSheet>
+    </VSheet>
+  </VSheet>
 </template>
 
 <script setup>

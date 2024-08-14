@@ -2,9 +2,9 @@
   <v-app >
     <v-main class="d-flex flex-row justify-center"
     >
-    <v-sheet width="1500px" class="bg-transparent">
+    <VSheet width="1500px" class="bg-transparent">
       <router-view class="pa-2"/>
-    </v-sheet>
+    </VSheet>
     </v-main>
   </v-app>
 </template>
@@ -18,7 +18,7 @@ const cartStore = useCartStore();
 
 onMounted(async () => {
   productStore.limit = 30;
-  const res = await productStore.fetchProducts();
+  productStore.fetchProducts();
   cartStore.getCart();
 })
 </script>

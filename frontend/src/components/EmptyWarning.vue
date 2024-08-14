@@ -1,22 +1,27 @@
 <template>
-  <v-sheet class="d-flex flex-column justify-center align-center" width="100%">
-    <v-sheet class="d-flex flex-column justify-center align-center pa-6" rounded>
+  <VSheet
+    class="d-flex flex-column justify-center align-center"
+    width="100%">
+    <VSheet
+      class="d-flex flex-column justify-center align-center pa-6"
+      rounded
+    >
       <span class="text-h2 mb-4">🤕</span>
       <span class="text-h5 font-weight-bold mb-2">{{ props.title }}</span>
       <span class="text-body-1">{{ props.description}}</span>
-      <v-btn 
-        v-if="props.action" 
+      <VBtn
+        v-if="props.action"
         :text="props.action"
         color="primary"
         @click="emit('click')"
         variant="tonal"
         class="mt-2"
       />
-    </v-sheet>
-  </v-sheet>
+    </VSheet>
+  </VSheet>
 </template>
 
-<script setup>  
+<script setup> 
 const props = defineProps({
   title: {
     type: String,

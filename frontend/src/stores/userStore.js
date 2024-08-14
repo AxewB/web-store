@@ -10,6 +10,11 @@ const initialState = user
 export const useUserStore = defineStore("user", {
   state: () => initialState,
   actions: {
+    /**
+     * Логин с использованием логина и пароля
+     * @param {Object} user - Пользователь
+     * @returns {Promise}
+     */
     login(user) {
       return AuthService.login(user).then(
         user => {
@@ -22,11 +27,19 @@ export const useUserStore = defineStore("user", {
         }
       );
     },
+    /**
+     * Выход из аккаунта
+     */
     logout() {
       AuthService.logout();
       this.logoutSuccess();
     },
 
+    /**
+     * Регистрация пользователя
+     * @param {Object} user - Новый пользователь
+     * @returns {Promise}
+     */
     register(user) {
       return AuthService.register(user).then(
         response => {
@@ -39,22 +52,41 @@ export const useUserStore = defineStore("user", {
         }
       );
     },
-    
+
+    /**
+     * Назначение пользователя после успешного логина
+     * @param {Object} user - Пользователь
+     */
     loginSuccess(user) {
       this.status.loggedIn = true;
       this.user = user;
     },
+
+    /**
+     * Очистка статуса в случае ошибки при входе
+     */
     loginFailure() {
       this.status.loggedIn = false;
       this.user = null;
     },
+
+    /**
+     * Очистка статуса после выхода из аккаунта
+     */
     logoutSuccess() {
       this.status.loggedIn = false;
       this.user = null;
     },
+    /**
+     * Очистка статуса после успешной регистрации
+     */
     registerSuccess() {
       this.status.loggedIn = false;
     },
+
+    /**
+     * Очистка статуса в случае ошибки при регистрации
+     */
     registerFailure() {
       this.status.loggedIn = false;
     }

@@ -1,31 +1,36 @@
 <template>
-  <v-sheet class="d-flex flex-column">
+  <VSheet class="d-flex flex-column">
     <v-toolbar v-if="props.toolbar"></v-toolbar>
 
-    <v-sheet v-if="props.type === 'card'" class="d-flex flex-row flex-wrap justify-center ">
+    <VSheet
+      v-if="props.type === 'card'"
+      class="d-flex flex-row flex-wrap justify-center "
+    >
       <ProductCard
         v-for="product in products"
         :key="product.id"
         :product="product"
         @on-click="cardClick"
       />
-    </v-sheet>
+    </VSheet>
 
-    <v-sheet v-if="props.type === 'row'" class="d-flex flex-column ">
+    <VSheet v-if="props.type === 'row'" class="d-flex flex-column ">
       <ProductRow
         v-for="product in products"
         :key="product.id"
         :product="product"
-        @on-click="cardClick"/>
-    </v-sheet>
+        @on-click="cardClick"
+      />
+    </VSheet>
 
-    <v-sheet v-if="totalPages > 1">
-      <v-pagination
+    <VSheet v-if="totalPages > 1">
+      <VPagination
         :length="totalPages"
         :total-visible="7"
-        v-model="page"/>
-    </v-sheet>
-  </v-sheet>
+        v-model="page"
+      />
+    </VSheet>
+  </VSheet>
 </template>
 
 <script setup>

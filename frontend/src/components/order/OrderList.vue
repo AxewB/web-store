@@ -1,6 +1,6 @@
 <template>
-  <v-sheet v-if="orders.length" class="pa-2" rounded>
-    <v-sheet 
+  <VSheet v-if="orders.length" class="pa-2" rounded>
+    <VSheet
       v-for="(order, index) in orders"
       :key="order.id"
     >
@@ -9,13 +9,13 @@
       @on-item-click="onItemClick"
     />
     <VDivider v-if="index < orders.length - 1" />
-    </v-sheet>
-    
-  </v-sheet>
-  <EmptyWarning 
+    </VSheet>
+  </VSheet>
+
+  <EmptyWarning
     v-else
-    title="Заказы отсутствуют" 
-    description="Создайте заказ" 
+    title="Заказы отсутствуют"
+    description="Создайте заказ"
     action="Перейти в корзину"
     @click="goToCart()"
   />
@@ -25,6 +25,8 @@
 import OrderItem from './OrderItem.vue';
 import EmptyWarning from '../EmptyWarning.vue';
 import { useRouter } from 'vue-router';
+
+// variables
 
 const router = useRouter();
 
@@ -36,13 +38,13 @@ const props = defineProps({
 })
 const emit = defineEmits(['on-item-click'])
 
+// methods
+
 function onItemClick() {
   emit('on-item-click')
-
 }
 
 function goToCart() {
   router.push({name: 'cart'})
 }
-
 </script>

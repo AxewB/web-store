@@ -1,14 +1,26 @@
 <template>
-  <v-sheet class="mb-2 text-h6 pa-2 d-flex flex-row align-center justify-center" rounded>
-    <v-btn-toggle v-model="mode" color="primary" mandatory rounded border>
-      <v-btn value="add">Add</v-btn>
-      <v-btn value="update">Update</v-btn>
-      <v-btn value="delete">Delete</v-btn>
-    </v-btn-toggle>
-  </v-sheet>
-  <v-sheet class="pa-2" rounded>
-    <component :is="modeTab"/>
-  </v-sheet>
+  <VSheet class="mb-2 text-h6 pa-2 d-flex flex-row align-center justify-center" rounded>
+    <VBtnToggle
+      v-model="mode"
+      color="primary"
+      mandatory
+      rounded
+      border
+    >
+      <VBtn value="add">
+        Добавить
+      </VBtn>
+      <VBtn value="update">
+        Изменить
+      </VBtn>
+      <VBtn value="delete">
+        Удалить
+      </VBtn>
+    </VBtnToggle>
+  </VSheet>
+  <VSheet class="pa-2" rounded>
+    <Component :is="modeTab"/>
+  </VSheet>
 </template>
 
 <script setup>

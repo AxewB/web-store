@@ -1,43 +1,64 @@
 <template>
-  <v-sheet class="d-flex flex-column bg-transparent">
+  <VSheet class="d-flex flex-column bg-transparent">
     <AppHeader class="mb-1"/>
-    <v-sheet class="my-1 pa-2 bg-transparent text-overline d-flex align-center">
-      <div v-for="category in productCategoryPath" :key="category.id + 'category'">
+    <VSheet class="my-1 pa-2 bg-transparent text-overline d-flex align-center">
+      <div
+        v-for="category in productCategoryPath"
+        :key="category.id + 'category'"
+      >
         <span>/</span>
-        <v-btn size="small" variant="plain" class="mx-2">
+        <VBtn size="small" variant="plain" class="mx-2">
           {{category.name}}
-        </v-btn>
+        </VBtn>
       </div>
-      
-    </v-sheet>
-    <v-sheet class="d-flex justify-center pa-4 my-1" rounded width="100%" >
-      <v-sheet elevation="2" rounded class="pa-2 bg-transparent" border min-width="350px">
+    </VSheet>
+    <VSheet
+      class="d-flex justify-center pa-4 my-1"
+      rounded
+      width="100%"
+    >
+      <VSheet
+        class="pa-2 bg-transparent"
+        elevation="2"
+        rounded 
+        border
+        min-width="350px"
+      >
         <ProductImageCarousel :images="product.images"/>
-      </v-sheet>
+      </VSheet>
 
-      <v-sheet class="flex-grow-1 pa-2 mx-4 bg-transparent">
-        <ProductShortInfo :product="product" @on-open-description=""/>
-      </v-sheet>
+      <VSheet class="flex-grow-1 pa-2 mx-4 bg-transparent">
+        <ProductShortInfo
+          :product="product"
+        />
+      </VSheet>
 
-      <v-sheet min-width="300px" class="pa-2  bg-transparent" >
-        <ProductActions 
-          :is-product-in-cart="isProductInCart" 
-          :product="product" 
+      <VSheet min-width="300px" class="pa-2  bg-transparent" >
+        <ProductActions
+          :is-product-in-cart="isProductInCart"
+          :product="product"
           @on-add-to-cart="addProductToCart"
           @on-remove-from-cart="removeProductFromCart"
-          @on-go-to-cart="pushProductToCart"/>
-      </v-sheet>
-    </v-sheet>
-    <v-sheet class="pa-4 d-flex flex-column" rounded >
-      <span class="text-h5 font-weight-medium ">Описание</span>
-      <span class="text-body-1"> {{ product.description }} </span>
-    </v-sheet>
-   
-  </v-sheet>
+          @on-go-to-cart="pushProductToCart"
+        />
+      </VSheet>
+    </VSheet>
+    <VSheet
+      class="pa-4 d-flex flex-column"
+      rounded
+    >
+      <span class="text-h5 font-weight-medium ">
+        Описание
+      </span>
+      <span class="text-body-1">
+        {{ product.description }}
+      </span>
+    </VSheet>
+  </VSheet>
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useProductStore } from '@/stores/productStore'
 import { useCategoryStore } from '@/stores/categoryStore'
 import {useCartStore } from '@/stores/cartStore'
@@ -75,9 +96,8 @@ function pushProductToCart() {
 
 onMounted(async () => {
   const id = route.params.id
-  product.value = await productStore.getProduct(id)
+  const { res } = await productStore.fetchProduct(id)
+  product.value = res.data
   categoryStore.getCategoryPath(product.value.categories[0].id)
-  
 })
-
 </script>

@@ -1,9 +1,9 @@
 <template>
-  <v-sheet>
-    <TabActionRow  title="Add category">
+  <VSheet>
+    <TabActionRow  title="Добавить категорию">
       <CategoryEdit @on-confirm="confirmAdding"/>
     </TabActionRow>
-  </v-sheet>
+  </VSheet>
 </template>
 
 <script setup>

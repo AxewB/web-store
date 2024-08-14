@@ -1,36 +1,36 @@
 <template>
-  <v-sheet
+  <VSheet
     :width="size"
     :max-height="size"
   >
-    <v-hover v-slot="{ isHovering, props }">
-      <v-card
-      class="mx-auto"
-      :height="size"
-      v-bind="props"
-      elevation="0"
-      border
-      @click="onClick()"
-    >
-      <v-img
-        :src="src"
+    <VHover v-slot="{ isHovering, props }">
+      <VCard
+        class="mx-auto"
         :height="size"
-        :width="size"
-        cover
-      />
-      <v-overlay
-        :model-value="isHovering"
-        class="align-center justify-center cursor-pointer"
-        scrim="rgba(0,0,0,0.7)"
-        contained
+        v-bind="props"
+        elevation="0"
+        border
+        @click="onClick()"
       >
-        <v-sheet class="text-button bg-transparent" >
-          {{ actionTitle }}
-        </v-sheet>
-      </v-overlay>
-    </v-card>
-    </v-hover>
-  </v-sheet>
+        <VImg
+          :src="src"
+          :height="size"
+          :width="size"
+          cover
+        />
+        <VOverlay
+          :model-value="isHovering"
+          class="align-center justify-center cursor-pointer"
+          scrim="rgba(0,0,0,0.7)"
+          contained
+        >
+          <VSheet class="text-button bg-transparent" >
+            {{ actionTitle }}
+          </VSheet>
+        </VOverlay>
+      </VCard>
+    </VHover>
+  </VSheet>
 </template>
 
 <script setup>

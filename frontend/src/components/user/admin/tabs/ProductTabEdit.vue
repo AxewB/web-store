@@ -1,18 +1,25 @@
 <template>
-  <v-sheet>
-    <TabActionRow  title="Update product">
-      <v-sheet v-if="isProductEditing" class="bg-transparent">
+  <VSheet>
+    <TabActionRow  title="Изменить продукт">
+      <VSheet v-if="isProductEditing" class="bg-transparent">
         <ProductEdit
           :id="editingProductId"
           @on-close="isProductEditing = false"
           @on-confirm="confirmEditing"
         />
-      </v-sheet>
-      <v-sheet v-else width="100%" class=bg-red>
-        <ProductList type="row" @on-card-click="editCardClick"></ProductList>
-      </v-sheet>
+      </VSheet>
+      <VSheet
+        v-else
+        width="100%"
+        class=bg-red
+      >
+        <ProductList
+          type="row"
+          @on-card-click="editCardClick"
+        />
+      </VSheet>
     </TabActionRow>
-  </v-sheet>
+  </VSheet>
 </template>
 
 <script setup>

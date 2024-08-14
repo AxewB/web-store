@@ -1,77 +1,100 @@
 <template>
-  <v-sheet v-if="currentUser" height="100%" class="d-flex flex-column bg-transparent">
-      <AppHeader/>
-      <PageHeading title="Profile"/>
-      <v-sheet class="d-flex flex-row bg-transparent">
-        <v-sheet class="mr-2 bg-transparent" min-width="200px">
-          <v-list rounded width="100%" v-model="window" elevation="10" class="mb-2">
-            <v-list-item
-              prepend-icon="mdi-crown"
-              :title="currentUser.username"/>
-          </v-list>
+  <VSheet v-if="currentUser" height="100%" class="d-flex flex-column bg-transparent">
+    <AppHeader/>
 
-          <v-list nav rounded density='compact' width="100%" v-model="window" elevation="10">
-            <v-list-item
-              link
-              @click="switchTab('account')"
-              :active="tab === 'account'"
-              prepend-icon="mdi-account"
-              title="Account"/>
-              <v-list-item
-              link
-              @click="switchTab('orders')"
-              :active="tab === 'orders'"
-              prepend-icon="mdi-package-variant"
-              title="Orders"/>
-              <v-list-item
-              link
-              @click="switchTab('settings')"
-              :active="tab === 'settings'"
-              prepend-icon="mdi-cog"
-              title="Settings"/>
-            
-          </v-list>
-          <v-list
-            v-if="userStore.user.roles.includes('ROLE_ADMIN')"
-            v-model="window"
-            class="mt-2"
-            nav
-            rounded
-            density='compact'
+    <PageHeading title="Профиль"/>
+
+    <VSheet class="d-flex flex-row bg-transparent">
+      <VSheet
+        class="mr-2 bg-transparent"
+        min-width="200px"
+      >
+        <VList
+          class="mb-2"
+          v-model="window" 
+          rounded
+          width="100%"
+          elevation="10"
+        >
+          <VListItem
+            prepend-icon="mdi-crown"
+            :title="currentUser.username"
+          />
+        </VList>
+
+        <VList v-model="window"
+          nav
+          rounded
+          density='compact'
+          width="100%"
+          elevation="10"
+        >
+          <VListItem
+            link
+            @click="switchTab('account')"
+            :active="tab === 'account'"
+            prepend-icon="mdi-account"
+            title="Аккаунт"
+          />
+          <VListItem
+            link
+            @click="switchTab('orders')"
+            :active="tab === 'orders'"
+            prepend-icon="mdi-package-variant"
+            title="Заказы"
+          />
+          <VListItem
+            link
+            @click="switchTab('settings')"
+            :active="tab === 'settings'"
+            prepend-icon="mdi-cog"
+            title="Настройки"
+          />
+        </VList>
+        <VList
+          v-if="userStore.user.roles.includes('ROLE_ADMIN')"
+          v-model="window"
+          class="mt-2"
+          nav
+          rounded
+          density='compact'
+          width="100%"
+          elevation="10"
+        >
+          <VListItem
+            link
+            :to="{ name: 'admin' }"
+            prepend-icon="mdi-security"
+            title="Админ панель"
+          />
+        </VList>
+        <VList
+          class="mt-2 bg-transparent"
+          nav
+          rounded
+          density='compact'
+          width="100%"
+        >
+          <VListItem
+            @click="logout"
+            color="error"
             width="100%"
-            elevation="10"
-          >
-            <v-list-item
-              link
-              :to="{ name: 'admin' }"
-              prepend-icon="mdi-security"
-              title="Admin panel"
-            />
-          </v-list>
-          <v-list
-            class="mt-2 bg-transparent"
-            nav
-            rounded
-            density='compact'
-            width="100%"
-          >
-            <v-list-item
-              @click="logout"
-              color="error"
-              width="100%"
-              title="Logout"
-              prepend-icon="mdi-logout"
-              border
-            />
-          </v-list>
-        </v-sheet>
-        <v-sheet class="flex-grow-1 bg-transparent">
-          <v-sheet elevation="3" rounded>
-            <component :is="currentTab"/>
-          </v-sheet>
-        </v-sheet>
-      </v-sheet>
-  </v-sheet>
+            title="Выйти"
+            prepend-icon="mdi-logout"
+            border
+          />
+        </VList>
+      </VSheet>
+      <VSheet class="flex-grow-1 bg-transparent">
+        <VSheet
+          elevation="3"
+          rounded
+        >
+          <Component :is="currentTab"/>
+        </VSheet>
+      </VSheet>
+    </VSheet>
+  </VSheet>
 </template>
 
 <script setup>

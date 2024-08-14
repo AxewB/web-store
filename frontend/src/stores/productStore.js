@@ -3,80 +3,89 @@ import axios from 'axios';
 import { useCategoryStore } from '@/stores/categoryStore';
 import authHeader from "@/services/auth-header";
 import contentHeader from '@/services/content-header';
+import ResponseHandler from '@/scripts/responseHandler';
 
 const API_URL = "http://localhost:8080/api/products";
 
 export const useProductStore = defineStore('products', {
   state: () => ({
-    products: [],
-    total: 0,
-    skip: 0,
-    limit: 10,
-    page: 1,
+    products: [], // Список продуктов
+    total: 0,     // Общее количество продуктов
+    skip: 0,      // Количество пропускаемых продуктов
+    limit: 10,    // Ограниечение на количество получаемых продуктов
+    page: 1,      // Страница
   }),
   getters: {
     totalPages: (state) => Math.ceil(state.total / state.limit),
   },
   actions: {
+    /**
+     * Запрос на получение продуктов с сервера
+     * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
+     */
     async fetchProducts() {
-      return await axios.get(API_URL + `?skip=${this.skip}&limit=${this.limit}`)
+      return axios.get(API_URL + `?skip=${this.skip}&limit=${this.limit}`)
       .then(response => {
         this.setFetchedParams(response.data)
+        return ResponseHandler.success(response, "Продукты получены")
       })
-      .catch(error => error);
+      .catch(error => {
+        return ResponseHandler.error(error, "Произошла ошибка при получении продуктов")
+      });
     },
+   
+    /**
+     * Запрос на получение продуктов согласно поисковому запросу
+     * @param {String} name - Строка, по которой будет проходить поиск
+     * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
+     */
     async fetchProductsByName(name) {
-      return await axios.get(API_URL + `/search?name=${name}&skip=${this.skip}&limit=${this.limit}`)
-      .then(response => this.setFetchedParams(response.data))
-      .catch(error => error);
+      return axios.get(API_URL + `/search?name=${name}&skip=${this.skip}&limit=${this.limit}`)
+      .then(response => {
+        this.setFetchedParams(response.data)
+        return ResponseHandler.success(response, "Продукты получены")
+      })
+      .catch(error => {
+        return ResponseHandler.error(error, "Произошла ошибка при получении продуктов")
+      });
     },
+    /**
+     * Запрос на получение продуктов согласно категории
+     * @param {Number} categoryId - id категории
+     * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
+     */
     async fetchProductByCategory(categoryId) {
-      return await axios.get(API_URL + `/category/${categoryId}?skip=${this.skip}&limit=${this.limit}`)
-      .then(response => this.setFetchedParams(response.data))
-      .catch(error => error);
+      return axios.get(API_URL + `/category/${categoryId}?skip=${this.skip}&limit=${this.limit}`)
+      .then(response => {
+        this.setFetchedParams(response.data)
+        return ResponseHandler.success(response, "Продукты получены")
+      })
+      .catch(error => {
+        return ResponseHandler.error(error, "Произошла ошибка при получении продуктов по категории")
+      });
     },
-    async getProducts() {
-      try {
-        const res = await axios.get(API_URL + `?skip=${this.skip}&limit=${this.limit}`).then((response) => response.data);
-        this.products = res.data
-        this.total = res.total
-        this.skip = res.skip
-        this.limit = res.limit
-      } catch (error) {
-        console.log("error in fetching products");
-      }
-    },
-    async getProductsWithParams(skip, limit) {
-      try {
-        const res = await axios.get(API_URL + `?skip=${skip}&limit=${limit}`).then((response) => response.data);
-        return res
-      } catch (error) {
-        console.log("error in fetching products");
-      }
-    },
-    async getProductsByName(name) {
-      try {
-        const res = await axios.get(API_URL + `/search/${name}`).then((response) => response.data);
-        this.products = res.data
-        this.total = res.total
-        this.skip = res.skip
-        this.limit = res.limit
-      } catch (error) {
-        console.log("error in fetching products");
-      }
-    },
-    async getProduct(id) {
-      try {
-        const res = await axios.get(`${API_URL}/${id}`).then((response) => response.data);
-        return res
-      } catch (error) {
-        console.log("error in fetching product");
-      }
+    /**
+     * Запрос на получение продукта по id
+     * @param {Number} id - id продукта
+     * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ответ содержит объект продукта. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
+     */
+    async fetchProduct(id) {
+      return axios.get(`${API_URL}/${id}`)
+      .then((response) => {
+        return ResponseHandler.success(response, "Продукт получен")
+      })
+      .catch((error) => {
+        return ResponseHandler.error(error, "Произошла ошибка при получении продукта")
+      })
     },
 
+    /**
+     * Запрос на добавление продукта в БД
+     * @param {Object} product - Продукт, который нужно добавить
+     * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
+     */
     async addProduct(product) {
       const categoryStore = useCategoryStore();
-      // await categoryStore.getCategories();
       const categories = categoryStore.categories.filter((cat) => product.categories.includes(cat.id));
       const data  = {
         "name": product.name,
@@ -88,13 +97,23 @@ export const useProductStore = defineStore('products', {
         "categories": categories
       }
 
-      axios.post(API_URL + '/add', data, { headers: contentHeader() })
-      .then(response => console.log(response))
-      .catch(error => console.log(error));
+      return axios.post(API_URL + '/add', data, { headers: contentHeader() })
+      .then(response => {
+        this.fetchProducts();
+        return ResponseHandler.success(response, "Продукт успешно добавлен")
+      })
+      .catch(error => {
+        return ResponseHandler.error(error, "Произошла ошибка при добавлении продукта")
+      });
 
-      await this.fetchProducts();
     },
 
+    /**
+     * Запрос на обновление параметров продукта
+     * @param {Number} id - id изменяемого продукта
+     * @param {Object} product - новые данные
+     * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
+     */
     async updateProduct(id, product) {
       const categoryStore = useCategoryStore();
       const categories = categoryStore.categories.filter((cat) => product.categories.includes(cat.id));
@@ -108,34 +127,62 @@ export const useProductStore = defineStore('products', {
         "categories": categories
       }
 
-      axios.put(API_URL + `/${id}`, data, { headers: contentHeader() })
-        .then(response => {console.log(response)})
-        .catch(error => console.log(error));
-
-      await this.fetchProducts();
+      return axios.put(API_URL + `/${id}`, data, { headers: contentHeader() })
+      .then(response => {
+        this.fetchProducts();
+        return ResponseHandler.success(response, "Продукт успешно обновлен")
+      })
+      .catch(error => {
+        return ResponseHandler.error(error, "Произошла ошибка при обновлении продукта")
+      });
     },
+
+    /**
+     * Запрос на удаление продукта
+     * @param {Number} id - Идентификатор продукта
+     * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
+     */
     async deleteProduct(id) {
-      axios.delete(API_URL + `/${id}`, { headers: authHeader() })
-        .then(response => console.log(response))
-        .catch(error => console.log(error));
+      return axios.delete(API_URL + `/${id}`, { headers: authHeader() })
+      .then(response => {
+        return ResponseHandler.success(response, "Продукт успешно удален")
+      })
+      .catch(error => {
+        return ResponseHandler.error(error, "Произошла ошибка при удалении продукта")
+      });
 
-      await this.fetchProducts();
+      this.fetchProducts();
     },
 
+    /**
+     * Сеттер для параметра skip.
+     * @param {Number} skip - Новое значение.
+     */
     setSkip(skip) {
       this.skip = skip
     },
 
+    /**
+     * Сеттер для параметра limit.
+     * @param {Number} limit - Новое значение.
+     */
     setLimit(limit) {
       this.limit = limit
     },
 
+    /**
+     * Переход на страницу
+     * @param {Number} page - Выбранная страница.
+     */
     async turnPage(page) {
       this.page = page
       this.skip = (this.page - 1) * this.limit
-      console.log(this.skip)
-      await this.fetchProducts()
+      this.fetchProducts()
     },
+    /**
+     * Вспомогательный метод для установки полученных значений.
+     * @param {Object} params - Новые значения.
+     */
     setFetchedParams(params) {
       if (params) {
         this.products = params.data;
@@ -148,7 +195,10 @@ export const useProductStore = defineStore('products', {
         this.resetStore();
       }
     },
-    resetStore() { 
+    /**
+     * Сброс значений хранилища
+     */
+    resetStore() {
       this.products = []
       this.total = 0
       this.skip = 0

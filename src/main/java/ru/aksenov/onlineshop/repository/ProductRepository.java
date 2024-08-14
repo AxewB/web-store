@@ -13,7 +13,11 @@ import java.util.Set;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findById(Long aLong);
+
+    // Поиск продуктов по множеству идентификаторов категорий
     List<Product> findByCategoriesIdIn(Set<Long> categoryIds);
+
+    // Приск продуктов по имени
     List<Product> findByName(String name);
 
     // Поиск продукта, игнорируя регистр и пробелы

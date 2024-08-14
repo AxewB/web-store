@@ -1,59 +1,68 @@
 <template>
-    <v-sheet 
-    height="100vh" 
-    class="d-flex 
-          justify-center 
-          align-center 
+    <VSheet
+    height="100vh"
+    class="d-flex
+          justify-center
+          align-center
           flex-column
           bg-transparent"
     >
-      <v-sheet
+      <VSheet
       class="pa-4 rounded d-flex flex-column"
       width="400px">
       <span class="text-h4 mb-4 text-center">
-        Register
+        Регистрация
       </span>
       <form @submit.prevent="submit">
-        <v-text-field
+        <VTextField
           v-model="username.value.value"
           :error-messages="username.errorMessage.value"
-          label="Username"
-        ></v-text-field>
-        <v-text-field
+          label="Имя пользователя"
+        />
+        <VTextField
           v-model="email.value.value"
           :error-messages="email.errorMessage.value"
           type="email"
-          label="Email"
-        ></v-text-field>
-        <v-text-field
+          label="Почта"
+        />
+        <VTextField
           v-model="password.value.value"
           :error-messages="password.errorMessage.value"
           type="password"
-          label="Password"
-        ></v-text-field>
-        <v-btn type="submit" variant="tonal" size="large" width="100%">Register</v-btn>
+          label="Пароль"
+        />
+        <VBtn
+          type="submit"
+          variant="tonal"
+          size="large"
+          width="100%"
+        >
+          Register
+        </VBtn>
       </form>
 
-      </v-sheet>
-      <v-sheet class="pa-4 bg-transparent rounded d-flex flex-row" width="400px">  
+      </VSheet>
+      <VSheet
+        class="pa-4 bg-transparent rounded d-flex flex-row"
+        width="400px"
+      > 
         <v-divider class="mt-3 mr-3" />
-        OR
+        ИЛИ
         <v-divider class="mt-3 ml-3" />
-
-      </v-sheet>
-      <v-sheet 
+      </VSheet>
+      <VSheet
       class="px-4 bg-transparent rounded d-flex flex-column"
-      width="400px">
-      <v-btn 
-        variant="tonal" 
-        size="large" 
-        :to="{ path: '/user/login'}">
-        Login
-      </v-btn>
-    </v-sheet>
-
-    </v-sheet>
-
+      width="400px"
+    >
+      <VBtn
+        variant="tonal"
+        size="large"
+        :to="{ path: '/user/login'}"
+      >
+        Авторизоваться
+      </VBtn>
+    </VSheet>
+  </VSheet>
 </template>
 
 <script setup>
@@ -94,11 +103,9 @@ const submit = handleSubmit(user => {
 
   userStore.register(user).then(
     (data) => {
-      
       message.value = data.message;
     },
     (error) => {
-      
       message.value =
         (error.response &&
           error.response.data &&

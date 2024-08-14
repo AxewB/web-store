@@ -30,6 +30,13 @@ public class CartService {
     @Autowired
     private OrderRepository orderRepository;
 
+    /**
+     * Добавление продукта в корзину пользователя.
+     *
+     * @param userId    Идентификатор пользователя.
+     * @param productId Идентификатор продукта.
+     * @throws RuntimeException Если пользователь или продукт не найден, или продукт уже есть в корзине.
+     */
     public void addProductToCart(Long userId, Long productId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
@@ -49,6 +56,13 @@ public class CartService {
         cartRepository.save(cart);
     }
 
+    /**
+     * Удаление продукта из корзины пользователя.
+     *
+     * @param userId    Идентификатор пользователя.
+     * @param productId Идентификатор продукта.
+     * @throws RuntimeException Если пользователь или продукт не найден, или корзина пустая.
+     */
     public void removeProductFromCart(Long userId, Long productId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
@@ -62,6 +76,13 @@ public class CartService {
         cartRepository.save(cart);
     }
 
+    /**
+     * Получение корзины пользователя по его идентификатору. Если корзина не существует, создается новая.
+     *
+     * @param userId Идентификатор пользователя.
+     * @return Корзина пользователя.
+     * @throws RuntimeException Если пользователь не найден.
+     */
     public Cart getCartByUserId(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         if (user.getCart() == null) {
@@ -73,6 +94,13 @@ public class CartService {
         return user.getCart();
     }
 
+    /**
+     * Оформление заказа из корзины пользователя.
+     *
+     * @param userId Идентификатор пользователя.
+     * @return Созданный заказ.
+     * @throws RuntimeException Если пользователь не найден, корзина пустая или нет доступных продуктов в наличии.
+     */
     @Transactional
     public Order checkout(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
@@ -122,6 +150,12 @@ public class CartService {
 
     }
 
+    /**
+     * Вычисление общей стоимости всех продуктов в корзине.
+     *
+     * @param id Идентификатор корзины.
+     * @return Общая стоимость продуктов в корзине.
+     */
     public double getTotalCostByCartId(Long id) {
         Cart cart = cartRepository.getCartById(id);
         return cart.totalCost();

@@ -1,19 +1,28 @@
 <template>
-  <v-card width="100%" rounded class="my-2 pa-2 d-flex" border @click="onClick">
-    <v-sheet width="100px">
-      <v-img :src="thumbnail"/>
-    </v-sheet>
-    <VDivider vertical class="mx-2"/>
+  <VCard
+    width="100%"
+    rounded
+    class="my-2 pa-2 d-flex"
+    border
+    @click="onClick"
+  >
+    <VSheet width="100px">
+      <VImg :src="thumbnail"/>
+    </VSheet>
+    <VDivider
+      class="mx-2"
+      vertical
+    />
 
-    <v-sheet class="d-flex flex-column flex-grow-1">
+    <VSheet class="d-flex flex-column flex-grow-1">
       <span class="text-h6 my-1">
         {{ props.product.cost }}$
       </span>
       <span class="my-1">
         {{ props.product.name }}
       </span>
-    </v-sheet>
-  </v-card>
+    </VSheet>
+  </VCard>
 </template>
 
 <script setup>

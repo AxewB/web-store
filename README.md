@@ -1,134 +1,93 @@
-# Spring Boot, Spring Security, PostgreSQL: JWT Authentication & Authorization example
+# Запуск проекта
 
-## User Registration, User Login and Authorization process.
-The diagram shows flow of how we implement User Registration, User Login and Authorization process.
+Можно запустить все по отдельности или в docker контейнере.
 
-![spring-boot-spring-security-postgresql-jwt-authentication-flow](spring-boot-spring-security-postgresql-jwt-authentication-flow.png)
+## По отдельности
 
-## Spring Boot Server Architecture with Spring Security
-You can have an overview of our Spring Boot Server with the diagram below:
+Для этого в папке проекта (web-store) необходимо установить все зависимости через maven и ввести команду для запуска сервера:
 
-![spring-boot-spring-security-postgresql-jwt-authentication-architecture](spring-boot-spring-security-postgresql-jwt-authentication-architecture.png)
-
-## Configure Spring Datasource, JPA, App properties
-Open `src/main/resources/application.properties`
-
-```
-spring.datasource.url= jdbc:postgresql://localhost:5432/testdb
-spring.datasource.username= postgres
-spring.datasource.password= 123
-
-spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation= true
-spring.jpa.properties.hibernate.dialect= org.hibernate.dialect.PostgreSQLDialect
-
-# Hibernate ddl auto (create, create-drop, validate, update)
-spring.jpa.hibernate.ddl-auto= update
-
-# App Properties
-bezkoder.app.jwtSecret= ======================BezKoder=Spring===========================
-bezkoder.app.jwtExpirationMs= 86400000
-```
-
-## Run Spring Boot application
-```
+```bash
 mvn spring-boot:run
 ```
 
-## Run following SQL insert statements
+Сервер будет доступен по адресу localhost:8080/api/{products, category и т.п. из контроллеров}
+
+Далее схожим образом делаем в папке frontend. 
+
+Устанавливаем зависимости
+
+```bash
+npm install
 ```
-INSERT INTO roles(name) VALUES('ROLE_USER');
-INSERT INTO roles(name) VALUES('ROLE_MODERATOR');
-INSERT INTO roles(name) VALUES('ROLE_ADMIN');
+
+И запускаем
+
+```bash
+npm run dev
 ```
 
-For more detail, please visit:
-> [Spring Boot, Spring Security, PostgreSQL: JWT Authentication & Authorization example](https://bezkoder.com/spring-boot-security-postgresql-jwt-authentication/)
+Сайт будет доступен по адресу localhost:3000/
 
-> [For MySQL](https://bezkoder.com/spring-boot-jwt-authentication/)
+## Docker
 
-> [For MongoDB](https://bezkoder.com/spring-boot-jwt-auth-mongodb/)
+Для запуска проекта в контейнере, необходимо открыть в терминале директорию с данным проектом и ввести команду
 
-## Refresh Token
+```bash
+sudo docker-compose up
+```
 
-![spring-boot-refresh-token-jwt-example-flow](spring-boot-refresh-token-jwt-example-flow.png)
+Далее выполнятся все скрипты и можно будет взаимодействовать с приложением
 
-For instruction: [Spring Boot Refresh Token with JWT example](https://bezkoder.com/spring-boot-refresh-token-jwt/)
+# Инфомация по проекту
 
-## More Practice:
-> [Spring Boot File upload example with Multipart File](https://bezkoder.com/spring-boot-file-upload/)
+Данный репозиторий включает в себя два компонента:
 
-> [Exception handling: @RestControllerAdvice example in Spring Boot](https://bezkoder.com/spring-boot-restcontrolleradvice/)
+- frontend часть
+- backend часть
 
-> [Spring Boot Repository Unit Test with @DataJpaTest](https://bezkoder.com/spring-boot-unit-test-jpa-repo-datajpatest/)
+Про каждую далее будет краткое описание того, что находится в проекте.
 
-> [Spring Boot Rest Controller Unit Test with @WebMvcTest](https://www.bezkoder.com/spring-boot-webmvctest/)
+Изначально, при старте проекта база данных будет пустая, поэтому будут подгружаться данные из json файлов для удобного тестирования.
 
-> [Spring Boot Pagination & Sorting example](https://www.bezkoder.com/spring-boot-pagination-sorting-example/)
+Пользователь администратор (для доступа к админ панели):
 
-> Validation: [Spring Boot Validate Request Body](https://www.bezkoder.com/spring-boot-validate-request-body/)
+- username: admin
+- password: admin12345
 
-> Documentation: [Spring Boot and Swagger 3 example](https://www.bezkoder.com/spring-boot-swagger-3/)
+## Backend
 
-> Caching: [Spring Boot Redis Cache example](https://www.bezkoder.com/spring-boot-redis-cache-example/)
+Является корневой папкой проекта.
 
-Associations:
-> [Spring Boot One To Many example with Spring JPA, Hibernate](https://www.bezkoder.com/jpa-one-to-many/)
+Написан с использованием Spring. Логика подчиняется паттерну MVC.
 
-> [Spring Boot Many To Many example with Spring JPA, Hibernate](https://www.bezkoder.com/jpa-many-to-many/)
+Содержит в себе настройки для запуска docker контейнера.
 
-> [JPA One To One example with Spring Boot](https://www.bezkoder.com/jpa-one-to-one/)
+Вся логика находится в директории src и содержит в себе:
 
-## Fullstack Authentication
+- data - содержит в себе тестовые данные, которые загружаются при первом запуске проекта;
+- main/java... - содержит в себе всю MVC логику приложения. Она состоит в свою очередь из:
+  - controllers - контроллеры, которые отвечают за получение и отправку запросов и ответов от сервера
+  - helperClasses - дополнительные классы, которые необязательно будет включать в результат (в них входит чтение данных из файла, преобразование их и загрузка в БД)
+  - models - модели базы данных (таблицы, сущности)
+  - payload - классы, связанные с запросами и ответами на регистрацию и вход в аккаунт
+  - repository - репозитории, которые отвечают за доступ к базе данных
+  - security - содержит в себе настройки аутентификации приложения
+  - service - сервисы, отвечающие за получение данных из репозитория
 
-> [Spring Boot + Vue.js JWT Authentication](https://bezkoder.com/spring-boot-vue-js-authentication-jwt-spring-security/)
+Для получения более подробной информации, можно почитать комментарии внутри классов.
 
-> [Spring Boot + Angular 8 JWT Authentication](https://bezkoder.com/angular-spring-boot-jwt-auth/)
+## Frontend
 
-> [Spring Boot + Angular 10 JWT Authentication](https://bezkoder.com/angular-10-spring-boot-jwt-auth/)
+Находится в корневой папке проекта backend.
 
-> [Spring Boot + Angular 11 JWT Authentication](https://bezkoder.com/angular-11-spring-boot-jwt-auth/)
+Написан с использованием Vue.js.
 
-> [Spring Boot + Angular 12 JWT Authentication](https://www.bezkoder.com/angular-12-spring-boot-jwt-auth/)
+Проект содержит в себе несколко основных страниц:
 
-> [Spring Boot + Angular 13 JWT Authentication](https://www.bezkoder.com/angular-13-spring-boot-jwt-auth/)
-
-> [Spring Boot + Angular 14 JWT Authentication](https://www.bezkoder.com/angular-14-spring-boot-jwt-auth/)
-
-> [Spring Boot + Angular 15 JWT Authentication](https://www.bezkoder.com/angular-15-spring-boot-jwt-auth/)
-
-> [Spring Boot + Angular 16 JWT Authentication](https://www.bezkoder.com/angular-16-spring-boot-jwt-auth/)
-
-> [Spring Boot + Angular 17 JWT Authentication](https://www.bezkoder.com/angular-17-spring-boot-jwt-auth/)
-
-> [Spring Boot + React JWT Authentication](https://bezkoder.com/spring-boot-react-jwt-auth/)
-
-## Fullstack CRUD App
-
-> [Vue.js + Spring Boot + PostgreSQL example](https://www.bezkoder.com/spring-boot-vue-js-postgresql/)
-
-> [Angular 8 + Spring Boot + PostgreSQL example](https://bezkoder.com/angular-spring-boot-postgresql/)
-
-> [Angular 10 + Spring Boot + PostgreSQL example](https://bezkoder.com/angular-10-spring-boot-postgresql/)
-
-> [Angular 11 + Spring Boot + PostgreSQL example](https://bezkoder.com/angular-11-spring-boot-postgresql/)
-
-> [Angular 12 + Spring Boot + PostgreSQL example](https://www.bezkoder.com/angular-12-spring-boot-postgresql/)
-
-> [Angular 13 + Spring Boot + PostgreSQL example](https://www.bezkoder.com/spring-boot-angular-13-postgresql/)
-
-> [Angular 14 + Spring Boot + PostgreSQL example](https://www.bezkoder.com/spring-boot-angular-14-postgresql/)
-
-> [Angular 15 + Spring Boot + PostgreSQL example](https://www.bezkoder.com/spring-boot-angular-15-postgresql/)
-
-> [Angular 16 + Spring Boot + PostgreSQL example](https://www.bezkoder.com/spring-boot-angular-16-postgresql/)
-
-> [Angular 17 + Spring Boot + PostgreSQL example](https://www.bezkoder.com/spring-boot-angular-17-postgresql/)
-
-> [React + Spring Boot + PostgreSQL example](https://bezkoder.com/spring-boot-react-postgresql/)
-
-Run both Back-end & Front-end in one place:
-> [Integrate Angular with Spring Boot Rest API](https://bezkoder.com/integrate-angular-spring-boot/)
-
-> [Integrate React.js with Spring Boot Rest API](https://bezkoder.com/integrate-reactjs-spring-boot/)
-
-> [Integrate Vue.js with Spring Boot Rest API](https://bezkoder.com/integrate-vue-spring-boot/)
+- Главная страница - отображает часть общего списка продуктов
+- Профиль пользователя - там можно посмотреть информацию о пользователе. Профиль содержит следующие вкладки:
+  - Аккаунт - просто информация об аккаунте: id, username и всякая информация об аутентификации. Некоторые поля поставил просто так, чтобы заполнить страницу. При необходимости можно будет заменить.
+  - Заказы - история заказов пользователя
+  - Настройки - пока в них ничего, в планах было добавить хотя бы переключение темы приложения
+- Корзина - отображает продукты, которые пользователь добавил в корзину
+- Панель администратора. Находится в профиле, если пользователь имеет достаточно прав.

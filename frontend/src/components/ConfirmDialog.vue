@@ -4,7 +4,8 @@
       :title="props.title"
       :description="props.description"
       @on-cancel="onCancel"
-      @on-confirm="onConfirm"/>
+      @on-confirm="onConfirm"
+    />
   </v-dialog>
 </template>
 

@@ -1,34 +1,63 @@
 <template>
-  <v-sheet >
-    <v-sheet v-if="product">
-      <v-container>
-        <v-row>
-          <v-col>
-            <v-sheet class="d-flex flex-row">
-              <v-sheet class="d-flex flex-column pa-2" rounded elevation="5">
-                <span class="text-caption text-disabled">Thumbnail</span>
-                  <v-sheet width="150" height="150">
-                    <ImageContainer 
-                      :src="product.thumbnail ? product.thumbnail : noImage"
-                      :size="150"
-                      :actionTitle="!product.thumbnail ? 'Add' : 'Remove'"
-                      @on-click="product.thumbnail ? removeThumbnail() : addThumbnail()"
-                    />
-                  </v-sheet>
-              </v-sheet>
-              <VDivider vertical class="mx-4"/>
-              <v-sheet class="d-flex flex-column pa-2" rounded elevation="5">
-                <span class="text-caption text-disabled">Images</span>
-                  <v-sheet class="d-flex flex-row justify-start" width="100%" rounded>
-                    <v-sheet v-if="product.images" class="d-flex flex-row justify-start overflow-auto" max-width="600px" rounded>
+  <VSheet >
+    <VSheet v-if="product">
+      <VContainer>
+        <VRow>
+          <VCol>
+            <VSheet class="d-flex flex-row">
+              <VSheet
+                class="d-flex flex-column pa-2"
+                rounded
+                elevation="5"
+              >
+                <span class="text-caption text-disabled">
+                  Превью
+                </span>
+
+                <VSheet
+                  width="150"
+                  height="150"
+                >
+                  <ImageContainer
+                    :src="product.thumbnail ? product.thumbnail : noImage"
+                    :size="150"
+                    :actionTitle="!product.thumbnail ? 'Add' : 'Remove'"
+                    @on-click="product.thumbnail ? removeThumbnail() : addThumbnail()"
+                  />
+                </VSheet>
+              </VSheet>
+              <VDivider
+                class="mx-4"
+                vertical
+              />
+              <VSheet
+                class="d-flex flex-column pa-2"
+                rounded
+                elevation="5"
+              >
+                <span class="text-caption text-disabled">
+                  Изображения
+                </span>
+                  <VSheet
+                    class="d-flex flex-row justify-start"
+                    width="100%"
+                    rounded
+                  >
+                    <VSheet
+                      v-if="product.images"
+                      class="d-flex flex-row justify-start overflow-auto"
+                      max-width="600px"
+                      rounded
+                    >
                       <ImageContainer
-                      v-for="(image, index) in product.images"
-                      :src="image"
-                      :size="150"
-                      @on-click="removeImage(index)"
-                      :class="index > 0 ? 'ml-2' : ''"/>
-                    </v-sheet>
-                  <v-btn
+                        v-for="(image, index) in product.images"
+                        :src="image"
+                        :size="150"
+                        @on-click="removeImage(index)"
+                        :class="index > 0 ? 'ml-2' : ''"
+                      />
+                    </VSheet>
+                  <VBtn
                     @click="addImage()"
                     icon="mdi-plus"
                     rounded
@@ -37,71 +66,93 @@
                     width="150"
                     :class="product.images ? 'ml-2' : ''"
                   />
-                  </v-sheet>
-              </v-sheet>
-            </v-sheet>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-text-field 
+                  </VSheet>
+              </VSheet>
+            </VSheet>
+          </VCol>
+        </VRow>
+        <VRow>
+          <VCol>
+            <VTextField
               v-model="product.name"
-              label="name"
+              label="Название"
               variant="solo-filled"
-              hide-details/>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-textarea hide-details label="description" v-model="product.description"/>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-text-field hide-details class="mr-2" label="quantity" type="number" v-model="product.quantity"/>
-          </v-col>
-          <v-col>
-            <v-text-field hide-details label="cost" type="number" v-model="product.cost"/>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-autocomplete
+              hide-details
+            />
+          </VCol>
+        </VRow>
+        <VRow>
+          <VCol>
+            <VTextarea
+              v-model="product.description" 
+              hide-details
+              label="Описание"
+            />
+          </VCol>
+        </VRow>
+        <VRow>
+          <VCol>
+            <VTextField
+              class="mr-2"
+              v-model="product.quantity"
+              hide-details 
+              label="Количество"
+              type="number"
+            />
+          </VCol>
+          <VCol>
+            <VTextField
+            v-model="product.cost"
+            hide-details
+            label="Стоимость"
+            type="number"
+          />
+          </VCol>
+        </VRow>
+        <VRow>
+          <VCol>
+            <VAutocomplete
               v-model="product.categories"
-              label="Categories"
+              label="Категории"
               :items="categories"
               item-title="name"
               item-value="id"
               multiple
               clearable
-            ></v-autocomplete>
-          </v-col>
-        </v-row>
-      </v-container>
-      <v-sheet class="d-flex ">
-      </v-sheet>
-    </v-sheet>
-    <v-sheet class="d-flex justify-end" width="100%">
-      <v-btn @click="closeTab()">
-        Cancel
-      </v-btn>
-      <v-btn
-        @click="finishEditing()" 
-        class="ml-2" 
-        color="primary">
-        Confirm
-      </v-btn>
-    </v-sheet>
-  </v-sheet>
-  <OneLineInputOverlay 
+            />
+          </VCol>
+        </VRow>
+      </VContainer>
+      <VSheet class="d-flex ">
+      </VSheet>
+    </VSheet>
+    <VSheet
+      class="d-flex justify-end"
+      width="100%"
+    >
+      <VBtn @click="closeTab()">
+        Отмена
+      </VBtn>
+      <VBtn
+        class="ml-2"
+        color="primary"
+        @click="finishEditing()"
+      >
+        Принять
+      </VBtn>
+    </VSheet>
+  </VSheet>
+  <OneLineInputOverlay
     :isShown="oneLineInputData.isShown"
     :title="oneLineInputData.title"
     :func="oneLineInputData.func"
     @on-confirm="onOneLineInputConfirm"
     @on-cancel="onOneLineInputCancel"
   />
-  <ConfirmDialog v-model="isConfirming" @on-confirm="confirmEditing"/>
-
+  <ConfirmDialog
+    v-model="isConfirming"
+    @on-confirm="confirmEditing"
+  />
 </template>
 
 <script setup>
@@ -203,14 +254,15 @@ function resetOneLineInput() {
 
 onMounted(async () => {
   if (props.id) {
-    const res = await productStore.getProduct(props.id)
-    product.name = res.name
-    product.description = res.description
-    product.thumbnail = res.thumbnail
-    product.images = res.images
-    product.quantity = res.quantity
-    product.cost = res.cost
-    product.categories = res.categories
+    const {res} = await productStore.fetchProduct(props.id)
+    const data = res.data
+    product.name = data.name
+    product.description = data.description
+    product.thumbnail = data.thumbnail
+    product.images = data.images
+    product.quantity = data.quantity
+    product.cost = data.cost
+    product.categories = data.categories
   }
   await categoryStore.getCategories();
 })

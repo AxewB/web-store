@@ -1,20 +1,27 @@
 <template>
-  <v-sheet v-if="userData" class="pa-2 d-flex flex-column" rounded>
+  <VSheet
+    v-if="userData"
+    class="pa-2 d-flex flex-column"
+    rounded
+  >
     <span class="text-h5 mb-2 font-weight-bold">
-      Account data
+      Данные об аккаунте
     </span>
-    {{ userData }}
-    <v-sheet>
-      <v-text-field
+    <span class="text-h6 mb-2 font-weight-bold">
+      Страница без полезной информации. Для заполнения решено было оставить данные пользователя:
+    </span>
+    <VSheet class="pa-4">
+      <VTextField
         v-for="key in Object.keys(userData)"
-        :value="userData[key]"
+        class="mb-2"
         :label="key"
-        disabled
-        variant="underlined"
+        v-model="userData[key]"
+        hide-details
+        variant="plain"
+        readonly
       />
-      <VDivider/>
-    </v-sheet>
-  </v-sheet>
+    </VSheet>
+  </VSheet>
 </template>
 
 <script setup>

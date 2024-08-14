@@ -1,5 +1,5 @@
 <template>
-  <v-sheet 
+  <VSheet
     class="d-flex justify-center bg-transparent align-center rounded text-h4 pa-2 cursor-pointer"
     width="175px"
     @click="router.push({name: 'home'})"
@@ -7,7 +7,7 @@
     <span class="logo-font text-light-blue-accent-4">
       S H O P
     </span>
-  </v-sheet>
+  </VSheet>
 </template>
 
 <script setup>

@@ -1,21 +1,43 @@
 <template>
-  <v-overlay v-model="props.isShown" width="100vw" height="100vh" class="d-flex flex-column justify-center align-center">
-    <v-sheet class="d-flex flex-column pa-2 align-center justify-center bg-transparent flex-grow-1" height="100%">
-      <v-sheet class="pa-2" rounded width="300px">
-        <span class="text-h5 font-weight-medium"> {{ title }} </span>
-        <v-text-field
-          v-model="value"/>
-        <v-sheet class="d-flex justify-end">
-          <v-btn @click="onCancel()" variant="plain" class="mr-2">
+  <VOverlay
+    class="d-flex flex-column justify-center align-center" 
+    v-model="props.isShown"
+    width="100vw"
+    height="100vh"
+  >
+    <VSheet
+      class="d-flex flex-column pa-2 align-center justify-center bg-transparent flex-grow-1"
+      height="100%"
+    >
+      <VSheet
+        class="pa-2"
+        rounded
+        width="300px"
+      >
+        <span class="text-h5 font-weight-medium">
+          {{ title }}
+        </span>
+
+        <VTextField v-model="value"/>
+
+        <VSheet class="d-flex justify-end">
+          <VBtn
+            class="mr-2"
+            @click="onCancel()"
+            variant="plain"
+          >
             Cancel
-          </v-btn>
-          <v-btn @click="onConfirm()" color="primary">
+          </VBtn>
+          <VBtn
+            @click="onConfirm()"
+            color="primary"
+          >
             Confirm
-          </v-btn>
-        </v-sheet>
-      </v-sheet>
-    </v-sheet>
-  </v-overlay>
+          </VBtn>
+        </VSheet>
+      </VSheet>
+    </VSheet>
+  </VOverlay>
 </template>
 
 <script setup>

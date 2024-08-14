@@ -1,15 +1,21 @@
 <template>
-  <v-sheet>
-    <TabActionRow  title="Delete product">
-      <v-sheet w-100 class="bg-red">
+  <VSheet>
+    <TabActionRow  title="Удалить продукт">
+      <VSheet
+        class="bg-red"
+        w-100
+      >
         <ProductList
           type="card"
           @on-card-click="removeProduct"
         />
-      </v-sheet>
+      </VSheet>
     </TabActionRow>
-  </v-sheet>
-  <ConfirmDialog v-model="isConfirming" @on-confirm="confirmRemove" />
+  </VSheet>
+  <ConfirmDialog
+    v-model="isConfirming"
+    @on-confirm="confirmRemove"
+  />
 </template>
 
 <script setup>
@@ -32,7 +38,6 @@ function removeProduct(newId) {
 
 async function confirmRemove() {
   await productStore.deleteProduct(id.value)
-  // router.go();
 }
 
 </script>

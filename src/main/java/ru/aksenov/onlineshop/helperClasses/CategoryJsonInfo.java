@@ -1,6 +1,10 @@
 package ru.aksenov.onlineshop.helperClasses;
 
 public class CategoryJsonInfo {
+    /**
+     * Вспомогательный класс, который нужен только
+     * для загрузки данных из json файла
+     */
     private Long id;
     private String name;
     private Long parent;

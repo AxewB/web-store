@@ -25,20 +25,44 @@ public class ProductService {
     @Autowired
     private CategoryService categoryService;
 
+    /**
+     * Получение списка всех продуктов.
+     *
+     * @return Список всех продуктов.
+     */
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
 
+    /**
+     * Получение продукта по его идентификатору.
+     *
+     * @param id Идентификатор продукта.
+     * @return Продукт с указанным идентификатором.
+     * @throws RuntimeException Если продукт не найден.
+     */
     public Product getProductById(Long id) {
         return productRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
+    /**
+     * Добавление нового продукта.
+     *
+     * @param product Продукт, который нужно добавить.
+     * @return Добавленный продукт.
+     */
     public Product addProduct(Product product) {
         return productRepository.save(product);
     }
 
+    /**
+     * Добавление нескольких продуктов.
+     *
+     * @param products Список продуктов для добавления.
+     * @return Список добавленных продуктов.
+     */
     public List<Product> addMultipleProducts(List<Product> products) {
         List<Product> newProducts = new ArrayList<>();
         for (Product product : products) {
@@ -47,6 +71,14 @@ public class ProductService {
         return newProducts;
     }
 
+    /**
+     * Обновление информации о продукте.
+     *
+     * @param id Идентификатор продукта, который нужно обновить.
+     * @param productDetails Объект с новыми данными продукта.
+     * @return Обновленный продукт.
+     * @throws RuntimeException Если продукт с указанным идентификатором не найден.
+     */
     public Product updateProduct(Long id, Product productDetails) {
         Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
 
@@ -61,11 +93,23 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    /**
+     * Удаление продукта по его идентификатору.
+     *
+     * @param id Идентификатор продукта, который нужно удалить.
+     * @throws RuntimeException Если продукт с указанным идентификатором не найден.
+     */
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
         productRepository.delete(product);
     }
 
+    /**
+     * Получение списка продуктов, относящихся к указанной категории и её подкатегориям.
+     *
+     * @param categoryId Идентификатор категории.
+     * @return Список продуктов, относящихся к указанной категории и её подкатегориям.
+     */
     public List<Product> getProductsByCategoryAndSubcategories(Long categoryId) {
         if (categoryId == null) {
             return this.getAllProducts();
@@ -75,6 +119,12 @@ public class ProductService {
         return productRepository.findByCategoriesIdIn(categoryIds);
     }
 
+    /**
+     * Получение списка продуктов по названию.
+     *
+     * @param name Название продукта.
+     * @return Список продуктов с указанным названием.
+     */
     public List<Product> getProductsByName(String name) {
         if (name.isEmpty())
             return productRepository.findAll();
@@ -82,6 +132,12 @@ public class ProductService {
             return productRepository.findByName(name);
     }
 
+    /**
+     * Получение списка продуктов по названию, игнорируя регистр и пробелы.
+     *
+     * @param name Название продукта.
+     * @return Список продуктов, соответствующих указанному названию, игнорируя регистр и пробелы.
+     */
     public List<Product> getProductsByNameIgnoreCaseAndSpace(String name) {
         return productRepository.findByNameIgnoreCaseAndSpaces(name);
     }

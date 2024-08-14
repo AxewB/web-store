@@ -1,16 +1,17 @@
 <template>
-  <v-card
+  <VCard
+    class="ma-4 pa-2 d-flex flex-column"
     width="200px"
-    rounded class="ma-4 pa-2 d-flex flex-column"
+    rounded
     elevation="10"
     border
     @click="onClick()"
   >
-    <v-img 
+    <VImg
       width="200px"
       height="200px"
-      :src="thumbnail">
-    </v-img>
+      :src="thumbnail"
+    />
 
     <VDivider />
     <span class="text-h6 my-1">
@@ -19,15 +20,7 @@
     <span class="my-1">
       {{ name }}
     </span>
-    <v-rating
-      class="my-1"
-      readonly
-      density="compact"
-      size="small"
-      color="orange"
-      :value="rating"
-    />
-  </v-card>
+  </VCard>
 </template>
 
 <script setup>
@@ -40,9 +33,10 @@ const props = defineProps({
 })
 const emit = defineEmits(['on-click'])
 
+// == computed ==
+
 const thumbnail = computed(() => props.product.thumbnail)
 const name = computed(() => props.product.name)
-const rating = computed(() => props.product.rating)
 const cost = computed(() => props.product.cost)
 
 function onClick() {

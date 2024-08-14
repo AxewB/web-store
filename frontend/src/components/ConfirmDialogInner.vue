@@ -1,21 +1,21 @@
 <template>
-  <v-card
+  <VCard
     prepend-icon="mdi-alert-box"
     :text="props.description"
     :title="props.title"
   >
     <template v-slot:actions>
-      <v-spacer></v-spacer>
+      <VSpacer/>
 
-      <v-btn @click="onCancel()">
+      <VBtn @click="onCancel()">
         Отмена
-      </v-btn>
+      </VBtn>
 
-      <v-btn @click="onConfirm()">
+      <VBtn @click="onConfirm()">
         Принять
-      </v-btn>
+      </VBtn>
     </template>
-  </v-card>
+  </VCard>
 </template>
 
 <script setup>

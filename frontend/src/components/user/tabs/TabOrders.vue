@@ -1,15 +1,17 @@
 <template>
-  <v-sheet class="pa-2" rounded>
+  <VSheet
+    class="pa-2"
+    rounded
+  >
     <OrderList
       :orders="orders"
       @on-item-click="onItemClick"/>
-  </v-sheet >
+  </VSheet >
 </template>
 
 <script setup>
 import { computed, onMounted, ref } from 'vue';
 import { useOrderStore } from '@/stores/orderStore';
-import {useRouter } from 'vue-router';
 import OrderList from '@/components/order/OrderList.vue';
 const orderStore = useOrderStore();
 

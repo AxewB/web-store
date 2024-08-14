@@ -1,18 +1,19 @@
 <template>
-  <v-sheet>
-    <TabActionRow  title="Edit category">
-      <v-sheet v-if="editingMode === false">
+  <VSheet>
+    <TabActionRow  title="Изменить категорию">
+      <VSheet v-if="editingMode === false">
         <CategoryList @on-click="editCategory"/>
-      </v-sheet>
+      </VSheet>
 
-      <v-sheet v-else>
-        <CategoryEdit 
+      <VSheet v-else>
+        <CategoryEdit
           @on-confirm="confirmEditing"
           @on-cancel="editingMode = false"
-          :id="chosenCategoryId"/>
-      </v-sheet>
+          :id="chosenCategoryId"
+        />
+      </VSheet>
     </TabActionRow>
-  </v-sheet>
+  </VSheet>
 </template>
 
 <script setup>

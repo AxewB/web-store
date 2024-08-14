@@ -1,13 +1,14 @@
 <template>
-  <v-sheet>
-    <TabActionRow  title="Delete category">
+  <VSheet>
+    <TabActionRow  title="Удалить категорию">
       <CategoryList @on-click="categoryClick"/>
     </TabActionRow>
-  </v-sheet>
+  </VSheet>
   <ConfirmDialog
     v-model="isConfirming"
-    @on-confirm="confirmDelete" 
-    @on-cancel="chosenCategoryId = null"/>
+    @on-confirm="confirmDelete"
+    @on-cancel="chosenCategoryId = null"
+  />
 </template>
 
 <script setup>

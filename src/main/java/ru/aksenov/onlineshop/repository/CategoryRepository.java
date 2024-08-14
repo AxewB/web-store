@@ -10,6 +10,10 @@ import java.util.Optional;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     Optional<Category> getCategoryById(Long id);
+
+    // Поиск категорий с указанным родительским идентификатором
     List<Category> findByParentId(Long parentId);
+
+    // Получение всех корневых категорий
     List<Category> findByParentIdIsNull();
 }

@@ -1,16 +1,16 @@
 <template>
-  <v-sheet class="bg-transparent">
+  <VSheet class="bg-transparent">
     <AppHeader/>
     <PageHeading title="Каталог"/>
-    <v-sheet class="bg-transparent d-flex flex-row">
-      <v-sheet class="pa-2" min-width="250px" rounded>
+    <VSheet class="bg-transparent d-flex flex-row">
+      <VSheet class="pa-2" min-width="250px" rounded>
         <CatalogueCategoryList @on-category-click="onCategoryClick"/>
-      </v-sheet>
-      <v-sheet class="flex-grow-1 ml-2 pa-2" rounded>
+      </VSheet>
+      <VSheet class="flex-grow-1 ml-2 pa-2" rounded>
         <ProductList :products="products"/>
-      </v-sheet>
-    </v-sheet>
-  </v-sheet>
+      </VSheet>
+    </VSheet>
+  </VSheet>
 </template>
 
 <script setup>

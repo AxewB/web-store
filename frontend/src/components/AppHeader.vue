@@ -1,9 +1,16 @@
 <template>
-  <v-sheet width="100%" class="bg-transparent">
-    <v-toolbar density="default" class="d-flex align-center pa-2 rounded" width="100%">
+  <VSheet
+    class="bg-transparent"
+    width="100%"
+  >
+    <VToolbar
+      class="d-flex align-center pa-2 rounded"
+      density="default"
+      width="100%"
+    >
       <ShopLogo />
 
-      <v-btn
+      <VBtn
         prepend-icon="mdi-menu"
         size="large"
         variant="flat"
@@ -12,27 +19,28 @@
         @click="moveToCataloguePage()"
       >
         Каталог
-      </v-btn>
-      <v-text-field
-        label="Search"
+      </VBtn>
+
+      <VTextField
+        label="Поиск"
         hide-details
         variant="solo"
         class="mx-2"
         v-model="searchValue"
       >
         <template #append-inner>
-          <v-btn
+          <VBtn
             color="primary"
             append-icon="mdi-magnify"
             variant="tonal"
             @click="search(searchValue)"
           >
             ИСКАТЬ
-          </v-btn>
+          </VBtn>
         </template>
-      </v-text-field>
+      </VTextField>
 
-      <v-btn
+      <VBtn
         class="mx-2 text-caption"
         size="small"
         prepend-icon="mdi-account"
@@ -41,8 +49,8 @@
         :active="false"
       >
         Профиль
-      </v-btn>
-      <v-btn
+      </VBtn>
+      <VBtn
         class="mx-2 text-caption"
         size="small"
         prepend-icon="mdi-package-variant"
@@ -51,8 +59,8 @@
         :active="false"
       >
         Заказы
-      </v-btn>
-      <v-btn
+      </VBtn>
+      <VBtn
         class="mx-2 text-caption"
         size="small"
         prepend-icon="mdi-cart"
@@ -61,9 +69,9 @@
         :active="false"
       >
         Корзина
-      </v-btn>
-    </v-toolbar>
-  </v-sheet>
+      </VBtn>
+    </VToolbar>
+  </VSheet>
 </template>
 
 <script setup>

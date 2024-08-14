@@ -1,12 +1,12 @@
 
 
 <template>
-  <v-sheet class="d-flex flex-column"> 
+  <VSheet class="d-flex flex-column">
     <AppHeader/>
-    <v-sheet>
+    <VSheet>
       <ProductList @on-card-click="moveToProductPage" />
-    </v-sheet>
-  </v-sheet>
+    </VSheet>
+  </VSheet>
 </template>
 
 <script setup lang="ts">
@@ -41,6 +41,6 @@ onMounted(async () => {
   productStore.limit = 20;
 
   await productStore.fetchProductsByName(search.value)
-}) 
+})
 
 </script>

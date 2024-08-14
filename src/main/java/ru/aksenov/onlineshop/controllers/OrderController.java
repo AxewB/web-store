@@ -16,24 +16,47 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    /**
+     * Получение списка всех заказов.
+     *
+     * @return ResponseEntity со списком всех заказов.
+     */
     @GetMapping
     public ResponseEntity<List<Order>> getAllOrders() {
         List<Order> orders = orderService.getAllOrders();
         return ResponseEntity.ok(orders);
     }
 
+    /**
+     * Получение заказа по его идентификатору.
+     *
+     * @param orderId Идентификатор заказа.
+     * @return ResponseEntity с заказом, если он найден.
+     */
     @GetMapping("/{orderId}")
     public ResponseEntity<Order> getOrderById(@PathVariable Long orderId) {
         Order order = orderService.getOrderById(orderId);
         return ResponseEntity.ok(order);
     }
 
+    /**
+     * Получение списка заказов по идентификатору пользователя.
+     *
+     * @param id Идентификатор пользователя.
+     * @return ResponseEntity со списком заказов, принадлежащих указанному пользователю.
+     */
     @GetMapping("/user/{id}")
     public ResponseEntity<List<Order>> getOrderByUserId(@PathVariable Long id) {
         List<Order> orders = orderService.getOrderByUserId(id);
         return ResponseEntity.ok(orders);
     }
 
+    /**
+     * Создание нового заказа для указанного пользователя.
+     *
+     * @param userId Идентификатор пользователя, для которого создаётся заказ.
+     * @return ResponseEntity с созданным заказом или сообщением об ошибке в случае неудачи.
+     */
     @PostMapping("/create/{userId}")
     public ResponseEntity<Order> createOrder(@PathVariable Long userId) {
         try {

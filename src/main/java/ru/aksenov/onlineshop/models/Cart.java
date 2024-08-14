@@ -53,22 +53,46 @@ public class Cart{
 
     // Вспомогательные методы
 
+    /**
+     * Добавление продукта в корзину.
+     *
+     * @param product Продукт, который нужно добавить.
+     */
     public void addProduct(Product product) {
         this.products.add(product);
     }
 
+    /**
+     * Удаление продукта из корзины.
+     *
+     * @param product Продукт, который нужно удалить.
+     */
     public void removeProduct(Product product) {
         this.products.remove(product);
     }
 
+
+    /**
+     * Очистка корзины от всех продуктов.
+     */
     public void clearProducts() {
         this.products.clear();
     }
 
+    /**
+     * Вычисление общей стоимости всех продуктов в корзине.
+     *
+     * @return Общая стоимость продуктов в корзине.
+     */
     public double totalCost() {
         return products.stream().reduce(0d, (partialCost, product) -> partialCost + product.getCost(), Double::sum);
     }
 
+    /**
+     * Вычисление общей стоимости доступных для продажи продуктов в корзине.
+     *
+     * @return Общая стоимость доступных продуктов в корзине.
+     */
     public double totalCostAvailable() {
         List<Product> availabeProducts = products.stream()
                 .filter(product -> product.getQuantity() > 0)
@@ -76,10 +100,16 @@ public class Cart{
         return availabeProducts.stream().reduce(0d, (partialCost, product) -> partialCost + product.getCost(), Double::sum);
     }
 
+    /**
+     * Удаление из корзины всех продуктов, которые отсутствуют на складе.
+     */
     public void removeOutOfStockProducts() {
         products = products.stream().filter(product -> product.getQuantity() > 0).collect(Collectors.toList());
     }
 
+    /**
+     * Удаление из корзины всех доступных для продажи продуктов.
+     */
     public void removeAvailableProducts() {
         products = products.stream().filter(product -> product.getQuantity() == 0).collect(Collectors.toList());
     }

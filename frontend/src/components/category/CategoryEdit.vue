@@ -1,33 +1,40 @@
 <template>
-  <v-sheet>
-    <v-sheet>
-      <v-text-field
+  <VSheet>
+    <VSheet>
+      <VTextField
         v-model="category.name"
-        label="Name"
+        label="Название"
         hide-details
         class="mb-2"
       />
-      <v-autocomplete 
+      <VAutocomplete
         :items="categories"
         v-model="category.parent"
         item-title="name"
         item-value="id"
-        label="parent"
+        label="Родительская категория"
         hide-details
         :disabled="isRoot"
       />
-      <v-checkbox 
-        label="Is root" 
+      <VCheckbox
+        label="Is root"
         v-model="isRoot"
         hide-details
       />
-
-    </v-sheet>
-    <v-sheet class="d-flex justify-end" width="100%">
-      <v-btn @click="emit('on-cancel')">Cancel</v-btn>
-      <v-btn @click="confirmEditing()" class="ml-2" color="primary">Confirm</v-btn>
-    </v-sheet>
-  </v-sheet>
+    </VSheet>
+    <VSheet class="d-flex justify-end" width="100%">
+      <VBtn @click="emit('on-cancel')">
+        Отмена
+      </VBtn>
+      <VBtn
+        class="ml-2"
+        @click="confirmEditing()"
+        color="primary"
+      >
+        Принять
+      </VBtn>
+    </VSheet>
+  </VSheet>
 </template>
 
 <script setup>
@@ -47,10 +54,6 @@ const categories = computed(() => {
 })
 
 const confirmEditing = () => {
-  console.log({
-    name: category.name,
-    parent: isRoot ? null : category.parent,
-  })
   emit('on-confirm', {
     name: category.name,
     parent: isRoot ? null : category.parent,
@@ -60,9 +63,12 @@ const confirmEditing = () => {
 onMounted(async () => {
   if (props.id) {
     const res = await categoryStore.getCategory(props.id)
-    category.name = res.name
-    category.parent = res.parent
-    isRoot.value = category.parent === null
+    if (res[0]) { // При получении не возникло ошибок
+      const categoryData = res[0].response.data
+      category.name = categoryData.name
+      category.parent = categoryData.parent
+      isRoot.value = category.parent === null
+    }
   }
 })
 </script>
