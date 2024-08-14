@@ -25,7 +25,6 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-
     /**
      * Получение содержимого корзины и общей стоимости для указанного пользователя.
      *

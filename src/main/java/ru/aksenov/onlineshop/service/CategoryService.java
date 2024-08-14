@@ -3,6 +3,7 @@ package ru.aksenov.onlineshop.service;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.aksenov.onlineshop.models.Category;
 import ru.aksenov.onlineshop.repository.CategoryRepository;
 
@@ -26,6 +27,7 @@ public class CategoryService {
      * @return Созданная категория.
      * @throws RuntimeException Если родительская категория не найдена (если задан parentId).
      */
+    @Transactional
     public Category addCategory(String name, Long parentId) {
         Category parent = null;
         if (parentId != null) {
@@ -144,6 +146,7 @@ public class CategoryService {
      * @return Обновленная категория.
      * @throws RuntimeException Если категория не найдена.
      */
+    @Transactional
     public Category updateCategory(Long id, Category categoryDetails) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
         BeanUtils.copyProperties(categoryDetails, category, "id");
@@ -156,6 +159,7 @@ public class CategoryService {
      * @param id Идентификатор категории для удаления.
      * @throws RuntimeException Если категория не найдена.
      */
+    @Transactional
     public void deleteCategory(Long id) {
         Category category = categoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
         categoryRepository.delete(category);

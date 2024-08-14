@@ -2,6 +2,7 @@ package ru.aksenov.onlineshop.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.aksenov.onlineshop.models.Cart;
 import ru.aksenov.onlineshop.models.Order;
 import ru.aksenov.onlineshop.models.OrderItem;
@@ -62,6 +63,7 @@ public class OrderService {
      * @return Созданный заказ.
      * @throws RuntimeException Если корзина не найдена или пуста, или если какой-либо продукт не доступен.
      */
+    @Transactional
     public Order createOrder(Long userId) {
         Cart cart = cartRepository.findById(userId).orElseThrow(() -> new RuntimeException("Cart not found"));
         if (cart.getProducts().isEmpty()) {

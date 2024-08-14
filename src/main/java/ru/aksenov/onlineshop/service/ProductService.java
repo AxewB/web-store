@@ -3,6 +3,7 @@ package ru.aksenov.onlineshop.service;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.aksenov.onlineshop.models.Category;
 import ru.aksenov.onlineshop.models.Product;
 import ru.aksenov.onlineshop.repository.CategoryRepository;
@@ -79,6 +80,7 @@ public class ProductService {
      * @return Обновленный продукт.
      * @throws RuntimeException Если продукт с указанным идентификатором не найден.
      */
+    @Transactional
     public Product updateProduct(Long id, Product productDetails) {
         Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
 
@@ -99,6 +101,7 @@ public class ProductService {
      * @param id Идентификатор продукта, который нужно удалить.
      * @throws RuntimeException Если продукт с указанным идентификатором не найден.
      */
+    @Transactional
     public void deleteProduct(Long id) {
         Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
         productRepository.delete(product);
@@ -110,6 +113,7 @@ public class ProductService {
      * @param categoryId Идентификатор категории.
      * @return Список продуктов, относящихся к указанной категории и её подкатегориям.
      */
+    @Transactional
     public List<Product> getProductsByCategoryAndSubcategories(Long categoryId) {
         if (categoryId == null) {
             return this.getAllProducts();

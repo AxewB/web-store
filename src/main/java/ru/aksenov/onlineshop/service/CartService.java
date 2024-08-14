@@ -63,6 +63,7 @@ public class CartService {
      * @param productId Идентификатор продукта.
      * @throws RuntimeException Если пользователь или продукт не найден, или корзина пустая.
      */
+    @Transactional
     public void removeProductFromCart(Long userId, Long productId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         Product product = productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
@@ -83,6 +84,7 @@ public class CartService {
      * @return Корзина пользователя.
      * @throws RuntimeException Если пользователь не найден.
      */
+    @Transactional
     public Cart getCartByUserId(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
         if (user.getCart() == null) {
@@ -113,7 +115,6 @@ public class CartService {
         order.setUser(user);
 
 
-
         // Вытягиваем доступные продукты
         List<Product> availableProducts = cart.getProducts().stream()
                 .filter(product -> product.getQuantity() > 0)
@@ -121,7 +122,6 @@ public class CartService {
         if (availableProducts.isEmpty()) {
             throw new RuntimeException("There is no products in stock");
         }
-
 
 
         // Превращаем их в нужный объект для заказа
@@ -147,7 +147,6 @@ public class CartService {
         cartRepository.save(cart);
 
         return order;
-
     }
 
     /**
