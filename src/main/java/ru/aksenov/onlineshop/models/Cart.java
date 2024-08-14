@@ -2,6 +2,8 @@ package ru.aksenov.onlineshop.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +11,8 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "Cart")
+@Getter
+@Setter
 public class Cart{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,30 +30,6 @@ public class Cart{
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     private List<Product> products = new ArrayList<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public User getUser() {
-        return this.user;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-
-    public List<Product> getProducts() {
-        return this.products;
-    }
 
     // Вспомогательные методы
 

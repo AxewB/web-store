@@ -2,6 +2,8 @@ package ru.aksenov.onlineshop.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.List;
@@ -10,6 +12,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "product")
+@Getter
+@Setter
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,70 +44,6 @@ public class Product {
         this.images = images;
         this.description = description;
         this.name = name;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getThumbnail() {
-        return this.thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
-
-    public List<String> getImages() {
-        return this.images;
-    }
-
-    public void setImages(List<String> images) {
-        this.images = images;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public void setCost(double cost) {
-        this.cost = cost;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public double getCost() {
-        return cost;
-    }
-
-    public Set<Category> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
     }
 
     /**
