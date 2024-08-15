@@ -1,7 +1,7 @@
 <template>
   <VSheet class="d-flex flex-column  bg-transparent">
-    <VSheet
-      class="d-flex justify-center mb-2 pa-3 bg-transparent" 
+    <VSheet 
+      class="d-flex justify-center mb-2 pa-3 bg-transparent"
       elevation="3"
       width="100%"
       border
@@ -19,19 +19,19 @@
       </VSheet>
       <VSheet v-if="!isProductInCart">
         <VBtn
-        @click="emit('on-add-to-cart', product)"
-        size="large"
-        width="100%"
-        color="primary"
-      >
-        В корзину
-      </VBtn>
+          @click="goToCart()"
+          size="large"
+          width="100%"
+          color="primary"
+        >
+          В корзину
+        </VBtn>
       </VSheet>
       <VSheet
-        class="d-flex align-center"
         v-else
+        class="d-flex align-center"
       >
-        <VBtn
+        <VBtn 
           class="mr-2"
           color="error"
           rounded
@@ -45,7 +45,7 @@
           @click="emit('on-go-to-cart')"
         >
           В корзине
-          <VIcon icon="mdi-arrow-right"/>
+          <VIcon icon="mdi-arrow-right" />
         </VBtn>
       </VSheet>
     </VSheet>
@@ -53,7 +53,12 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+
 // variables
+
+const userStore = useUserStore();
 
 const props = defineProps({
   product: {
@@ -66,5 +71,19 @@ const props = defineProps({
   }
 })
 
+const loggedIn = computed(() => {
+  return userStore.status.loggedIn;
+},
+)
+
 const emit = defineEmits(['on-add-to-cart', 'on-remove-from-cart', 'on-go-to-cart'])
+
+const goToCart = () => {
+  if (!loggedIn.value) {
+    emit('on-go-to-cart')
+  }
+  else {
+    emit('on-add-to-cart', props.product)
+  }
+}
 </script>

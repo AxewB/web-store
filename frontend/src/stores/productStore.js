@@ -4,6 +4,7 @@ import { useCategoryStore } from '@/stores/categoryStore';
 import authHeader from "@/services/auth-header";
 import contentHeader from '@/services/content-header';
 import ResponseHandler from '@/scripts/responseHandler';
+import { useRequestStore } from './requestStore';
 
 const API_URL = "http://localhost:8080/api/products";
 
@@ -24,12 +25,17 @@ export const useProductStore = defineStore('products', {
      * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
      */
     async fetchProducts() {
+      useRequestStore().showLoading();;
       return axios.get(API_URL + `?skip=${this.skip}&limit=${this.limit}`)
       .then(response => {
+        const responseHandler = ResponseHandler.success(response, "Продукты получены")
+        useRequestStore().hideLoading(responseHandler, false)
         this.setFetchedParams(response.data)
-        return ResponseHandler.success(response, "Продукты получены")
+        return responseHandler
       })
       .catch(error => {
+        const responseHandler = ResponseHandler.error(error, "Произошла ошибка при получении продуктов")
+        useRequestStore().hideLoading(responseHandler)
         return ResponseHandler.error(error, "Произошла ошибка при получении продуктов")
       });
     },
@@ -40,13 +46,19 @@ export const useProductStore = defineStore('products', {
      * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
      */
     async fetchProductsByName(name) {
+      useRequestStore().showLoading();;
+
       return axios.get(API_URL + `/search?name=${name}&skip=${this.skip}&limit=${this.limit}`)
       .then(response => {
+        const responseHandler = ResponseHandler.success(response, "Продукты получены")
+        useRequestStore().hideLoading(responseHandler, false)
         this.setFetchedParams(response.data)
-        return ResponseHandler.success(response, "Продукты получены")
+        return responseHandler
       })
       .catch(error => {
-        return ResponseHandler.error(error, "Произошла ошибка при получении продуктов")
+        const responseHandler = ResponseHandler.error(error, "Произошла ошибка при получении продуктов")
+        useRequestStore().hideLoading(responseHandler)
+        return responseHandler
       });
     },
     /**
@@ -55,13 +67,19 @@ export const useProductStore = defineStore('products', {
      * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
      */
     async fetchProductByCategory(categoryId) {
+      useRequestStore().showLoading();
+
       return axios.get(API_URL + `/category/${categoryId}?skip=${this.skip}&limit=${this.limit}`)
       .then(response => {
         this.setFetchedParams(response.data)
-        return ResponseHandler.success(response, "Продукты получены")
+        const responseHandler = ResponseHandler.success(response, "Продукты получены")
+        useRequestStore().hideLoading(responseHandler, false)
+        return responseHandler
       })
       .catch(error => {
-        return ResponseHandler.error(error, "Произошла ошибка при получении продуктов по категории")
+        const responseHandler = ResponseHandler.error(error, "Произошла ошибка при получении продуктов по категории")
+        useRequestStore().hideLoading(responseHandler)
+        return responseHandler
       });
     },
     /**
@@ -70,12 +88,18 @@ export const useProductStore = defineStore('products', {
      * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ответ содержит объект продукта. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
      */
     async fetchProduct(id) {
+      useRequestStore().showLoading();
+      
       return axios.get(`${API_URL}/${id}`)
       .then((response) => {
-        return ResponseHandler.success(response, "Продукт получен")
+        const responseHandler = ResponseHandler.success(response, "Продукт получен")
+        useRequestStore().hideLoading(responseHandler, false)
+        return responseHandler
       })
       .catch((error) => {
-        return ResponseHandler.error(error, "Произошла ошибка при получении продукта")
+        const responseHandler = ResponseHandler.error(error, "Произошла ошибка при получении продукта")
+        useRequestStore().hideLoading(responseHandler)
+        return responseHandler
       })
     },
 
@@ -85,6 +109,8 @@ export const useProductStore = defineStore('products', {
      * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
      */
     async addProduct(product) {
+      useRequestStore().showLoading();
+      
       const categoryStore = useCategoryStore();
       const categories = categoryStore.categories.filter((cat) => product.categories.includes(cat.id));
       const data  = {
@@ -100,10 +126,14 @@ export const useProductStore = defineStore('products', {
       return axios.post(API_URL + '/add', data, { headers: contentHeader() })
       .then(response => {
         this.fetchProducts();
-        return ResponseHandler.success(response, "Продукт успешно добавлен")
+        const responseHandler = ResponseHandler.success(response, "Продукт успешно добавлен")
+        useRequestStore().hideLoading(responseHandler);
+        return responseHandler
       })
       .catch(error => {
-        return ResponseHandler.error(error, "Произошла ошибка при добавлении продукта")
+        const responseHandler = ResponseHandler.error(error, "Произошла ошибка при добавлении продукта")
+        useRequestStore().hideLoading(responseHandler);
+        return responseHandler
       });
 
     },
@@ -115,6 +145,8 @@ export const useProductStore = defineStore('products', {
      * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
      */
     async updateProduct(id, product) {
+      useRequestStore().showLoading();
+
       const categoryStore = useCategoryStore();
       const categories = categoryStore.categories.filter((cat) => product.categories.includes(cat.id));
       const data = {
@@ -130,10 +162,14 @@ export const useProductStore = defineStore('products', {
       return axios.put(API_URL + `/${id}`, data, { headers: contentHeader() })
       .then(response => {
         this.fetchProducts();
-        return ResponseHandler.success(response, "Продукт успешно обновлен")
+        const requestHandler = ResponseHandler.success(response, "Продукт успешно обновлен")
+        useRequestStore().hideLoading(requestHandler)
+        return requestHandler
       })
       .catch(error => {
-        return ResponseHandler.error(error, "Произошла ошибка при обновлении продукта")
+        const requestHandler = ResponseHandler.error(error, "Произошла ошибка при обновлении продукта")
+        useRequestStore().hideLoading(requestHandler)
+        return requestHandler
       });
     },
 
@@ -143,15 +179,21 @@ export const useProductStore = defineStore('products', {
      * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
      */
     async deleteProduct(id) {
+      useRequestStore().showLoading();
+
       return axios.delete(API_URL + `/${id}`, { headers: authHeader() })
       .then(response => {
-        return ResponseHandler.success(response, "Продукт успешно удален")
+        const requestHandler = ResponseHandler.success(response, "Продукт успешно удален")
+        useRequestStore().hideLoading(requestHandler)
+        this.fetchProducts();
+        return requestHandler
       })
       .catch(error => {
-        return ResponseHandler.error(error, "Произошла ошибка при удалении продукта")
+        const requestHandler = ResponseHandler.error(error, "Произошла ошибка при удалении продукта")
+        useRequestStore().hideLoading(requestHandler)
+        return requestHandler
       });
 
-      this.fetchProducts();
     },
 
     /**

@@ -4,12 +4,13 @@ import contentHeader from '@/services/content-header';
 import userHeader from '@/services/auth-header';
 import axios from 'axios';
 import ResponseHandler from '@/scripts/responseHandler';
+import { useRequestStore } from './requestStore';
 
 const API_URL = "http://localhost:8080/api/cart";
 
 export const useCartStore = defineStore('cart', {
   state: () => ({
-    cart: [], // Корзина
+    cart: {}, // Корзина
     totalCost: 0, // Общая стоимость продуктов в наличии
   }),
 
@@ -21,6 +22,9 @@ export const useCartStore = defineStore('cart', {
      */
     isProductInCart: (state) => {
       return (product) => {
+        if (!state.cart.products) { 
+          return false
+        }
         return state.cart.products.some((item) => item.id === product.id);
       }
     }
@@ -33,6 +37,9 @@ export const useCartStore = defineStore('cart', {
      */
     async getCart() {
       const userStore = useUserStore();
+      if (!userStore.user) { 
+        return Promise.reject("You must be logged in")
+      }
       return axios.get(API_URL + `/${userStore.user.id}`, { headers: userHeader() })
       .then((response) => {
         this.cart = response.data.cart
@@ -50,14 +57,21 @@ export const useCartStore = defineStore('cart', {
      */
     async addToCart(product) {
       const userStore = useUserStore();
+      const requestStore = useRequestStore();
+      requestStore.showLoading();
+
       const { id } = product;
       return axios.post(API_URL + `/${userStore.user.id}/add?productId=${id}`, { headers: contentHeader() })
       .then((response) => {
         this.getCart()
-        return ResponseHandler.success(response, "Корзина успешно очищена.")
+        const responseHandler = ResponseHandler.success(response, "Продукт добавлен в корзину.")
+        requestStore.hideLoading(responseHandler, false)
+        return responseHandler
       })
       .catch((error) => {
-        return ResponseHandler.error(error, "Ошибка при добавлении продукта в корзину.")
+        const responseHandler = ResponseHandler.error(error, "Ошибка при добавлении продукта в корзину.")
+        requestStore.hideLoading(responseHandler)
+        return responseHandler
       })
     },
     /**
@@ -67,14 +81,21 @@ export const useCartStore = defineStore('cart', {
      */
     async removeFromCart(product) {
       const userStore = useUserStore();
+      const requestStore = useRequestStore();
+      requestStore.showLoading();
+
       const { id } = product;
       return axios.delete(API_URL + `/${userStore.user.id}/remove?productId=${id}`, { headers: userHeader() })
       .then((response) => {
         this.getCart()
-        return ResponseHandler.success(response, "Продукт успешно удален из корзины.")
+        const responseHandler = ResponseHandler.success(response, "Продукт успешно удален из корзины.")
+        requestStore.hideLoading(responseHandler, false)
+        return responseHandler
       })
       .catch((error) => {
-        return ResponseHandler.error(error, "Произошла ошибка при удалении продукта из корзины.")
+        const responseHandler = ResponseHandler.error(error, "Произошла ошибка при удалении продукта из корзины.")
+        requestStore.hideLoading(responseHandler)
+        return responseHandler
       })
     },
     /**
@@ -84,14 +105,21 @@ export const useCartStore = defineStore('cart', {
      */
     async removeFromCartById(productId) {
       const userStore = useUserStore();
+      const requestStore = useRequestStore();
+      requestStore.showLoading();
+
       const id = productId;
       return axios.delete(API_URL + `/${userStore.user.id}/remove?productId=${id}`, { headers: userHeader() })
       .then((response) => {
         this.getCart()
-        return ResponseHandler.success(response, "Продукт успешно удален из корзины.")
+        const responseHandler = ResponseHandler.success(response, "Продукт успешно удален из корзины.")
+        requestStore.hideLoading(responseHandler, false)
+        return responseHandler
       })
       .catch((error) => {
-        return ResponseHandler.error(error, "Произошла ошибка при удалении продукта из корзины.")
+        const responseHandler = ResponseHandler.error(error, "Произошла ошибка при удалении продукта из корзины.")
+        requestStore.hideLoading(responseHandler)
+        return responseHandler
       })
     },
     /**
@@ -100,13 +128,20 @@ export const useCartStore = defineStore('cart', {
      */
     async clearCart() {
       const userStore = useUserStore();
+      const requestStore = useRequestStore();
+      requestStore.showLoading();
+
       return axios.delete(API_URL + `/${userStore.user.id}/clear`, { headers: userHeader() })
       .then((response) => {
         this.getCart()
-        return ResponseHandler.success(response, "Корзина успешно очищена.")
+        const responseHandler = ResponseHandler.success(response, "Корзина успешно очищена.")
+        requestStore.hideLoading(responseHandler)
+        return responseHandler
       })
       .catch((error) => {
-        return ResponseHandler.error(error, "Произошла ошибка при очистке корзины.")
+        const responseHandler = ResponseHandler.error(error, "Произошла ошибка при очистке корзины.")
+        requestStore.hideLoading(responseHandler)
+        return responseHandler
       })
     },
     /**
@@ -115,13 +150,20 @@ export const useCartStore = defineStore('cart', {
      */
     async checkout() {
       const userStore = useUserStore();
+      const requestStore = useRequestStore();
+      requestStore.showLoading();
+
       return axios.post(API_URL + `/${userStore.user.id}/checkout`, { headers: userHeader() },)
       .then((response) => {
         this.getCart()
-        return ResponseHandler.success(response, "Корзина успешно очищена.")
+        const responseHandler = ResponseHandler.success(response, "Заказ успешно оформлен.")
+        requestStore.hideLoading(responseHandler)
+        return responseHandler
       })
       .catch((error) => {
-        return ResponseHandler.error(error, "Произошла ошибка при оформлении заказа.")
+        const responseHandler = ResponseHandler.error(error, "Произошла ошибка при оформлении заказа.")
+        requestStore.hideLoading(responseHandler)
+        return responseHandler
       })
     }
   }

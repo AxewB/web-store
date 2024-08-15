@@ -3,6 +3,7 @@ import axios from 'axios'
 import contentHeader from '@/services/content-header';
 import authHeader from '@/services/auth-header';
 import ResponseHandler from '@/scripts/responseHandler';
+import { useRequestStore } from './requestStore';
 const API_URL = "http://localhost:8080/api/category";
 
 
@@ -44,13 +45,18 @@ export const useCategoryStore = defineStore('category', {
      * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
      */
     async getCategories() {
+      useRequestStore().showLoading()
       return axios.get(API_URL)
       .then((response) => {
         this.categories = response.data
-        return ResponseHandler.success(response, "Категории получены")
+        const responseHandler = ResponseHandler.success(response, "Категории получены")
+        useRequestStore().hideLoading(responseHandler, false)
+        return responseHandler
       })
       .catch((error) => {
-        return ResponseHandler.error(error, "Произошла ошибка при получении категорий")
+        const responseHandler = ResponseHandler.error(error, "Произошла ошибка при получении категорий")
+        useRequestStore().hideLoading(responseHandler)
+        return responseHandler
       });
     },
     /**
@@ -58,13 +64,18 @@ export const useCategoryStore = defineStore('category', {
      * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
      */
     async getCategoriesWithChildren() {
+      useRequestStore().showLoading()
       return axios.get(API_URL + "/all-with-children")
       .then((response) => {
         this.categories = response.data
-        return ResponseHandler.success(response, "Категории получены")
+        const responseHandler = ResponseHandler.success(response, "Категории получены")
+        useRequestStore().hideLoading(responseHandler, false)
+        return responseHandler
       })
       .catch((error) => {
-        return ResponseHandler.error(error, "Произошла ошибка при получении категорий")
+        const responseHandler = ResponseHandler.error(error, "Произошла ошибка при получении категорий")
+        useRequestStore().hideLoading(responseHandler)
+        return responseHandler
       });
     },
     /**
@@ -73,12 +84,17 @@ export const useCategoryStore = defineStore('category', {
      * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ответ содержит объект категории. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
      */
     async getCategory(id) {
+      useRequestStore().showLoading()
       return axios.get(API_URL + `/${id}`)
       .then((response) => {
-        return ResponseHandler.success(response , "Категория получена", response.data)
+        const responseHandler = ResponseHandler.success(response , "Категория получена", response.data)
+        useRequestStore().hideLoading(responseHandler, false)
+        return responseHandler
       })
       .catch((error) => {
-        return ResponseHandler.error(error, "Произошла ошибка при получении категории")
+        const responseHandler = ResponseHandler.error(error, "Произошла ошибка при получении категории")
+        useRequestStore().hideLoading(responseHandler)
+        return responseHandler
       })
     },
     /**
@@ -87,13 +103,18 @@ export const useCategoryStore = defineStore('category', {
      * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
      */
     async getCategoryPath(id) {
+      useRequestStore().showLoading()
       return axios.get(API_URL + `/${id}/path`)
       .then((response) => {
         this.categoryPath = response.data
-        return ResponseHandler.success(response, "Путь к категории получен")
+        const responseHandler = ResponseHandler.success(response, "Путь к категории получен")
+        useRequestStore().hideLoading(responseHandler, false)
+        return responseHandler
       })
       .catch((error) => {
-        return ResponseHandler.error(error, "Произошла ошибка при получении пути к категории")
+        const responseHandler = ResponseHandler.error(error, "Произошла ошибка при получении пути к категории")
+        useRequestStore().hideLoading(responseHandler)
+        return responseHandler
       })
     },
 
@@ -103,12 +124,17 @@ export const useCategoryStore = defineStore('category', {
      * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ответ содержит массив дочерних категорий. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
      */
     async getChildren(parentId) {
+      useRequestStore().showLoading()
       return axios.get(API_URL + `/${parentId}/children`)
       .then((response) => {
-        return ResponseHandler.success(response, "Дочерние категории получены")
+        const responseHandler = ResponseHandler.success(response, "Дочерние категории получены")
+        useRequestStore().hideLoading(responseHandler, false)
+        return responseHandler
       })
       .catch((error) => {
-        return ResponseHandler.error(error, "Произошла ошибка при получении дочерних категорий")
+        const responseHandler = ResponseHandler.error(error, "Произошла ошибка при получении дочерних категорий")
+        useRequestStore().hideLoading(responseHandler)
+        return responseHandler
       });
     },
 
@@ -118,7 +144,10 @@ export const useCategoryStore = defineStore('category', {
      * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
      */
     async addCategory(category) {
-      await this.getCategories();
+      useRequestStore().showLoading()
+      if (!this.categories) {
+        this.getCategories();
+      }
       const parent = category.parent ? this.categories.filter((cat) => cat.id === category.parent) : null
       const data = {
         "name": category.name,
@@ -126,10 +155,14 @@ export const useCategoryStore = defineStore('category', {
       }
       return axios.post(API_URL, data, { headers: contentHeader() })
       .then(response => {
-        return ResponseHandler.success(response, "Категория успешно добавлена")
+        const responseHandler = ResponseHandler.success(response, "Категория успешно добавлена")
+        useRequestStore().hideLoading(responseHandler)
+        return responseHandler
       })
       .catch(error => {
-        return ResponseHandler.error(error, "Произошла ошибка при добавлении категории")
+        const responseHandler = ResponseHandler.error(error, "Произошла ошибка при добавлении категории")
+        useRequestStore().hideLoading(responseHandler)
+        return responseHandler
       });
     },
 
@@ -140,6 +173,7 @@ export const useCategoryStore = defineStore('category', {
      * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
      */
     async updateCategory(id, category) {
+      useRequestStore().showLoading()
       await this.getCategories();
       const parent = category.parent ? this.categories.filter((cat) => cat.id === category.parent) : null
       const data = {
@@ -149,10 +183,14 @@ export const useCategoryStore = defineStore('category', {
 
       return axios.put(API_URL + `/${id}`, data, { headers: contentHeader() })
       .then(response => {
-        return ResponseHandler.success(response, "Категория успешно изменена")
+        const responseHandler = ResponseHandler.success(response, "Категория успешно изменена")
+        useRequestStore().hideLoading(responseHandler)
+        return responseHandler
       })
       .catch(error => {
-        return ResponseHandler.error(error, "Произошла ошибка при изменении категории")
+        const responseHandler = ResponseHandler.error(error, "Произошла ошибка при изменении категории")
+        useRequestStore().hideLoading(responseHandler)
+        return responseHandler
       });
     },
 
@@ -162,12 +200,17 @@ export const useCategoryStore = defineStore('category', {
      * @returns {Array} - Результат запроса вида [ответ?, ошибка?]. Ошибка равна null, если запрос прошел успешно. Иначе наоборот
      */
     async deleteCategory(id) {
+      useRequestStore().showLoading()
       return axios.delete(API_URL + `/${id}`, { headers: authHeader() })
       .then(response => {
-        return ResponseHandler.success(response, "Категория успешно удалена")
+        const responseHandler = ResponseHandler.success(response, "Категория успешно удалена")
+        useRequestStore().hideLoading(responseHandler)
+        return responseHandler
       })
       .catch(error => {
-        return ResponseHandler.error(error, "Произошла ошибка при удалении категории")
+        const responseHandler = ResponseHandler.error(error, "Произошла ошибка при удалении категории")
+        useRequestStore().hideLoading(responseHandler)
+        return responseHandler
       });
     },
   }

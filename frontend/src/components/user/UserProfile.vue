@@ -111,6 +111,7 @@ const window = shallowRef(UserInfo)
 const currentUser = computed(() => {return userStore.user});
 
 const logout = () => {
+  router.push({name: 'home'});
   userStore.logout();
 }
 

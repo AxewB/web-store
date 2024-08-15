@@ -36,6 +36,6 @@ watch(chosenCategory, () => {
 onMounted(() => {
   productStore.limit = 30
   productStore.skip = 0
-  productStore.fetchProductByCategory();
+  // productStore.fetchProductByCategory();
 })
 </script>

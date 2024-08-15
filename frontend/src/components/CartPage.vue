@@ -1,5 +1,5 @@
 <template>
-  <VSheet class="bg-transparent pa-2">
+  <VSheet v-if="loggedIn" class="bg-transparent pa-2">
     <PageHeader/>
 
     <PageHeading title="Корзина"/>
@@ -74,12 +74,15 @@
 import { onMounted, computed, ref } from 'vue';
 import PageHeader from '@/components/AppHeader.vue'
 import { useCartStore } from '@/stores/cartStore';
+import { useUserStore } from '@/stores/userStore';
 import CartItemList from '@/components/cart/CartItemList.vue';
 import PageHeading from './PageHeading.vue';
 import EmptyWarning from '@/components/EmptyWarning.vue';
 import ConfirmDialog from './ConfirmDialog.vue';
+import { useRouter } from 'vue-router';
 const cartStore = useCartStore();
-
+const userStore = useUserStore();
+const router = useRouter();
 const isConfirmingClearingCart = ref(false)
 
 function confirmClearCart() {
@@ -99,7 +102,17 @@ function checkout() {
   cartStore.checkout()
 }
 
+const loggedIn = computed(() => {
+    return userStore.status.loggedIn;
+  },
+)
+
 onMounted(async () => {
-  await cartStore.getCart()
+  if (!loggedIn.value) {
+    router.push({name: "userProfile"});
+  }
+  else {
+    await cartStore.getCart()
+  }
 })
 </script>

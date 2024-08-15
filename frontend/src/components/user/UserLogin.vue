@@ -1,62 +1,78 @@
 <template>
-    <VSheet
+  <VSheet 
     height="100vh"
-    class="d-flex
-          justify-center
-          align-center
-          flex-column
-          bg-transparent"
-    >
-      <VSheet
-      class="pa-4 rounded d-flex flex-column"
-      width="400px">
-      <span class="text-h4 mb-4 text-center">
-        Авторизация
-      </span>
-      <form @submit.prevent="submit">
-        <VTextField
-          v-model="username.value.value"
-          :error-messages="username.errorMessage.value"
-          label="Username"
-        />
-        <VTextField
-          v-model="password.value.value"
-          :error-messages="password.errorMessage.value"
-          type="password"
-          label="Password"
-        />
-        <VBtn
-          type="submit"
-          variant="tonal"
-          size="large"
-          width="100%"
-        >
-          Принять
-        </VBtn>
-      </form>
-      </VSheet>
-      <VSheet
-        class="pa-4 bg-transparent rounded d-flex flex-row"
-        width="400px"
-      > 
-        <v-divider class="mt-3 mr-3" />
-        ИЛИ
-        <v-divider class="mt-3 ml-3" />
-      </VSheet>
-      <VSheet
-        class="px-4 bg-transparent rounded d-flex flex-column"
-        width="400px"
-      >
-      <VBtn
-        variant="tonal"
-        size="large"
-        :to="{ path: '/user/register'}"
-      >
-        Зарегистрироваться
-        {{ message }}
+    class="d-flex flex-column bg-transparent"
+  >
+    <VSheet class="bg-transparent" size="large">
+      <VBtn variant="text" @click="moveToHomePage()">
+        <VIcon>mdi-arrow-left</VIcon>
+        На главную
       </VBtn>
     </VSheet>
+
+    <VSheet
+      
+      class="flex-grow-1
+            d-flex
+            justify-center
+            align-center
+            flex-column
+            bg-transparent"
+      >
+        <VSheet
+        class="pa-4 rounded d-flex flex-column"
+        width="400px">
+        <span class="text-h4 mb-4 text-center">
+          Авторизация
+        </span>
+        <form @submit.prevent="submit">
+          <VTextField
+            v-model="username.value.value"
+            :error-messages="username.errorMessage.value"
+            label="Username"
+            class="mb-2"
+          />
+          <VTextField
+            v-model="password.value.value"
+            :error-messages="password.errorMessage.value"
+            type="password"
+            label="Password"
+            class="mb-2"
+          />
+          <VBtn
+            type="submit"
+            variant="tonal"
+            size="large"
+            width="100%"
+          >
+            Принять
+          </VBtn>
+        </form>
+        </VSheet>
+        <VSheet
+          class="pa-4 bg-transparent rounded d-flex flex-row"
+          width="400px"
+        > 
+          <v-divider class="mt-3 mr-3" />
+          ИЛИ
+          <v-divider class="mt-3 ml-3" />
+        </VSheet>
+        <VSheet
+          class="px-4 bg-transparent rounded d-flex flex-column"
+          width="400px"
+        >
+        <VBtn
+          variant="tonal"
+          size="large"
+          :to="{ path: '/user/register'}"
+        >
+          Зарегистрироваться
+        </VBtn>
+        <VAlert v-if="isError" type="error" class="mt-4" variant="outlined" :text="message"/>
+      </VSheet>
+    </VSheet>
   </VSheet>
+    
 </template>
 
 <script setup>
@@ -64,9 +80,11 @@ import { useField, useForm } from 'vee-validate'
 import { ref, computed, onMounted } from 'vue';
 import { useUserStore } from '@/stores/userStore';
 import { useRouter } from 'vue-router';
+import AppHeader from '../AppHeader.vue';
 
 const userStore = useUserStore();
 const router = useRouter();
+const isError = ref(false)
 
 const { handleSubmit } = useForm({
   validationSchema: {
@@ -85,25 +103,25 @@ const { handleSubmit } = useForm({
 const username = useField('username')
 const password = useField('password')
 const message = ref("")
-const submit = handleSubmit(user => {
-  userStore.login(user).then(
-    () => {
-      router.push("user/profile");
-    },
-    (error) => {
-      message.value =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-    }
-  );
+const submit = handleSubmit(async user => {
+  const { res, err } = await userStore.login(user)
+  if (res) {
+    message.value = res.message
+  } else {
+    isError.value = true
+    message.value = err.error.response.data.message;
+  }
+
+  
 })
 const loggedIn = computed(() => {
     return userStore.status.loggedIn;
   },
 )
+const moveToHomePage = () => {
+  router.push({name: "home"})
+}
+
 onMounted(() => {
   if (loggedIn.value) {
     router.push('/user/profile');

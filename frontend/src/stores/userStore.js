@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 
 import AuthService from '@/services/auth.service';
+import ResponseHandler from "@/scripts/responseHandler";
+import { useRequestStore } from "./requestStore";
 
 const user = JSON.parse(localStorage.getItem('user'));
 const initialState = user
@@ -16,14 +18,19 @@ export const useUserStore = defineStore("user", {
      * @returns {Promise}
      */
     login(user) {
+      useRequestStore().showLoading();
       return AuthService.login(user).then(
         user => {
           this.loginSuccess(user);
-          return Promise.resolve(user);
+          const responseHandler = ResponseHandler.success(user, "Вы успешно вошли в систему")
+          useRequestStore().hideLoading(responseHandler);
+          return responseHandler;
         },
         error => {
           this.loginFailure();
-          return Promise.reject(error);
+          const responseHandler = ResponseHandler.error(error, "Произошла ошибка при входе")
+          useRequestStore().hideLoading(responseHandler);
+          return responseHandler;
         }
       );
     },
@@ -31,6 +38,7 @@ export const useUserStore = defineStore("user", {
      * Выход из аккаунта
      */
     logout() {
+      useRequestStore().hideLoading(ResponseHandler.success({response: "success"}, "Вы вышли из системы"));
       AuthService.logout();
       this.logoutSuccess();
     },
@@ -41,14 +49,19 @@ export const useUserStore = defineStore("user", {
      * @returns {Promise}
      */
     register(user) {
+      useRequestStore().showLoading();
       return AuthService.register(user).then(
         response => {
           this.registerSuccess();
-          return Promise.resolve(response.data);
+          const responseHandler = ResponseHandler.success(response, "Вы успешно зарегистрировались. Осталось авторизоватся. Перенаправляем...")
+          useRequestStore().hideLoading(responseHandler);
+          return responseHandler;
         },
         error => {
           this.registerFailure();
-          return Promise.reject(error);
+          const responseHandler = ResponseHandler.error(error, "Произошла ошибка при регистрации")
+          useRequestStore().hideLoading(responseHandler);
+          return responseHandler;
         }
       );
     },

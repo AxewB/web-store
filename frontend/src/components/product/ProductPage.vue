@@ -58,7 +58,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useProductStore } from '@/stores/productStore'
 import { useCategoryStore } from '@/stores/categoryStore'
 import {useCartStore } from '@/stores/cartStore'
@@ -75,8 +75,9 @@ const product = ref({})
 const productStore = useProductStore();
 const categoryStore = useCategoryStore();
 const cartStore = useCartStore();
-const productCategoryPath = computed(() => categoryStore.categoryPath)
 
+
+const productCategoryPath = computed(() => categoryStore.categoryPath)
 const isProductInCart = computed(() => {
   return cartStore.isProductInCart(product.value)
 })
