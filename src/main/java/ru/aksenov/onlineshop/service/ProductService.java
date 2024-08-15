@@ -119,7 +119,7 @@ public class ProductService {
             return this.getAllProducts();
         }
         Set<Long> categoryIds = categoryService.getAllChildCategoryIds(categoryId);
-        categoryIds.add(categoryId); // Добавляем родительскую категорию
+//        categoryIds.add(categoryId); // Добавляем родительскую категорию
         return productRepository.findByCategoriesIdIn(categoryIds);
     }
 

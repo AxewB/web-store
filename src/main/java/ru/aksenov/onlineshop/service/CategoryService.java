@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class CategoryService {
 
     @Autowired
-    CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
 
     /**
      * Добавление новой категории с указанным именем и родительской категорией.
@@ -96,7 +96,7 @@ public class CategoryService {
     }
 
     /**
-     * Получение пути от корневой категории до указанной категории.
+     * Получение пути от указанной категории до корневой
      *
      * @param categoryId Идентификатор категории.
      * @return Список категорий от корня до указанной категории.

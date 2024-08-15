@@ -7,9 +7,11 @@ import ru.aksenov.onlineshop.models.Cart;
 import ru.aksenov.onlineshop.models.Order;
 import ru.aksenov.onlineshop.models.OrderItem;
 import ru.aksenov.onlineshop.models.Product;
+import ru.aksenov.onlineshop.models.User;
 import ru.aksenov.onlineshop.repository.CartRepository;
 import ru.aksenov.onlineshop.repository.OrderRepository;
 import ru.aksenov.onlineshop.repository.ProductRepository;
+import ru.aksenov.onlineshop.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,6 +28,9 @@ public class OrderService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     /**
      * Получение списка всех заказов.
@@ -65,8 +70,9 @@ public class OrderService {
      */
     @Transactional
     public Order createOrder(Long userId) {
-        Cart cart = cartRepository.findById(userId).orElseThrow(() -> new RuntimeException("Cart not found"));
-        if (cart.getProducts().isEmpty()) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        Cart cart = user.getCart();
+        if (cart == null || cart.getProducts().isEmpty()) {
             throw new RuntimeException("Cart is empty");
         }
 
