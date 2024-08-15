@@ -70,9 +70,6 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) throws InterruptedException {
         MessageResponse messageResponse = authService.registration(signUpRequest);
 
-        Thread.sleep(1000);
-
-
         if (messageResponse.getError()) {
             return ResponseEntity.badRequest().body(messageResponse);
         }
